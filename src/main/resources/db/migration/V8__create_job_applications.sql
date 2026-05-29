@@ -1,0 +1,22 @@
+CREATE TABLE job_applications (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    position VARCHAR(255) NOT NULL,
+    job_description TEXT,
+    job_url VARCHAR(500),
+    location VARCHAR(255),
+    salary_range VARCHAR(100),
+    job_type VARCHAR(20) NOT NULL,
+    source VARCHAR(30) NOT NULL,
+    source_meta VARCHAR(500),
+    notes TEXT,
+    project_id BIGINT NOT NULL,
+    recruiter_id BIGINT,
+    current_status_id BIGINT NOT NULL,
+    owner_id BIGINT NOT NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT fk_jobs_project FOREIGN KEY (project_id) REFERENCES projects(id),
+    CONSTRAINT fk_jobs_recruiter FOREIGN KEY (recruiter_id) REFERENCES recruiters(id),
+    CONSTRAINT fk_jobs_status FOREIGN KEY (current_status_id) REFERENCES pipeline_statuses(id),
+    CONSTRAINT fk_jobs_owner FOREIGN KEY (owner_id) REFERENCES users(id)
+);

@@ -1,0 +1,12 @@
+CREATE TABLE pipeline_statuses (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    sort_order INT NOT NULL,
+    color VARCHAR(7) NOT NULL,
+    type VARCHAR(20) NOT NULL,
+    user_id BIGINT NOT NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT fk_pipeline_statuses_user FOREIGN KEY (user_id) REFERENCES users(id),
+    UNIQUE (user_id, name)
+);

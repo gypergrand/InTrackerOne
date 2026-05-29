@@ -1,0 +1,13 @@
+CREATE TABLE recruiters (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    email VARCHAR(255),
+    phone VARCHAR(50),
+    notes TEXT,
+    company_id BIGINT NOT NULL,
+    owner_id BIGINT NOT NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT fk_recruiters_company FOREIGN KEY (company_id) REFERENCES companies(id),
+    CONSTRAINT fk_recruiters_owner FOREIGN KEY (owner_id) REFERENCES users(id)
+);

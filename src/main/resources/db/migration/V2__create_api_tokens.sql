@@ -1,0 +1,11 @@
+CREATE TABLE api_tokens (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    token_hash VARCHAR(255) NOT NULL,
+    token_identifier VARCHAR(64) NOT NULL UNIQUE,
+    user_id BIGINT NOT NULL,
+    enabled BOOLEAN NOT NULL DEFAULT TRUE,
+    last_used_at TIMESTAMP,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT fk_api_tokens_user FOREIGN KEY (user_id) REFERENCES users(id)
+);

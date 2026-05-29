@@ -1,0 +1,12 @@
+CREATE TABLE interview_events (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    job_application_id BIGINT NOT NULL,
+    title VARCHAR(255) NOT NULL,
+    event_date TIMESTAMP NOT NULL,
+    duration_minutes INT,
+    format VARCHAR(20) NOT NULL,
+    interviewer_name VARCHAR(255),
+    notes TEXT,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT fk_ie_job FOREIGN KEY (job_application_id) REFERENCES job_applications(id)
+);

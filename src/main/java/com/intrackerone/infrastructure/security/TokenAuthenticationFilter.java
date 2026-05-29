@@ -1,0 +1,78 @@
+package com.intrackerone.infrastructure.security;
+
+import com.intrackerone.domain.user.ApiToken;
+import com.intrackerone.domain.user.ApiTokenRepository;
+import com.intrackerone.domain.user.User;
+import jakarta.servlet.FilterChain;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import lombok.RequiredArgsConstructor;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.bcrypt.BCrypt;
+import org.springframework.stereotype.Component;
+import org.springframework.web.filter.OncePerRequestFilter;
+
+import java.io.IOException;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+
+@Component
+@RequiredArgsConstructor
+public class TokenAuthenticationFilter extends OncePerRequestFilter {
+
+    private static final String BEARER_PREFIX = "Bearer ";
+    private static final String API_ACCESS = "API_ACCESS";
+
+    private final ApiTokenRepository apiTokenRepository;
+
+    @Override
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
+                                    FilterChain filterChain) throws ServletException, IOException {
+        String authHeader = request.getHeader("Authorization");
+        if (authHeader != null && authHeader.startsWith(BEARER_PREFIX)) {
+            authenticate(authHeader.substring(BEARER_PREFIX.length()));
+        }
+        filterChain.doFilter(request, response);
+    }
+
+    @Override
+    protected boolean shouldNotFilter(HttpServletRequest request) {
+        return !request.getRequestURI().startsWith("/api/");
+    }
+
+    private void authenticate(String rawToken) {
+        for (ApiToken token : apiTokenRepository.findAll()) {
+            if (Boolean.FALSE.equals(token.getEnabled())) {
+                continue;
+            }
+            if (BCrypt.checkpw(rawToken, token.getTokenHash())) {
+                setAuthentication(token);
+                break;
+            }
+        }
+    }
+
+    private void setAuthentication(ApiToken token) {
+        User user = token.getUser();
+        token.setLastUsedAt(LocalDateTime.now());
+        apiTokenRepository.save(token);
+
+        var auth = new UsernamePasswordAuthenticationToken(
+            user.getUsername(), null, authoritiesFor(user)
+        );
+        SecurityContextHolder.getContext().setAuthentication(auth);
+    }
+
+    private List<SimpleGrantedAuthority> authoritiesFor(User user) {
+        var authorities = new ArrayList<SimpleGrantedAuthority>();
+        authorities.add(new SimpleGrantedAuthority("ROLE_" + user.getRole().name()));
+        if (AccessControl.hasGlobalDataAccess(user.getRole())) {
+            authorities.add(new SimpleGrantedAuthority(API_ACCESS));
+        }
+        return authorities;
+    }
+}
