@@ -1,5 +1,6 @@
 package com.intrackerone.domain.company;
 
+import com.intrackerone.domain.status.PipelineStatusService;
 import com.intrackerone.domain.user.Role;
 import com.intrackerone.domain.user.User;
 import com.intrackerone.domain.user.UserRepository;
@@ -32,6 +33,9 @@ class CompanyServiceTest {
 
     @Mock
     private UserRepository userRepository;
+
+    @Mock
+    private PipelineStatusService pipelineStatusService;
 
     @InjectMocks
     private CompanyService companyService;

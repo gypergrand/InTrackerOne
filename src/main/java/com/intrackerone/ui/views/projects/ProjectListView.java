@@ -22,6 +22,7 @@ import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.router.Route;
 import jakarta.annotation.security.PermitAll;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Route(value = "projects", layout = MainLayout.class)
@@ -33,17 +34,18 @@ public class ProjectListView extends VerticalLayout {
     private final SecurityService securityService;
     private final Grid<ProjectDto> grid = new Grid<>(ProjectDto.class);
     private ComboBox<CompanyDto> companyFilter;
-    private List<CompanyDto> companies;
+    private final List<CompanyDto> companies = new ArrayList<>();
 
     public ProjectListView(ProjectService projectService, CompanyService companyService,
-                           SecurityService securityService) {
+                            SecurityService securityService) {
         this.projectService = projectService;
         this.companyService = companyService;
         this.securityService = securityService;
         setSizeFull();
         configureGrid();
-        add(createToolbar(), grid);
-        loadCompanies();
+        add(createToolbar());
+        add(grid);
+        refreshGrid();
     }
 
     private void configureGrid() {
@@ -60,22 +62,17 @@ public class ProjectListView extends VerticalLayout {
 
     private HorizontalLayout createToolbar() {
         User current = securityService.getCurrentUser();
-        companies = companyService.findAll(current.getId(), current.getRole());
+        companies.clear();
+        companies.addAll(companyService.findAll(current.getId(), current.getRole()));
 
         companyFilter = new ComboBox<>("Company");
         companyFilter.setItems(companies);
         companyFilter.setItemLabelGenerator(CompanyDto::name);
-        companyFilter.setPlaceholder("Select a company");
+        companyFilter.setPlaceholder("All companies");
         companyFilter.addValueChangeListener(e -> refreshGrid());
 
         Button add = new Button("Add Project", e -> openEditDialog(null));
         return new HorizontalLayout(companyFilter, add);
-    }
-
-    private void loadCompanies() {
-        if (!companies.isEmpty()) {
-            companyFilter.setValue(companies.get(0));
-        }
     }
 
     private void openEditDialog(ProjectDto existing) {
@@ -94,11 +91,6 @@ public class ProjectListView extends VerticalLayout {
         companyField.setItems(companies);
         companyField.setItemLabelGenerator(CompanyDto::name);
 
-        if (companyFilter.getValue() != null) {
-            companyField.setValue(companyFilter.getValue());
-            form.setCompanyId(companyFilter.getValue().id());
-        }
-
         binder.bind(nameField, "name");
         binder.bind(descField, "description");
 
@@ -108,6 +100,9 @@ public class ProjectListView extends VerticalLayout {
             companyField.setValue(companies.stream()
                 .filter(c -> c.id().equals(existing.companyId())).findFirst().orElse(null));
             form.setCompanyId(existing.companyId());
+        } else if (companyFilter.getValue() != null) {
+            companyField.setValue(companyFilter.getValue());
+            form.setCompanyId(companyFilter.getValue().id());
         }
 
         companyField.addValueChangeListener(e -> {
@@ -117,7 +112,14 @@ public class ProjectListView extends VerticalLayout {
         });
 
         Button save = new Button("Save", e -> {
-            if (binder.validate().isOk() && form.getCompanyId() != null) {
+            try {
+                if (!binder.validate().isOk()) {
+                    return;
+                }
+                if (form.getCompanyId() == null) {
+                    Notification.show("Company is required", 3000, Notification.Position.MIDDLE);
+                    return;
+                }
                 if (existing == null) {
                     projectService.create(form, current.getId(), current.getRole());
                 } else {
@@ -126,6 +128,8 @@ public class ProjectListView extends VerticalLayout {
                 dialog.close();
                 refreshGrid();
                 Notification.show("Saved");
+            } catch (Exception ex) {
+                Notification.show("Save failed: " + ex.getMessage(), 5000, Notification.Position.MIDDLE);
             }
         });
         Button cancel = new Button("Cancel", e -> dialog.close());
@@ -136,9 +140,18 @@ public class ProjectListView extends VerticalLayout {
 
     private void refreshGrid() {
         User current = securityService.getCurrentUser();
-        if (companyFilter.getValue() != null) {
-            grid.setItems(projectService.findByCompanyId(
-                companyFilter.getValue().id(), current.getId(), current.getRole()));
+        try {
+            if (companyFilter.getValue() != null) {
+                grid.setItems(projectService.findByCompanyId(
+                    companyFilter.getValue().id(), current.getId(), current.getRole()));
+            } else {
+                companies.clear();
+                companies.addAll(companyService.findAll(current.getId(), current.getRole()));
+                var allProjects = projectService.findByCompanyId(null, current.getId(), current.getRole());
+                grid.setItems(allProjects);
+            }
+        } catch (Exception ex) {
+            Notification.show("Failed to load projects: " + ex.getMessage(), 5000, Notification.Position.MIDDLE);
         }
     }
 }

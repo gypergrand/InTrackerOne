@@ -1,5 +1,6 @@
 package com.intrackerone.domain.company;
 
+import com.intrackerone.domain.status.PipelineStatusService;
 import com.intrackerone.domain.user.Role;
 import com.intrackerone.domain.user.User;
 import com.intrackerone.domain.user.UserRepository;
@@ -20,6 +21,7 @@ public class CompanyService {
     private final CompanyRepository companyRepository;
     private final CompanyMapper companyMapper;
     private final UserRepository userRepository;
+    private final PipelineStatusService pipelineStatusService;
 
     @Transactional(readOnly = true)
     public List<CompanyDto> findAll(Long currentUserId, Role role) {
@@ -44,6 +46,7 @@ public class CompanyService {
     public CompanyDto create(CompanyForm form, Long ownerId) {
         User owner = userRepository.findById(ownerId)
             .orElseThrow(() -> new ResourceNotFoundException("User", ownerId));
+        pipelineStatusService.seedDefaultsForUser(ownerId);
         Company company = companyMapper.toEntity(form);
         company.setOwner(owner);
         company = companyRepository.save(company);

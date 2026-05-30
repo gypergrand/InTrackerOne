@@ -30,7 +30,7 @@ class CompanyRepositoryTest {
     @BeforeEach
     void setUp() {
         user = userRepository.save(User.builder()
-            .username("owner").password("pass").enabled(true).role(Role.USER).build());
+            .username("owner").password("pass").email("owner@test.com").enabled(true).role(Role.USER).build());
     }
 
     @Test
@@ -38,7 +38,7 @@ class CompanyRepositoryTest {
         companyRepository.save(Company.builder().name("Mine").owner(user).build());
 
         User otherUser = userRepository.save(User.builder()
-            .username("other").password("pass").enabled(true).role(Role.USER).build());
+            .username("other").password("pass").email("other@test.com").enabled(true).role(Role.USER).build());
         companyRepository.save(Company.builder().name("Theirs").owner(otherUser).build());
 
         List<Company> result = companyRepository.findByOwnerId(user.getId());

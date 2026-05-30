@@ -54,8 +54,8 @@ class ApiAuthenticationE2ETest {
         adminUser = userRepository.findByUsername("admin").orElseThrow();
 
         // Admin creates API token for themselves
-        ApiToken token = apiTokenService.createToken(adminUser.getId(), "E2E Test Token");
-        apiToken = token.getTokenValue();
+        ApiTokenService.CreatedToken token = apiTokenService.create(adminUser.getId(), "E2E Test Token");
+        apiToken = token.token();
         assertNotNull(apiToken);
         log.info("✓ Created API token for admin user");
     }
@@ -90,22 +90,22 @@ class ApiAuthenticationE2ETest {
     }
 
     @Test
-    void apiRequest_WithoutToken_ReturnsForbidden() throws Exception {
+    void apiRequest_WithoutToken_ReturnsUnauthorized() throws Exception {
         mockMvc.perform(get("/api/v1/companies"))
-            .andExpect(status().isForbidden());
+            .andExpect(status().isUnauthorized());
 
-        log.info("✓ Request without token returns 403");
+        log.info("Request without token returns 401");
     }
 
     @Test
-    void apiRequest_WithInvalidToken_ReturnsForbidden() throws Exception {
+    void apiRequest_WithInvalidToken_ReturnsUnauthorized() throws Exception {
         mockMvc.perform(
             get("/api/v1/companies")
                 .header("Authorization", "Bearer invalid_token_xyz")
         )
-        .andExpect(status().isForbidden());
+        .andExpect(status().isUnauthorized());
 
-        log.info("✓ Request with invalid token returns 403");
+        log.info("Request with invalid token returns 401");
     }
 
     @Test
@@ -127,7 +127,7 @@ class ApiAuthenticationE2ETest {
             .orElseThrow()
             .getId();
 
-        apiTokenService.revokeToken(adminUser.getId(), tokenId);
+        apiTokenService.revoke(tokenId, adminUser.getId());
         log.info("✓ Token revoked");
 
         // Verify token no longer works
@@ -135,7 +135,7 @@ class ApiAuthenticationE2ETest {
             get("/api/v1/companies")
                 .header("Authorization", "Bearer " + apiToken)
         )
-        .andExpect(status().isForbidden());
+        .andExpect(status().isUnauthorized());
 
         log.info("✓ Revoked token returns 403");
     }
@@ -143,9 +143,9 @@ class ApiAuthenticationE2ETest {
     @Test
     void multipleTokens_AdminCanManageMultiple() {
         // Create second token
-        ApiToken token2 = apiTokenService.createToken(adminUser.getId(), "E2E Test Token 2");
-        assertNotNull(token2.getTokenValue());
-        assertNotEquals(apiToken, token2.getTokenValue());
+        ApiTokenService.CreatedToken token2 = apiTokenService.create(adminUser.getId(), "E2E Test Token 2");
+        assertNotNull(token2.token());
+        assertNotEquals(apiToken, token2.token());
 
         // Verify both tokens exist
         var tokens = apiTokenRepository.findByUserId(adminUser.getId());

@@ -42,6 +42,18 @@ public class RecruiterService {
     }
 
     @Transactional(readOnly = true)
+    public List<RecruiterDto> findAllAccessible(Long currentUserId, Role role) {
+        if (role == Role.ADMIN || role == Role.MODERATOR) {
+            return recruiterRepository.findAll().stream()
+                .map(recruiterMapper::toDto)
+                .toList();
+        }
+        return recruiterRepository.findByOwnerId(currentUserId).stream()
+            .map(recruiterMapper::toDto)
+            .toList();
+    }
+
+    @Transactional(readOnly = true)
     public RecruiterDto findById(Long id, Long currentUserId, Role role) {
         Recruiter recruiter = findRecruiter(id);
         AccessControl.requireOwnerOrGlobal(recruiter.getOwner(), currentUserId, role, "Recruiter");

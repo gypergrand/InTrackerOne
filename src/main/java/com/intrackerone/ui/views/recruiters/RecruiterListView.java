@@ -2,6 +2,7 @@ package com.intrackerone.ui.views.recruiters;
 
 import com.intrackerone.domain.company.CompanyDto;
 import com.intrackerone.domain.company.CompanyService;
+import com.intrackerone.domain.project.ProjectDto;
 import com.intrackerone.domain.project.ProjectService;
 import com.intrackerone.domain.recruiter.RecruiterDto;
 import com.intrackerone.domain.recruiter.RecruiterForm;
@@ -23,7 +24,10 @@ import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.Route;
 import jakarta.annotation.security.PermitAll;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Route(value = "recruiters", layout = MainLayout.class)
@@ -36,17 +40,19 @@ public class RecruiterListView extends VerticalLayout {
     private final SecurityService securityService;
     private final Grid<RecruiterDto> grid = new Grid<>(RecruiterDto.class);
     private ComboBox<CompanyDto> companyFilter;
+    private final List<CompanyDto> companies = new ArrayList<>();
 
     public RecruiterListView(RecruiterService recruiterService, CompanyService companyService,
-                             ProjectService projectService, SecurityService securityService) {
+                              ProjectService projectService, SecurityService securityService) {
         this.recruiterService = recruiterService;
         this.companyService = companyService;
         this.projectService = projectService;
         this.securityService = securityService;
         setSizeFull();
         configureGrid();
-        add(createToolbar(), grid);
-        loadCompanies();
+        add(createToolbar());
+        add(grid);
+        refreshGrid();
     }
 
     private void configureGrid() {
@@ -63,24 +69,17 @@ public class RecruiterListView extends VerticalLayout {
 
     private HorizontalLayout createToolbar() {
         User current = securityService.getCurrentUser();
-        var companies = companyService.findAll(current.getId(), current.getRole());
+        companies.clear();
+        companies.addAll(companyService.findAll(current.getId(), current.getRole()));
 
         companyFilter = new ComboBox<>("Company");
         companyFilter.setItems(companies);
         companyFilter.setItemLabelGenerator(CompanyDto::name);
-        companyFilter.setPlaceholder("Select a company");
+        companyFilter.setPlaceholder("All companies");
         companyFilter.addValueChangeListener(e -> refreshGrid());
 
         Button add = new Button("Add Recruiter", e -> openEditDialog(null));
         return new HorizontalLayout(companyFilter, add);
-    }
-
-    private void loadCompanies() {
-        User current = securityService.getCurrentUser();
-        var companies = companyService.findAll(current.getId(), current.getRole());
-        if (!companies.isEmpty()) {
-            companyFilter.setValue(companies.get(0));
-        }
     }
 
     private void openEditDialog(RecruiterDto existing) {
@@ -88,9 +87,10 @@ public class RecruiterListView extends VerticalLayout {
         RecruiterForm form = new RecruiterForm();
 
         User current = securityService.getCurrentUser();
-        var companies = companyService.findAll(current.getId(), current.getRole());
+        List<ProjectDto> availableProjects = new ArrayList<>();
 
         TextField nameField = new TextField("Name");
+        nameField.setRequiredIndicatorVisible(true);
         TextField emailField = new TextField("Email");
         TextField phoneField = new TextField("Phone");
         TextArea notesField = new TextArea("Notes");
@@ -98,25 +98,9 @@ public class RecruiterListView extends VerticalLayout {
         ComboBox<CompanyDto> companyField = new ComboBox<>("Company");
         companyField.setItems(companies);
         companyField.setItemLabelGenerator(CompanyDto::name);
+        companyField.setRequiredIndicatorVisible(true);
 
-        CheckboxGroup<Object> projectsField = new CheckboxGroup<>("Projects");
-
-        companyField.addValueChangeListener(e -> {
-            if (e.getValue() != null) {
-                Long companyId = e.getValue().id();
-                var projs = projectService.findByCompanyId(companyId, current.getId(), current.getRole());
-                projectsField.setItems(projs);
-//                projectsField.setItemLabelGenerator(p -> ((com.intrackerone.domain.project.ProjectDto) p).name());
-                form.setCompanyId(companyId);
-            } else {
-                projectsField.setItems();
-                form.setCompanyId(null);
-            }
-        });
-
-        if (companyFilter.getValue() != null) {
-            companyField.setValue(companyFilter.getValue());
-        }
+        CheckboxGroup<ProjectDto> projectsField = new CheckboxGroup<>("Projects");
 
         if (existing != null) {
             nameField.setValue(existing.name());
@@ -125,37 +109,64 @@ public class RecruiterListView extends VerticalLayout {
             notesField.setValue(existing.notes() != null ? existing.notes() : "");
             companyField.setValue(companies.stream()
                 .filter(c -> c.id().equals(existing.companyId())).findFirst().orElse(null));
-            if (existing.companyId() != null) {
-                var projs = projectService.findByCompanyId(existing.companyId(), current.getId(), current.getRole());
-                java.util.Set<Object> selected = projs.stream()
-                    .filter(p -> existing.projectIds().contains(p.id()))
-                    .collect(Collectors.toSet());
-                projectsField.setValue(selected);
-            }
             form.setCompanyId(existing.companyId());
             form.setProjectIds(existing.projectIds());
+
+            availableProjects.addAll(projectService.findByCompanyId(existing.companyId(), current.getId(), current.getRole()));
+            Set<ProjectDto> selected = availableProjects.stream()
+                .filter(p -> existing.projectIds().contains(p.id()))
+                .collect(Collectors.toSet());
+            projectsField.setItems(availableProjects);
+            projectsField.setValue(selected);
+        } else if (companyFilter.getValue() != null) {
+            companyField.setValue(companyFilter.getValue());
         }
 
-        Button save = new Button("Save", e -> {
-            form.setName(nameField.getValue());
-            form.setEmail(emailField.getValue());
-            form.setPhone(phoneField.getValue());
-            form.setNotes(notesField.getValue());
-            if (companyField.getValue() != null) {
-                form.setCompanyId(companyField.getValue().id());
-            }
-            form.setProjectIds(projectsField.getSelectedItems().stream()
-                .map(p -> ((com.intrackerone.domain.project.ProjectDto) ((List) p).get(0)).id())
-                .collect(Collectors.toSet()));
-
-            if (existing == null) {
-                recruiterService.create(form, current.getId(), current.getRole());
+        companyField.addValueChangeListener(e -> {
+            projectsField.clear();
+            projectsField.setItems();
+            if (e.getValue() != null) {
+                Long companyId = e.getValue().id();
+                form.setCompanyId(companyId);
+                availableProjects.clear();
+                availableProjects.addAll(projectService.findByCompanyId(companyId, current.getId(), current.getRole()));
+                projectsField.setItems(availableProjects);
             } else {
-                recruiterService.update(existing.id(), form, current.getId(), current.getRole());
+                form.setCompanyId(null);
             }
-            dialog.close();
-            refreshGrid();
-            Notification.show("Saved");
+        });
+
+        Button save = new Button("Save", e -> {
+            try {
+                if (nameField.isEmpty()) {
+                    Notification.show("Name is required", 3000, Notification.Position.MIDDLE);
+                    return;
+                }
+                if (companyField.isEmpty()) {
+                    Notification.show("Company is required", 3000, Notification.Position.MIDDLE);
+                    return;
+                }
+
+                form.setName(nameField.getValue());
+                form.setEmail(emailField.getValue().isBlank() ? null : emailField.getValue());
+                form.setPhone(phoneField.getValue().isBlank() ? null : phoneField.getValue());
+                form.setNotes(notesField.getValue().isBlank() ? null : notesField.getValue());
+                form.setCompanyId(companyField.getValue().id());
+                form.setProjectIds(projectsField.getSelectedItems().stream()
+                    .map(ProjectDto::id)
+                    .collect(Collectors.toSet()));
+
+                if (existing == null) {
+                    recruiterService.create(form, current.getId(), current.getRole());
+                } else {
+                    recruiterService.update(existing.id(), form, current.getId(), current.getRole());
+                }
+                dialog.close();
+                refreshGrid();
+                Notification.show("Saved");
+            } catch (Exception ex) {
+                Notification.show("Save failed: " + ex.getMessage(), 5000, Notification.Position.MIDDLE);
+            }
         });
         Button cancel = new Button("Cancel", e -> dialog.close());
 
@@ -166,9 +177,17 @@ public class RecruiterListView extends VerticalLayout {
 
     private void refreshGrid() {
         User current = securityService.getCurrentUser();
-        if (companyFilter.getValue() != null) {
-            grid.setItems(recruiterService.findByCompanyId(
-                companyFilter.getValue().id(), current.getId(), current.getRole()));
+        try {
+            if (companyFilter.getValue() != null) {
+                grid.setItems(recruiterService.findByCompanyId(
+                    companyFilter.getValue().id(), current.getId(), current.getRole()));
+            } else {
+                companies.clear();
+                companies.addAll(companyService.findAll(current.getId(), current.getRole()));
+                grid.setItems(recruiterService.findAllAccessible(current.getId(), current.getRole()));
+            }
+        } catch (Exception ex) {
+            Notification.show("Failed to load recruiters: " + ex.getMessage(), 5000, Notification.Position.MIDDLE);
         }
     }
 }

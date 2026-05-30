@@ -41,6 +41,7 @@ public class ApiTokenService {
         ApiToken token = ApiToken.builder()
             .name(name)
             .tokenHash(tokenHash)
+            .tokenIdentifier(rawToken.substring(4, 20))
             .user(user)
             .enabled(true)
             .build();

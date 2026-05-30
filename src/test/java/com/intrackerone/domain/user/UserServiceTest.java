@@ -89,7 +89,7 @@ class UserServiceTest {
     @Test
     void create_encodesPasswordAndSaves() {
         when(passwordEncoder.encode("rawpass")).thenReturn("encoded");
-        when(userMapper.toEntity(form)).thenReturn(User.builder().username("newuser").build());
+        when(userMapper.toEntity(form)).thenReturn(User.builder().username("newuser").email("user@test.com").build());
         when(userRepository.save(any())).thenReturn(adminUser);
         when(userMapper.toDto(adminUser)).thenReturn(adminDto);
 

@@ -1,6 +1,7 @@
 package com.intrackerone.domain.job;
 
 import com.intrackerone.domain.company.Company;
+import com.intrackerone.domain.history.StatusChangeRepository;
 import com.intrackerone.domain.project.Project;
 import com.intrackerone.domain.project.ProjectRepository;
 import com.intrackerone.domain.recruiter.Recruiter;
@@ -46,6 +47,9 @@ class JobServiceTest {
 
     @Mock
     private PipelineStatusRepository pipelineStatusRepository;
+
+    @Mock
+    private StatusChangeRepository statusChangeRepository;
 
     @Mock
     private UserRepository userRepository;

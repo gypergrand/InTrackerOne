@@ -1,5 +1,7 @@
 package com.intrackerone.domain.job;
 
+import com.intrackerone.domain.history.StatusChange;
+import com.intrackerone.domain.history.StatusChangeRepository;
 import com.intrackerone.domain.project.Project;
 import com.intrackerone.domain.project.ProjectRepository;
 import com.intrackerone.domain.recruiter.Recruiter;
@@ -16,6 +18,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -28,6 +31,7 @@ public class JobService {
     private final ProjectRepository projectRepository;
     private final RecruiterRepository recruiterRepository;
     private final PipelineStatusRepository pipelineStatusRepository;
+    private final StatusChangeRepository statusChangeRepository;
 
     @Transactional(readOnly = true)
     public List<JobDto> findAll(Long currentUserId, Role role, Long statusId, Long companyId, Long projectId) {
@@ -38,6 +42,7 @@ public class JobService {
             jobs = jobRepository.findByOwnerId(currentUserId);
         }
         return jobs.stream()
+            .filter(j -> j.getProject() != null && j.getCurrentStatus() != null)
             .filter(j -> statusId == null || j.getCurrentStatus().getId().equals(statusId))
             .filter(j -> companyId == null || j.getProject().getCompany().getId().equals(companyId))
             .filter(j -> projectId == null || j.getProject().getId().equals(projectId))
@@ -65,6 +70,15 @@ public class JobService {
         job.setOwner(project.getOwner());
         updateRecruiter(job, form.getRecruiterId(), project);
         job = jobRepository.save(job);
+
+        StatusChange change = StatusChange.builder()
+            .jobApplication(job)
+            .fromStatus(null)
+            .toStatus(status)
+            .changedAt(LocalDateTime.now())
+            .build();
+        statusChangeRepository.save(change);
+
         log.info("Created job application: {} ({})", job.getPosition(), project.getName());
         return jobMapper.toDto(job);
     }

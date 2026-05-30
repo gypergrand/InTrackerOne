@@ -36,7 +36,7 @@ class UserRepositoryTest {
     @Test
     void existsByUsername_whenExists_returnsTrue() {
         userRepository.save(User.builder()
-            .username("existing").password("pass").enabled(true).role(Role.ADMIN).build());
+            .username("existing").password("pass").email("existing@test.com").enabled(true).role(Role.ADMIN).build());
 
         boolean exists = userRepository.existsByUsername("existing");
 
@@ -46,7 +46,7 @@ class UserRepositoryTest {
     @Test
     void save_encodesTimestamps() {
         User user = userRepository.save(User.builder()
-            .username("newuser").password("pass").enabled(true).role(Role.USER).build());
+            .username("newuser").password("pass").email("newuser@test.com").enabled(true).role(Role.USER).build());
 
         assertThat(user.getId()).isNotNull();
         assertThat(user.getCreatedAt()).isNotNull();

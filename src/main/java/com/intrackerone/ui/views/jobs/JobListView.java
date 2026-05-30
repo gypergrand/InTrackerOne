@@ -1,13 +1,17 @@
 package com.intrackerone.ui.views.jobs;
 
+import com.intrackerone.domain.company.CompanyDto;
 import com.intrackerone.domain.company.CompanyService;
 import com.intrackerone.domain.job.JobDto;
 import com.intrackerone.domain.job.JobForm;
 import com.intrackerone.domain.job.JobService;
 import com.intrackerone.domain.job.JobType;
 import com.intrackerone.domain.job.Source;
+import com.intrackerone.domain.project.ProjectDto;
 import com.intrackerone.domain.project.ProjectService;
+import com.intrackerone.domain.recruiter.RecruiterDto;
 import com.intrackerone.domain.recruiter.RecruiterService;
+import com.intrackerone.domain.status.PipelineStatusDto;
 import com.intrackerone.domain.status.PipelineStatusService;
 import com.intrackerone.domain.user.User;
 import com.intrackerone.infrastructure.security.SecurityService;
@@ -88,6 +92,8 @@ public class JobListView extends VerticalLayout {
         User current = securityService.getCurrentUser();
 
         TextField positionField = new TextField("Position");
+        positionField.setRequiredIndicatorVisible(true);
+
         TextArea descField = new TextArea("Description");
         TextField urlField = new TextField("Job URL");
         TextField locationField = new TextField("Location");
@@ -98,34 +104,49 @@ public class JobListView extends VerticalLayout {
         Select<JobType> typeField = new Select<>();
         typeField.setLabel("Job Type");
         typeField.setItems(JobType.values());
+        typeField.setRequiredIndicatorVisible(true);
 
         Select<Source> sourceField = new Select<>();
         sourceField.setLabel("Source");
         sourceField.setItems(Source.values());
+        sourceField.setRequiredIndicatorVisible(true);
 
         var companies = companyService.findAll(current.getId(), current.getRole());
-        ComboBox<Object> companyField = new ComboBox<>("Company");
+        ComboBox<CompanyDto> companyField = new ComboBox<>("Company");
         companyField.setItems(companies);
-        companyField.setItemLabelGenerator(c -> ((com.intrackerone.domain.company.CompanyDto) c).name());
+        companyField.setItemLabelGenerator(CompanyDto::name);
+        companyField.setRequiredIndicatorVisible(true);
 
-        ComboBox<Object> projectField = new ComboBox<>("Project");
-        ComboBox<Object> recruiterField = new ComboBox<>("Recruiter");
-        recruiterField.setItemLabelGenerator(r -> ((com.intrackerone.domain.recruiter.RecruiterDto) r).name());
+        ComboBox<ProjectDto> projectField = new ComboBox<>("Project");
+        projectField.setRequiredIndicatorVisible(true);
+        projectField.setEnabled(false);
+        projectField.setPlaceholder("Select a company first");
+
+        ComboBox<RecruiterDto> recruiterField = new ComboBox<>("Recruiter");
+        recruiterField.setItemLabelGenerator(RecruiterDto::name);
 
         var statuses = pipelineStatusService.findByOwnerId(current.getId());
-        ComboBox<Object> statusField = new ComboBox<>("Status");
+        ComboBox<PipelineStatusDto> statusField = new ComboBox<>("Status");
         statusField.setItems(statuses);
-        statusField.setItemLabelGenerator(s -> ((com.intrackerone.domain.status.PipelineStatusDto) s).name());
+        statusField.setItemLabelGenerator(PipelineStatusDto::name);
+        statusField.setRequiredIndicatorVisible(true);
 
         companyField.addValueChangeListener(e -> {
+            projectField.clear();
+            recruiterField.clear();
             if (e.getValue() != null) {
-                Long companyId = ((com.intrackerone.domain.company.CompanyDto) e.getValue()).id();
+                Long companyId = e.getValue().id();
                 var projects = projectService.findByCompanyId(companyId, current.getId(), current.getRole());
                 projectField.setItems(projects);
-                projectField.setItemLabelGenerator(p -> ((com.intrackerone.domain.project.ProjectDto) p).name());
+                projectField.setItemLabelGenerator(ProjectDto::name);
+                projectField.setEnabled(true);
+                projectField.setPlaceholder(null);
 
                 var recruiters = recruiterService.findByCompanyId(companyId, current.getId(), current.getRole());
                 recruiterField.setItems(recruiters);
+            } else {
+                projectField.setEnabled(false);
+                projectField.setPlaceholder("Select a company first");
             }
         });
 
@@ -155,34 +176,61 @@ public class JobListView extends VerticalLayout {
         }
 
         Button save = new Button("Save", e -> {
-            form.setPosition(positionField.getValue());
-            form.setJobDescription(descField.getValue());
-            form.setJobUrl(urlField.getValue());
-            form.setLocation(locationField.getValue());
-            form.setSalaryRange(salaryField.getValue());
-            form.setNotes(notesField.getValue());
-            form.setSourceMeta(sourceMetaField.getValue());
-            form.setJobType(typeField.getValue());
-            form.setSource(sourceField.getValue());
+            try {
+                if (positionField.isEmpty()) {
+                    Notification.show("Position is required", 3000, Notification.Position.MIDDLE);
+                    positionField.focus();
+                    return;
+                }
+                if (typeField.isEmpty()) {
+                    Notification.show("Job Type is required", 3000, Notification.Position.MIDDLE);
+                    return;
+                }
+                if (sourceField.isEmpty()) {
+                    Notification.show("Source is required", 3000, Notification.Position.MIDDLE);
+                    return;
+                }
+                if (companyField.isEmpty()) {
+                    Notification.show("Company is required", 3000, Notification.Position.MIDDLE);
+                    return;
+                }
+                if (projectField.isEmpty()) {
+                    Notification.show("Project is required", 3000, Notification.Position.MIDDLE);
+                    return;
+                }
+                if (statusField.isEmpty()) {
+                    Notification.show("Status is required", 3000, Notification.Position.MIDDLE);
+                    return;
+                }
 
-            if (statusField.getValue() != null) {
-                form.setCurrentStatusId(((com.intrackerone.domain.status.PipelineStatusDto) statusField.getValue()).id());
-            }
-            if (projectField.getValue() != null) {
-                form.setProjectId(((com.intrackerone.domain.project.ProjectDto) projectField.getValue()).id());
-            }
-            if (recruiterField.getValue() != null) {
-                form.setRecruiterId(((com.intrackerone.domain.recruiter.RecruiterDto) recruiterField.getValue()).id());
-            }
+                form.setPosition(positionField.getValue());
+                form.setJobDescription(descField.getValue());
+                form.setJobUrl(urlField.getValue());
+                form.setLocation(locationField.getValue());
+                form.setSalaryRange(salaryField.getValue());
+                form.setNotes(notesField.getValue());
+                form.setSourceMeta(sourceMetaField.getValue());
+                form.setJobType(typeField.getValue());
+                form.setSource(sourceField.getValue());
 
-            if (existing == null) {
-                jobService.create(form, current.getId(), current.getRole());
-            } else {
-                jobService.update(existing.id(), form, current.getId(), current.getRole());
+                form.setCurrentStatusId(statusField.getValue().id());
+                form.setProjectId(projectField.getValue().id());
+
+                if (recruiterField.getValue() != null) {
+                    form.setRecruiterId(recruiterField.getValue().id());
+                }
+
+                if (existing == null) {
+                    jobService.create(form, current.getId(), current.getRole());
+                } else {
+                    jobService.update(existing.id(), form, current.getId(), current.getRole());
+                }
+                dialog.close();
+                refresh();
+                Notification.show("Saved");
+            } catch (Exception ex) {
+                Notification.show("Save failed: " + ex.getMessage(), 5000, Notification.Position.MIDDLE);
             }
-            dialog.close();
-            refresh();
-            Notification.show("Saved");
         });
         Button cancel = new Button("Cancel", e -> dialog.close());
 
@@ -195,6 +243,10 @@ public class JobListView extends VerticalLayout {
 
     private void refresh() {
         User current = securityService.getCurrentUser();
-        grid.setItems(jobService.findAll(current.getId(), current.getRole(), null, null, null));
+        try {
+            grid.setItems(jobService.findAll(current.getId(), current.getRole(), null, null, null));
+        } catch (Exception ex) {
+            Notification.show("Failed to load jobs: " + ex.getMessage(), 5000, Notification.Position.MIDDLE);
+        }
     }
 }

@@ -74,16 +74,20 @@ public class CompanyListView extends VerticalLayout {
         binder.bind(notesField, "notes");
 
         Button save = new Button("Save", e -> {
-            if (binder.validate().isOk()) {
-                User current = securityService.getCurrentUser();
-                if (existing == null) {
-                    companyService.create(form, current.getId());
-                } else {
-                    companyService.update(existing.id(), form, current.getId(), current.getRole());
+            try {
+                if (binder.validate().isOk()) {
+                    User current = securityService.getCurrentUser();
+                    if (existing == null) {
+                        companyService.create(form, current.getId());
+                    } else {
+                        companyService.update(existing.id(), form, current.getId(), current.getRole());
+                    }
+                    dialog.close();
+                    refresh();
+                    Notification.show("Saved");
                 }
-                dialog.close();
-                refresh();
-                Notification.show("Saved");
+            } catch (Exception ex) {
+                Notification.show("Save failed: " + ex.getMessage(), 5000, Notification.Position.MIDDLE);
             }
         });
         Button cancel = new Button("Cancel", e -> dialog.close());
@@ -94,6 +98,10 @@ public class CompanyListView extends VerticalLayout {
 
     private void refresh() {
         User current = securityService.getCurrentUser();
-        grid.setItems(companyService.findAll(current.getId(), current.getRole()));
+        try {
+            grid.setItems(companyService.findAll(current.getId(), current.getRole()));
+        } catch (Exception ex) {
+            Notification.show("Failed to load companies: " + ex.getMessage(), 5000, Notification.Position.MIDDLE);
+        }
     }
 }

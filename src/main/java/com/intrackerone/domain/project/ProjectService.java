@@ -23,6 +23,9 @@ public class ProjectService {
 
     @Transactional(readOnly = true)
     public List<ProjectDto> findByCompanyId(Long companyId, Long currentUserId, Role role) {
+        if (companyId == null) {
+            return findAllAccessible(currentUserId, role);
+        }
         if (role == Role.ADMIN || role == Role.MODERATOR) {
             return projectRepository.findByCompanyId(companyId).stream()
                 .map(projectMapper::toDto)
@@ -30,6 +33,18 @@ public class ProjectService {
         }
         return projectRepository.findByCompanyId(companyId).stream()
             .filter(p -> p.getOwner().getId().equals(currentUserId))
+            .map(projectMapper::toDto)
+            .toList();
+    }
+
+    @Transactional(readOnly = true)
+    public List<ProjectDto> findAllAccessible(Long currentUserId, Role role) {
+        if (role == Role.ADMIN || role == Role.MODERATOR) {
+            return projectRepository.findAll().stream()
+                .map(projectMapper::toDto)
+                .toList();
+        }
+        return projectRepository.findByOwnerId(currentUserId).stream()
             .map(projectMapper::toDto)
             .toList();
     }
