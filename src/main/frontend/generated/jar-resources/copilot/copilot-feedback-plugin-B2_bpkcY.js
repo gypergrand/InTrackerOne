@@ -1,9 +1,9 @@
-import { B as c, j as d, b as h, v as g, a5 as u, s as v, P as f, G as y, r as k } from "./copilot-BLh5wx96.js";
-import { r as s } from "./state-BjIo3eCc.js";
+import { B as c, j as d, b as h, w as g, a5 as u, s as v, P as f, G as y, r as k } from "./copilot-D63_Kxm1.js";
+import { r as s } from "./state-BA6hnnsv.js";
 import { e as w } from "./query-BykXNUlT.js";
-import { B as $ } from "./base-panel-CfEmfEkB.js";
-import { i as x } from "./icons-JiiuKfcS.js";
-import { m as A } from "./overlay-monkeypatch-DL7WcPen.js";
+import { B as $ } from "./base-panel-DwlRfMDt.js";
+import { i as x } from "./icons-B1bSjv1h.js";
+import { m as A } from "./overlay-monkeypatch-CMzG4ZpL.js";
 const P = "copilot-feedback-panel{display:flex;flex-direction:column;font:var(--font-xsmall);gap:var(--space-200);padding:var(--space-150)}copilot-feedback-panel>p{margin:0}copilot-feedback-panel .dialog-footer{display:flex;gap:var(--space-100)}copilot-feedback-panel :is(vaadin-select,vaadin-text-area,vaadin-email-field){padding:0}copilot-feedback-panel :is(vaadin-select,vaadin-text-area,vaadin-email-field)::part(input-field),copilot-feedback-panel vaadin-select-value-button{padding:0}copilot-feedback-panel vaadin-select::part(toggle-button){align-items:center;display:flex;height:var(--size-m);justify-content:center;width:var(--size-m)}copilot-feedback-panel vaadin-text-area textarea{line-height:var(--line-height-1);padding:calc((var(--size-m) - var(--line-height-1)) / 2) var(--space-100)}copilot-feedback-panel vaadin-text-area:hover::part(input-field){background:none}copilot-feedback-panel vaadin-email-field input{padding:0 var(--space-100)}copilot-feedback-panel>*::part(label){font-weight:var(--font-weight-medium);line-height:var(--line-height-1);margin:0;padding:0 var(--space-150) var(--space-50) 0}copilot-feedback-panel>*::part(helper-text){line-height:var(--line-height-1);margin:0}";
 var F = Object.defineProperty, T = Object.getOwnPropertyDescriptor, o = (e, t, n, l) => {
   for (var a = l > 1 ? void 0 : l ? T(t, n) : t, p = e.length - 1, r; p >= 0; p--)

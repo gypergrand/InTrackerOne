@@ -129,6 +129,7 @@ class JobServiceTest {
         when(projectRepository.findById(1L)).thenReturn(Optional.of(project));
         when(pipelineStatusRepository.findById(1L)).thenReturn(Optional.of(status));
         when(recruiterRepository.findById(1L)).thenReturn(Optional.of(recruiter));
+        when(userRepository.findById(1L)).thenReturn(Optional.of(admin));
         when(jobMapper.toEntity(createForm)).thenReturn(JobApplication.builder().position("New Job").build());
         when(jobRepository.save(any())).thenReturn(job);
         when(jobMapper.toDto(job)).thenReturn(jobDto);

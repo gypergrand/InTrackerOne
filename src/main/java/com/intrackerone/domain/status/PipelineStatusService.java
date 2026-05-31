@@ -23,9 +23,16 @@ public class PipelineStatusService {
 
     @Transactional(readOnly = true)
     public List<PipelineStatusDto> findByOwnerId(Long ownerId) {
-        return pipelineStatusRepository.findByOwnerIdOrderBySortOrderAsc(ownerId).stream()
+        List<PipelineStatusDto> statuses = pipelineStatusRepository.findByOwnerIdOrderBySortOrderAsc(ownerId).stream()
             .map(pipelineStatusMapper::toDto)
             .toList();
+        if (statuses.isEmpty()) {
+            seedDefaultsForUser(ownerId);
+            statuses = pipelineStatusRepository.findByOwnerIdOrderBySortOrderAsc(ownerId).stream()
+                .map(pipelineStatusMapper::toDto)
+                .toList();
+        }
+        return statuses;
     }
 
     @Transactional(readOnly = true)

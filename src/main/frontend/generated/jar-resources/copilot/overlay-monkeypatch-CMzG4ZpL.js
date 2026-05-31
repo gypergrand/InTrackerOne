@@ -1,4 +1,4 @@
-import { P as r } from "./copilot-BLh5wx96.js";
+import { P as r } from "./copilot-D63_Kxm1.js";
 function i(e) {
   e.querySelectorAll(
     "vaadin-context-menu, vaadin-menu-bar, vaadin-menu-bar-submenu, vaadin-select, vaadin-combo-box, vaadin-tooltip, vaadin-dialog, vaadin-multi-select-combo-box, vaadin-popover"

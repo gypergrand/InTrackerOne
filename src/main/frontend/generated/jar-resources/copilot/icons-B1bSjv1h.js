@@ -1,4 +1,4 @@
-import { av as t } from "./copilot-BLh5wx96.js";
+import { av as t } from "./copilot-D63_Kxm1.js";
 const o = {
   adsClick: t`
 <svg
@@ -3102,7 +3102,7 @@ const o = {
 <svg
   width="18"
   height="18"
-  viewBox="0 0 24 24"
+  viewBox="0 0 18 18"
   xmlns="http://www.w3.org/2000/svg"
 >
   <path

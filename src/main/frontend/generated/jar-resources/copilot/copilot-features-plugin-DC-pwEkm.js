@@ -1,8 +1,8 @@
-import { j as p, B as d, a5 as m, W as R, ao as b, X as y, ap as $, M as F, E as u, aq as x, y as w, ar as O, r as f } from "./copilot-BLh5wx96.js";
-import { r as h } from "./state-BjIo3eCc.js";
-import { B as T } from "./base-panel-CfEmfEkB.js";
-import { i as v } from "./icons-JiiuKfcS.js";
-import { m as q } from "./overlay-monkeypatch-DL7WcPen.js";
+import { j as p, B as d, a5 as m, W as R, ao as b, X as y, ap as $, M as F, E as u, aq as x, y as w, ar as O, r as f } from "./copilot-D63_Kxm1.js";
+import { r as h } from "./state-BA6hnnsv.js";
+import { B as T } from "./base-panel-DwlRfMDt.js";
+import { i as v } from "./icons-B1bSjv1h.js";
+import { m as q } from "./overlay-monkeypatch-CMzG4ZpL.js";
 const P = "copilot-features-panel{padding:var(--space-100);font:var(--font-xsmall);display:grid;grid-template-columns:auto 1fr;gap:var(--space-50);height:auto}copilot-features-panel a{display:flex;align-items:center;gap:var(--space-50);white-space:nowrap}copilot-features-panel a svg{height:12px;width:12px;min-height:12px;min-width:12px}";
 var S = Object.defineProperty, A = Object.getOwnPropertyDescriptor, o = (e, t, a, s) => {
   for (var r = s > 1 ? void 0 : s ? A(t, a) : t, i = e.length - 1, n; i >= 0; i--)

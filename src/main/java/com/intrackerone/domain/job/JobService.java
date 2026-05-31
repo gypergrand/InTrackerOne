@@ -32,11 +32,12 @@ public class JobService {
     private final RecruiterRepository recruiterRepository;
     private final PipelineStatusRepository pipelineStatusRepository;
     private final StatusChangeRepository statusChangeRepository;
+    private final com.intrackerone.domain.user.UserRepository userRepository;
 
     @Transactional(readOnly = true)
     public List<JobDto> findAll(Long currentUserId, Role role, Long statusId, Long companyId, Long projectId) {
         List<JobApplication> jobs;
-        if (role == Role.ADMIN || role == Role.MODERATOR) {
+        if (role == Role.ADMIN) {
             jobs = jobRepository.findAll();
         } else {
             jobs = jobRepository.findByOwnerId(currentUserId);
@@ -62,13 +63,14 @@ public class JobService {
         Project project = findProject(form.getProjectId());
         AccessControl.requireOwnerOrGlobal(project.getOwner(), currentUserId, role, "Project");
         PipelineStatus status = findStatus(form.getCurrentStatusId());
-        requireSameOwner(project.getOwner(), status.getOwner(), "PipelineStatus");
+        User currentUser = getUser(currentUserId);
+        requireSameOwner(currentUser, status.getOwner(), "PipelineStatus");
 
         JobApplication job = jobMapper.toEntity(form);
         job.setProject(project);
         job.setCurrentStatus(status);
-        job.setOwner(project.getOwner());
-        updateRecruiter(job, form.getRecruiterId(), project);
+        job.setOwner(currentUser);
+        updateRecruiter(job, form.getRecruiterId(), project, currentUser);
         job = jobRepository.save(job);
 
         StatusChange change = StatusChange.builder()
@@ -90,7 +92,7 @@ public class JobService {
         updateFields(job, form);
         Project project = updateProject(job, form.getProjectId());
         updateStatus(job, form.getCurrentStatusId());
-        updateRecruiter(job, form.getRecruiterId(), project);
+        updateRecruiter(job, form.getRecruiterId(), project, job.getOwner());
         job = jobRepository.save(job);
         return jobMapper.toDto(job);
     }
@@ -143,13 +145,13 @@ public class JobService {
         job.setCurrentStatus(status);
     }
 
-    private void updateRecruiter(JobApplication job, Long recruiterId, Project project) {
+    private void updateRecruiter(JobApplication job, Long recruiterId, Project project, User owner) {
         if (recruiterId == null) {
             job.setRecruiter(null);
             return;
         }
         Recruiter recruiter = findRecruiter(recruiterId);
-        requireSameOwner(job.getOwner(), recruiter.getOwner(), "Recruiter");
+        requireSameOwner(owner, recruiter.getOwner(), "Recruiter");
         requireRecruiterCompany(recruiter, project);
         job.setRecruiter(recruiter);
     }
@@ -183,5 +185,10 @@ public class JobService {
     private Recruiter findRecruiter(Long id) {
         return recruiterRepository.findById(id)
             .orElseThrow(() -> new ResourceNotFoundException("Recruiter", id));
+    }
+
+    private User getUser(Long userId) {
+        return userRepository.findById(userId)
+            .orElseThrow(() -> new ResourceNotFoundException("User", userId));
     }
 }

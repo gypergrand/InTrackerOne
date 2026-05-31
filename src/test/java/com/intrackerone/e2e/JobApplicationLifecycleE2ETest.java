@@ -199,21 +199,25 @@ class JobApplicationLifecycleE2ETest {
         form3.setCurrentStatusId(statuses.get(5).getId()); // Offer
         jobService.update(job3.id(), form3, testUser.getId(), userRole);
 
-        // Verify applications in different statuses
+        // Verify applications in different statuses (filter by positions created in this test to avoid
+        // interference from other @BeforeEach-created jobs in the same @Transactional test class)
         List<JobDto> allJobs = jobService.findAll(testUser.getId(), userRole, null, null, null);
-        assertEquals(3, allJobs.size());
+        List<JobDto> thisTestsJobs = allJobs.stream()
+            .filter(j -> List.of("Frontend Dev", "Backend Dev", "DevOps Engineer").contains(j.position()))
+            .toList();
+        assertEquals(3, thisTestsJobs.size());
 
-        long phoneScreenCount = allJobs.stream()
+        long phoneScreenCount = thisTestsJobs.stream()
             .filter(j -> j.currentStatusId().equals(statuses.get(2).getId()))
             .count();
         assertEquals(1, phoneScreenCount);
 
-        long technicalCount = allJobs.stream()
+        long technicalCount = thisTestsJobs.stream()
             .filter(j -> j.currentStatusId().equals(statuses.get(3).getId()))
             .count();
         assertEquals(1, technicalCount);
 
-        long offerCount = allJobs.stream()
+        long offerCount = thisTestsJobs.stream()
             .filter(j -> j.currentStatusId().equals(statuses.get(5).getId()))
             .count();
         assertEquals(1, offerCount);

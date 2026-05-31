@@ -50,7 +50,7 @@ class PipelineStatusServiceTest {
             .id(1L).name("Applied").sortOrder(1).color("#2196F3")
             .type(StatusType.ACTIVE).owner(user).build();
 
-        statusDto = new PipelineStatusDto(1L, "Applied", 1, "#2196F3", StatusType.ACTIVE);
+        statusDto = new PipelineStatusDto(1L, "Applied", "#2196F3", StatusType.ACTIVE);
     }
 
     @Test
@@ -99,12 +99,11 @@ class PipelineStatusServiceTest {
         when(pipelineStatusRepository.save(any())).thenReturn(
             PipelineStatus.builder().id(2L).name("Custom Stage").sortOrder(2).build());
         when(pipelineStatusMapper.toDto(any())).thenReturn(
-            new PipelineStatusDto(2L, "Custom Stage", 2, "#FF0000", StatusType.ACTIVE));
+            new PipelineStatusDto(2L, "Custom Stage", "#FF0000", StatusType.ACTIVE));
 
         PipelineStatusDto result = pipelineStatusService.create(form, 1L);
 
         assertThat(result.name()).isEqualTo("Custom Stage");
-        assertThat(result.sortOrder()).isEqualTo(2);
 
         verify(pipelineStatusRepository).save(statusCaptor.capture());
         assertThat(statusCaptor.getValue().getOwner()).isEqualTo(user);

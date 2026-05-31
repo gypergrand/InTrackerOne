@@ -1,7 +1,7 @@
-import { j as p, I as c, v as y, B as a, J as g, E as k, an as u, R as $, Y as I, W as V, X as C, M as S, b as D, r as w } from "./copilot-BLh5wx96.js";
-import { B as E } from "./base-panel-CfEmfEkB.js";
-import { i as d } from "./icons-JiiuKfcS.js";
-import { c as P } from "./index-D5wBGfNx.js";
+import { j as p, I as c, w as y, B as a, J as g, E as k, an as u, R as $, Y as I, W as V, X as C, M as S, b as D, r as b } from "./copilot-D63_Kxm1.js";
+import { B as E } from "./base-panel-DwlRfMDt.js";
+import { i as d } from "./icons-B1bSjv1h.js";
+import { c as P } from "./index-DRX3pp6K.js";
 const A = 'copilot-info-panel{--dev-tools-red-color: red;--dev-tools-grey-color: gray;--dev-tools-green-color: green;position:relative}copilot-info-panel dl{margin:0;width:100%}copilot-info-panel dl>div{align-items:center;display:flex;gap:var(--space-50);height:var(--size-m);padding:0 var(--space-150);position:relative}copilot-info-panel dl>div:after{border-bottom:1px solid var(--divider-secondary-color);content:"";inset:auto var(--space-150) 0;position:absolute}copilot-info-panel dl dt{color:var(--secondary-text-color)}copilot-info-panel dl dd{align-items:center;display:flex;font-weight:var(--font-weight-medium);gap:var(--space-50);margin:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}copilot-info-panel dl dd span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}copilot-info-panel dl dd span.icon{display:inline-flex;vertical-align:bottom}copilot-info-panel dd.live-reload-status>span{overflow:hidden;text-overflow:ellipsis;display:block;color:var(--status-color)}copilot-info-panel dd span.hidden{display:none}copilot-info-panel code{white-space:nowrap;-webkit-user-select:all;user-select:all}copilot-info-panel .checks{display:inline-grid;grid-template-columns:auto 1fr;gap:var(--space-50)}copilot-info-panel span.hint{font-size:var(--font-size-0);background:var(--gray-50);padding:var(--space-75);border-radius:var(--radius-2)}';
 var H = Object.getOwnPropertyDescriptor, h = (e, t, i, o) => {
   for (var s = o > 1 ? void 0 : o ? H(t, i) : t, n = e.length - 1, l; n >= 0; n--)
@@ -150,9 +150,9 @@ let m = class extends E {
   }
 };
 m = h([
-  w("copilot-info-panel")
+  b("copilot-info-panel")
 ], m);
-let b = class extends S {
+let w = class extends S {
   createRenderRoot() {
     return this;
   }
@@ -174,9 +174,9 @@ let b = class extends S {
     </button>`;
   }
 };
-b = h([
-  w("copilot-info-actions")
-], b);
+w = h([
+  b("copilot-info-actions")
+], w);
 const T = {
   header: "Info",
   expanded: !1,
@@ -197,6 +197,6 @@ function f(e, t) {
   return e ? a`<span aria-label=${t} class="icon success-text" title=${t}>${d.check}</span>` : a`<span aria-label=${t} class="icon error-text" title=${t}>${d.x}</span>`;
 }
 export {
-  b as Actions,
+  w as Actions,
   m as CopilotInfoPanel
 };

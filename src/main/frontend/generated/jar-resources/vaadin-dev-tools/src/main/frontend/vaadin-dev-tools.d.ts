@@ -56,8 +56,9 @@ type DevToolsConf = {
     enable: boolean;
     url: string;
     backend?: string;
-    liveReloadPort: number;
+    liveReloadPort?: number;
     token?: string;
+    usageStatisticsEnabled?: boolean;
 };
 export declare class VaadinDevTools extends LitElement {
     unhandledMessages: ServerMessage[];

@@ -1,4 +1,4 @@
-import { M as t, v as n, j as a, au as i, b as o } from "./copilot-BLh5wx96.js";
+import { M as t, w as n, j as a, au as i, b as o } from "./copilot-D63_Kxm1.js";
 class l extends t {
   constructor() {
     super(...arguments), this.eventBusRemovers = [], this.messageHandlers = {}, this.handleESC = (e) => {

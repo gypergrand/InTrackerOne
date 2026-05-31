@@ -145,13 +145,13 @@ function p(e) {
   throw new Error(typeof e == "number" ? "[MobX] minified error nr: " + e + (n.length ? " " + n.map(String).join(",") : "") + ". Find the full error at: https://github.com/mobxjs/mobx/blob/main/packages/mobx/src/errors.ts" : "[MobX] " + e);
 }
 var Yo = {};
-function Gn() {
+function Wn() {
   return typeof globalThis < "u" ? globalThis : typeof window < "u" ? window : typeof global < "u" ? global : typeof self < "u" ? self : Yo;
 }
-var hi = Object.assign, Bt = Object.getOwnPropertyDescriptor, Z = Object.defineProperty, on = Object.prototype, Ht = [];
-Object.freeze(Ht);
-var Yn = {};
-Object.freeze(Yn);
+var hi = Object.assign, Ht = Object.getOwnPropertyDescriptor, Z = Object.defineProperty, an = Object.prototype, qt = [];
+Object.freeze(qt);
+var Gn = {};
+Object.freeze(Gn);
 var Xo = typeof Proxy < "u", Jo = /* @__PURE__ */ Object.toString();
 function gi() {
   Xo || p(process.env.NODE_ENV !== "production" ? "`Proxy` objects are not available in the current environment. Please configure MobX to enable a fallback implementation.`" : "Proxy not available");
@@ -162,7 +162,7 @@ function rt(e) {
 function B() {
   return ++f.mobxGuid;
 }
-function Xn(e) {
+function Yn(e) {
   var t = !1;
   return function() {
     if (!t)
@@ -174,7 +174,7 @@ var ze = function() {
 function O(e) {
   return typeof e == "function";
 }
-function Se(e) {
+function Ne(e) {
   var t = typeof e;
   switch (t) {
     case "string":
@@ -184,11 +184,11 @@ function Se(e) {
   }
   return !1;
 }
-function an(e) {
+function sn(e) {
   return e !== null && typeof e == "object";
 }
 function P(e) {
-  if (!an(e))
+  if (!sn(e))
     return !1;
   var t = Object.getPrototypeOf(e);
   if (t == null)
@@ -200,7 +200,7 @@ function mi(e) {
   var t = e?.constructor;
   return t ? t.name === "GeneratorFunction" || t.displayName === "GeneratorFunction" : !1;
 }
-function sn(e, t, n) {
+function ln(e, t, n) {
   Z(e, t, {
     enumerable: !1,
     writable: !0,
@@ -216,10 +216,10 @@ function bi(e, t, n) {
     value: n
   });
 }
-function ke(e, t) {
+function Te(e, t) {
   var n = "isMobX" + e;
   return t.prototype[n] = !0, function(r) {
-    return an(r) && r[n] === !0;
+    return sn(r) && r[n] === !0;
   };
 }
 function Ye(e) {
@@ -239,7 +239,7 @@ function Qo(e) {
     return t;
   var n = Object.getOwnPropertySymbols(e);
   return n.length ? [].concat(t, n.filter(function(r) {
-    return on.propertyIsEnumerable.call(e, r);
+    return an.propertyIsEnumerable.call(e, r);
   })) : t;
 }
 var mt = typeof Reflect < "u" && Reflect.ownKeys ? Reflect.ownKeys : _i ? function(e) {
@@ -248,19 +248,19 @@ var mt = typeof Reflect < "u" && Reflect.ownKeys ? Reflect.ownKeys : _i ? functi
   /* istanbul ignore next */
   Object.getOwnPropertyNames
 );
-function Tn(e) {
+function kn(e) {
   return typeof e == "string" ? e : typeof e == "symbol" ? e.toString() : new String(e).toString();
 }
 function yi(e) {
   return e === null ? null : typeof e == "object" ? "" + e : e;
 }
 function q(e, t) {
-  return on.hasOwnProperty.call(e, t);
+  return an.hasOwnProperty.call(e, t);
 }
 var ea = Object.getOwnPropertyDescriptors || function(t) {
   var n = {};
   return mt(t).forEach(function(r) {
-    n[r] = Bt(t, r);
+    n[r] = Ht(t, r);
   }), n;
 };
 function D(e, t) {
@@ -269,7 +269,7 @@ function D(e, t) {
 function k(e, t, n) {
   return n ? e |= t : e &= ~t, e;
 }
-function vr(e, t) {
+function pr(e, t) {
   (t == null || t > e.length) && (t = e.length);
   for (var n = 0, r = Array(t); n < t; n++) r[n] = e[n];
   return r;
@@ -313,12 +313,12 @@ function ve() {
   }, ve.apply(null, arguments);
 }
 function wi(e, t) {
-  e.prototype = Object.create(t.prototype), e.prototype.constructor = e, In(e, t);
+  e.prototype = Object.create(t.prototype), e.prototype.constructor = e, Tn(e, t);
 }
-function In(e, t) {
-  return In = Object.setPrototypeOf ? Object.setPrototypeOf.bind() : function(n, r) {
+function Tn(e, t) {
+  return Tn = Object.setPrototypeOf ? Object.setPrototypeOf.bind() : function(n, r) {
     return n.__proto__ = r, n;
-  }, In(e, t);
+  }, Tn(e, t);
 }
 function na(e, t) {
   if (typeof e != "object" || !e) return e;
@@ -336,9 +336,9 @@ function ra(e) {
 }
 function ia(e, t) {
   if (e) {
-    if (typeof e == "string") return vr(e, t);
+    if (typeof e == "string") return pr(e, t);
     var n = {}.toString.call(e).slice(8, -1);
-    return n === "Object" && e.constructor && (n = e.constructor.name), n === "Map" || n === "Set" ? Array.from(e) : n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n) ? vr(e, t) : void 0;
+    return n === "Object" && e.constructor && (n = e.constructor.name), n === "Map" || n === "Set" ? Array.from(e) : n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n) ? pr(e, t) : void 0;
   }
 }
 var oe = /* @__PURE__ */ Symbol("mobx-stored-annotations");
@@ -351,14 +351,14 @@ function Q(e) {
   return Object.assign(t, e);
 }
 function xt(e, t, n) {
-  if (q(e, oe) || sn(e, oe, ve({}, e[oe])), process.env.NODE_ENV !== "production" && qt(n) && !q(e[oe], t)) {
+  if (q(e, oe) || ln(e, oe, ve({}, e[oe])), process.env.NODE_ENV !== "production" && Kt(n) && !q(e[oe], t)) {
     var r = e.constructor.name + ".prototype." + t.toString();
     p("'" + r + "' is decorated with 'override', but no such decorated member was found on prototype.");
   }
-  oa(e, n, t), qt(n) || (e[oe][t] = n);
+  oa(e, n, t), Kt(n) || (e[oe][t] = n);
 }
 function oa(e, t, n) {
-  if (process.env.NODE_ENV !== "production" && !qt(t) && q(e[oe], n)) {
+  if (process.env.NODE_ENV !== "production" && !Kt(t) && q(e[oe], n)) {
     var r = e.constructor.name + ".prototype." + n.toString(), i = e[oe][n].annotationType_, o = t.annotationType_;
     p("Cannot apply '@" + o + "' to '" + r + "':" + (`
 The field is already decorated with '@` + i + "'.") + `
@@ -369,7 +369,7 @@ Use '@override' decorator for methods overridden by subclass.`);
 function St(e) {
   return typeof e == "object" && typeof e.kind == "string";
 }
-function ln(e, t) {
+function cn(e, t) {
   process.env.NODE_ENV !== "production" && !t.includes(e.kind) && p("The decorator applied to '" + String(e.name) + "' cannot be used on a " + e.kind + " element");
 }
 var g = /* @__PURE__ */ Symbol("mobx administration"), ge = /* @__PURE__ */ function() {
@@ -420,7 +420,7 @@ var g = /* @__PURE__ */ Symbol("mobx administration"), ge = /* @__PURE__ */ func
 ge.isBeingObservedMask_ = 1;
 ge.isPendingUnobservationMask_ = 2;
 ge.diffValueMask_ = 4;
-var Jn = /* @__PURE__ */ ke("Atom", ge);
+var Xn = /* @__PURE__ */ Te("Atom", ge);
 function Ei(e, t, n) {
   t === void 0 && (t = ze), n === void 0 && (n = ze);
   var r = new ge(e);
@@ -436,7 +436,7 @@ var Be = {
   structural: aa,
   default: sa
 };
-function Ne(e, t, n) {
+function Ce(e, t, n) {
   return yt(e) ? e : Array.isArray(e) ? x.array(e, {
     name: n
   }) : P(e) ? x.object(e, void 0, {
@@ -448,7 +448,7 @@ function Ne(e, t, n) {
   }) : typeof e == "function" && !He(e) && !_t(e) ? mi(e) ? qe(e) : bt(n, e) : e;
 }
 function la(e, t, n) {
-  if (e == null || Qe(e) || hn(e) || me(e) || X(e))
+  if (e == null || Qe(e) || gn(e) || me(e) || X(e))
     return e;
   if (Array.isArray(e))
     return x.array(e, {
@@ -472,14 +472,14 @@ function la(e, t, n) {
     });
   process.env.NODE_ENV !== "production" && p("The shallow modifier / decorator can only used in combination with arrays, objects, maps and sets");
 }
-function cn(e) {
+function un(e) {
   return e;
 }
 function ca(e, t) {
   return process.env.NODE_ENV !== "production" && yt(e) && p("observable.struct should not be used with observable values"), oo(e, t) ? t : e;
 }
 var ua = "override";
-function qt(e) {
+function Kt(e) {
   return e.annotationType_ === ua;
 }
 function Nt(e, t) {
@@ -507,10 +507,10 @@ function fa(e, t, n, r) {
   return e.defineProperty_(t, i, r);
 }
 function pa(e, t) {
-  process.env.NODE_ENV !== "production" && ln(t, ["method", "field"]);
+  process.env.NODE_ENV !== "production" && cn(t, ["method", "field"]);
   var n = t.kind, r = t.name, i = t.addInitializer, o = this, a = function(c) {
     var u, d, v, h;
-    return Ce((u = (d = o.options_) == null ? void 0 : d.name) != null ? u : r.toString(), c, (v = (h = o.options_) == null ? void 0 : h.autoAction) != null ? v : !1);
+    return Pe((u = (d = o.options_) == null ? void 0 : d.name) != null ? u : r.toString(), c, (v = (h = o.options_) == null ? void 0 : h.autoAction) != null ? v : !1);
   };
   if (n == "field")
     return function(l) {
@@ -541,7 +541,7 @@ function Ai(e, t, n, r, i) {
     v = v.bind((h = e.proxy_) != null ? h : e.target_);
   }
   return {
-    value: Ce(
+    value: Pe(
       (a = (s = t.options_) == null ? void 0 : s.name) != null ? a : n.toString(),
       v,
       (l = (c = t.options_) == null ? void 0 : c.autoAction) != null ? l : !1,
@@ -584,7 +584,7 @@ function ga(e, t, n, r) {
 }
 function ma(e, t) {
   var n;
-  process.env.NODE_ENV !== "production" && ln(t, ["method"]);
+  process.env.NODE_ENV !== "production" && cn(t, ["method"]);
   var r = t.name, i = t.addInitializer;
   return _t(e) || (e = qe(e)), (n = this.options_) != null && n.bound && i(function() {
     var o = this, a = o[r].bind(o);
@@ -615,7 +615,7 @@ function xi(e, t, n, r, i, o) {
     writable: !o
   };
 }
-function Zn(e, t) {
+function Jn(e, t) {
   return {
     annotationType_: e,
     options_: t,
@@ -634,7 +634,7 @@ function ya(e, t, n, r) {
   }), r);
 }
 function wa(e, t) {
-  process.env.NODE_ENV !== "production" && ln(t, ["getter"]);
+  process.env.NODE_ENV !== "production" && cn(t, ["getter"]);
   var n = this, r = t.name, i = t.addInitializer;
   return i(function() {
     var o = Ze(this)[g], a = ve({}, n.options_, {
@@ -651,7 +651,7 @@ function Ea(e, t, n, r) {
   process.env.NODE_ENV !== "production" && !o && p("Cannot apply '" + i + "' to '" + e.name_ + "." + n.toString() + "':" + (`
 '` + i + "' can only be used on getter(+setter) properties."));
 }
-function un(e, t) {
+function dn(e, t) {
   return {
     annotationType_: e,
     options_: t,
@@ -665,17 +665,17 @@ function Aa(e, t, n) {
 }
 function Oa(e, t, n, r) {
   var i, o;
-  return Sa(e, this, t, n), e.defineObservableProperty_(t, n.value, (i = (o = this.options_) == null ? void 0 : o.enhancer) != null ? i : Ne, r);
+  return Sa(e, this, t, n), e.defineObservableProperty_(t, n.value, (i = (o = this.options_) == null ? void 0 : o.enhancer) != null ? i : Ce, r);
 }
 function xa(e, t) {
   if (process.env.NODE_ENV !== "production") {
     if (t.kind === "field")
       throw p("Please use `@observable accessor " + String(t.name) + "` instead of `@observable " + String(t.name) + "`");
-    ln(t, ["accessor"]);
+    cn(t, ["accessor"]);
   }
   var n = this, r = t.kind, i = t.name, o = /* @__PURE__ */ new WeakSet();
   function a(s, l) {
-    var c, u, d = Ze(s)[g], v = new xe(l, (c = (u = n.options_) == null ? void 0 : u.enhancer) != null ? c : Ne, process.env.NODE_ENV !== "production" ? d.name_ + "." + i.toString() : "ObservableObject." + i.toString(), !1);
+    var c, u, d = Ze(s)[g], v = new Se(l, (c = (u = n.options_) == null ? void 0 : u.enhancer) != null ? c : Ce, process.env.NODE_ENV !== "production" ? d.name_ + "." + i.toString() : "ObservableObject." + i.toString(), !1);
     d.values_.set(i, v), o.add(s);
   }
   if (r == "accessor")
@@ -709,9 +709,9 @@ function Si(e) {
 function Pa(e, t, n, r) {
   var i, o;
   if (n.get)
-    return dn.make_(e, t, n, r);
+    return fn.make_(e, t, n, r);
   if (n.set) {
-    var a = Ce(t.toString(), n.set);
+    var a = Pe(t.toString(), n.set);
     return r === e.target_ ? e.defineProperty_(t, {
       configurable: f.safeDescriptors ? e.isPlainObject_ : !0,
       set: a
@@ -739,11 +739,11 @@ function Pa(e, t, n, r) {
 function $a(e, t, n, r) {
   var i, o;
   if (n.get)
-    return dn.extend_(e, t, n, r);
+    return fn.extend_(e, t, n, r);
   if (n.set)
     return e.defineProperty_(t, {
       configurable: f.safeDescriptors ? e.isPlainObject_ : !0,
-      set: Ce(t.toString(), n.set)
+      set: Pe(t.toString(), n.set)
     }, r);
   if (typeof n.value == "function" && (i = this.options_) != null && i.autoBind) {
     var a;
@@ -755,25 +755,25 @@ function $a(e, t, n, r) {
 function Da(e, t) {
   p("'" + this.annotationType_ + "' cannot be used as a decorator");
 }
-var ka = "observable", Ta = "observable.ref", Ia = "observable.shallow", Va = "observable.struct", Ni = {
+var ka = "observable", Ta = "observable.ref", Ia = "observable.shallow", Ra = "observable.struct", Ni = {
   deep: !0,
   name: void 0,
   defaultDecorator: void 0,
   proxy: !0
 };
 Object.freeze(Ni);
-function $t(e) {
+function Dt(e) {
   return e || Ni;
 }
-var Vn = /* @__PURE__ */ un(ka), Ra = /* @__PURE__ */ un(Ta, {
-  enhancer: cn
-}), ja = /* @__PURE__ */ un(Ia, {
+var In = /* @__PURE__ */ dn(ka), Va = /* @__PURE__ */ dn(Ta, {
+  enhancer: un
+}), ja = /* @__PURE__ */ dn(Ia, {
   enhancer: la
-}), Ma = /* @__PURE__ */ un(Va, {
+}), Ma = /* @__PURE__ */ dn(Ra, {
   enhancer: ca
-}), Ci = /* @__PURE__ */ Q(Vn);
-function Dt(e) {
-  return e.deep === !0 ? Ne : e.deep === !1 ? cn : za(e.defaultDecorator);
+}), Ci = /* @__PURE__ */ Q(In);
+function kt(e) {
+  return e.deep === !0 ? Ce : e.deep === !1 ? un : za(e.defaultDecorator);
 }
 function La(e) {
   var t;
@@ -781,13 +781,13 @@ function La(e) {
 }
 function za(e) {
   var t, n;
-  return e && (t = (n = e.options_) == null ? void 0 : n.enhancer) != null ? t : Ne;
+  return e && (t = (n = e.options_) == null ? void 0 : n.enhancer) != null ? t : Ce;
 }
 function Pi(e, t, n) {
   if (St(t))
-    return Vn.decorate_20223_(e, t);
-  if (Se(t)) {
-    xt(e, t, Vn);
+    return In.decorate_20223_(e, t);
+  if (Ne(t)) {
+    xt(e, t, In);
     return;
   }
   return yt(e) ? e : P(e) ? x.object(e, t, n) : Array.isArray(e) ? x.array(e, t) : Ye(e) ? x.map(e, t) : ie(e) ? x.set(e, t) : typeof e == "object" && e !== null ? e : x.box(e, t);
@@ -795,60 +795,60 @@ function Pi(e, t, n) {
 hi(Pi, Ci);
 var Ua = {
   box: function(t, n) {
-    var r = $t(n);
-    return new xe(t, Dt(r), r.name, !0, r.equals);
+    var r = Dt(n);
+    return new Se(t, kt(r), r.name, !0, r.equals);
   },
   array: function(t, n) {
-    var r = $t(n);
-    return (f.useProxies === !1 || r.proxy === !1 ? js : Ns)(t, Dt(r), r.name);
+    var r = Dt(n);
+    return (f.useProxies === !1 || r.proxy === !1 ? js : Ns)(t, kt(r), r.name);
   },
   map: function(t, n) {
-    var r = $t(n);
-    return new Qi(t, Dt(r), r.name);
+    var r = Dt(n);
+    return new Qi(t, kt(r), r.name);
   },
   set: function(t, n) {
-    var r = $t(n);
-    return new eo(t, Dt(r), r.name);
+    var r = Dt(n);
+    return new eo(t, kt(r), r.name);
   },
   object: function(t, n, r) {
-    return Ie(function() {
+    return Re(function() {
       return Yi(f.useProxies === !1 || r?.proxy === !1 ? Ze({}, r) : Os({}, r), t, n);
     });
   },
-  ref: /* @__PURE__ */ Q(Ra),
+  ref: /* @__PURE__ */ Q(Va),
   shallow: /* @__PURE__ */ Q(ja),
   deep: Ci,
   struct: /* @__PURE__ */ Q(Ma)
-}, x = /* @__PURE__ */ hi(Pi, Ua), $i = "computed", Fa = "computed.struct", Rn = /* @__PURE__ */ Zn($i), Ba = /* @__PURE__ */ Zn(Fa, {
+}, x = /* @__PURE__ */ hi(Pi, Ua), $i = "computed", Fa = "computed.struct", Rn = /* @__PURE__ */ Jn($i), Ba = /* @__PURE__ */ Jn(Fa, {
   equals: Be.structural
-}), dn = function(t, n) {
+}), fn = function(t, n) {
   if (St(n))
     return Rn.decorate_20223_(t, n);
-  if (Se(n))
+  if (Ne(n))
     return xt(t, n, Rn);
   if (P(t))
-    return Q(Zn($i, t));
+    return Q(Jn($i, t));
   process.env.NODE_ENV !== "production" && (O(t) || p("First argument to `computed` should be an expression."), O(n) && p("A setter as second argument is no longer supported, use `{ set: fn }` option instead"));
   var r = P(n) ? n : {};
   return r.get = t, r.name || (r.name = t.name || ""), new F(r);
 };
-Object.assign(dn, Rn);
-dn.struct = /* @__PURE__ */ Q(Ba);
-var hr, gr, Kt = 0, Ha = 1, qa = (hr = (gr = /* @__PURE__ */ Bt(function() {
-}, "name")) == null ? void 0 : gr.configurable) != null ? hr : !1, mr = {
+Object.assign(fn, Rn);
+fn.struct = /* @__PURE__ */ Q(Ba);
+var vr, hr, Wt = 0, Ha = 1, qa = (vr = (hr = /* @__PURE__ */ Ht(function() {
+}, "name")) == null ? void 0 : hr.configurable) != null ? vr : !1, gr = {
   value: "action",
   configurable: !0,
   writable: !1,
   enumerable: !1
 };
-function Ce(e, t, n, r) {
+function Pe(e, t, n, r) {
   n === void 0 && (n = !1), process.env.NODE_ENV !== "production" && (O(t) || p("`action` can only be invoked on functions"), (typeof e != "string" || !e) && p("actions should have valid names, got: '" + e + "'"));
   function i() {
     return Di(e, n, t, r || this, arguments);
   }
   return i.isMobxAction = !0, i.toString = function() {
     return t.toString();
-  }, qa && (mr.value = e, Z(i, "name", mr)), i;
+  }, qa && (gr.value = e, Z(i, "name", gr)), i;
 }
 function Di(e, t, n, r, i) {
   var o = Ka(e, t, r, i);
@@ -864,9 +864,9 @@ function Ka(e, t, n, r) {
   var i = process.env.NODE_ENV !== "production" && C() && !!e, o = 0;
   if (process.env.NODE_ENV !== "production" && i) {
     o = Date.now();
-    var a = r ? Array.from(r) : Ht;
+    var a = r ? Array.from(r) : qt;
     T({
-      type: er,
+      type: Qn,
       name: e,
       object: n,
       arguments: a
@@ -875,8 +875,8 @@ function Ka(e, t, n, r) {
   var s = f.trackingDerivation, l = !t || !s;
   L();
   var c = f.allowStateChanges;
-  l && (Te(), c = fn(!0));
-  var u = Qn(!0), d = {
+  l && (Ie(), c = pn(!0));
+  var u = Zn(!0), d = {
     runAsAction_: l,
     prevDerivation_: s,
     prevAllowStateChanges_: c,
@@ -884,34 +884,34 @@ function Ka(e, t, n, r) {
     notifySpy_: i,
     startTime_: o,
     actionId_: Ha++,
-    parentActionId_: Kt
+    parentActionId_: Wt
   };
-  return Kt = d.actionId_, d;
+  return Wt = d.actionId_, d;
 }
 function Wa(e) {
-  Kt !== e.actionId_ && p(30), Kt = e.parentActionId_, e.error_ !== void 0 && (f.suppressReactionErrors = !0), pn(e.prevAllowStateChanges_), pt(e.prevAllowStateReads_), z(), e.runAsAction_ && se(e.prevDerivation_), process.env.NODE_ENV !== "production" && e.notifySpy_ && I({
+  Wt !== e.actionId_ && p(30), Wt = e.parentActionId_, e.error_ !== void 0 && (f.suppressReactionErrors = !0), vn(e.prevAllowStateChanges_), pt(e.prevAllowStateReads_), z(), e.runAsAction_ && se(e.prevDerivation_), process.env.NODE_ENV !== "production" && e.notifySpy_ && I({
     time: Date.now() - e.startTime_
   }), f.suppressReactionErrors = !1;
 }
 function Ga(e, t) {
-  var n = fn(e);
+  var n = pn(e);
   try {
     return t();
   } finally {
-    pn(n);
+    vn(n);
   }
 }
-function fn(e) {
+function pn(e) {
   var t = f.allowStateChanges;
   return f.allowStateChanges = e, t;
 }
-function pn(e) {
+function vn(e) {
   f.allowStateChanges = e;
 }
-var Ya = "create", xe = /* @__PURE__ */ function(e) {
+var Ya = "create", Se = /* @__PURE__ */ function(e) {
   function t(r, i, o, a, s) {
     var l;
-    return o === void 0 && (o = process.env.NODE_ENV !== "production" ? "ObservableValue@" + B() : "ObservableValue"), a === void 0 && (a = !0), s === void 0 && (s = Be.default), l = e.call(this, o) || this, l.enhancer = void 0, l.name_ = void 0, l.equals = void 0, l.hasUnreportedChange_ = !1, l.interceptors_ = void 0, l.changeListeners_ = void 0, l.value_ = void 0, l.dehancer = void 0, l.enhancer = i, l.name_ = o, l.equals = s, l.value_ = i(r, void 0, o), process.env.NODE_ENV !== "production" && a && C() && Pe({
+    return o === void 0 && (o = process.env.NODE_ENV !== "production" ? "ObservableValue@" + B() : "ObservableValue"), a === void 0 && (a = !0), s === void 0 && (s = Be.default), l = e.call(this, o) || this, l.enhancer = void 0, l.name_ = void 0, l.equals = void 0, l.hasUnreportedChange_ = !1, l.interceptors_ = void 0, l.changeListeners_ = void 0, l.value_ = void 0, l.dehancer = void 0, l.enhancer = i, l.name_ = o, l.equals = s, l.value_ = i(r, void 0, o), process.env.NODE_ENV !== "production" && a && C() && $e({
       type: Ya,
       object: l,
       observableKind: "value",
@@ -982,7 +982,7 @@ var Ya = "create", xe = /* @__PURE__ */ function(e) {
   }, t;
 }(ge), F = /* @__PURE__ */ function() {
   function e(n) {
-    this.dependenciesState_ = _.NOT_TRACKING_, this.observing_ = [], this.newObserving_ = null, this.observers_ = /* @__PURE__ */ new Set(), this.runId_ = 0, this.lastAccessedBy_ = 0, this.lowestObserverState_ = _.UP_TO_DATE_, this.unboundDepsCount_ = 0, this.value_ = new Wt(null), this.name_ = void 0, this.triggeredBy_ = void 0, this.flags_ = 0, this.derivation = void 0, this.setter_ = void 0, this.isTracing_ = U.NONE, this.scope_ = void 0, this.equals_ = void 0, this.requiresReaction_ = void 0, this.keepAlive_ = void 0, this.onBOL = void 0, this.onBUOL = void 0, n.get || p(31), this.derivation = n.get, this.name_ = n.name || (process.env.NODE_ENV !== "production" ? "ComputedValue@" + B() : "ComputedValue"), n.set && (this.setter_ = Ce(process.env.NODE_ENV !== "production" ? this.name_ + "-setter" : "ComputedValue-setter", n.set)), this.equals_ = n.equals || (n.compareStructural || n.struct ? Be.structural : Be.default), this.scope_ = n.context, this.requiresReaction_ = n.requiresReaction, this.keepAlive_ = !!n.keepAlive;
+    this.dependenciesState_ = _.NOT_TRACKING_, this.observing_ = [], this.newObserving_ = null, this.observers_ = /* @__PURE__ */ new Set(), this.runId_ = 0, this.lastAccessedBy_ = 0, this.lowestObserverState_ = _.UP_TO_DATE_, this.unboundDepsCount_ = 0, this.value_ = new Gt(null), this.name_ = void 0, this.triggeredBy_ = void 0, this.flags_ = 0, this.derivation = void 0, this.setter_ = void 0, this.isTracing_ = U.NONE, this.scope_ = void 0, this.equals_ = void 0, this.requiresReaction_ = void 0, this.keepAlive_ = void 0, this.onBOL = void 0, this.onBUOL = void 0, n.get || p(31), this.derivation = n.get, this.name_ = n.name || (process.env.NODE_ENV !== "production" ? "ComputedValue@" + B() : "ComputedValue"), n.set && (this.setter_ = Pe(process.env.NODE_ENV !== "production" ? this.name_ + "-setter" : "ComputedValue-setter", n.set)), this.equals_ = n.equals || (n.compareStructural || n.struct ? Be.structural : Be.default), this.scope_ = n.context, this.requiresReaction_ = n.requiresReaction, this.keepAlive_ = !!n.keepAlive;
   }
   var t = e.prototype;
   return t.onBecomeStale_ = function() {
@@ -998,13 +998,13 @@ var Ya = "create", xe = /* @__PURE__ */ function(e) {
   }, t.get = function() {
     if (this.isComputing && p(32, this.name_, this.derivation), f.inBatch === 0 && // !globalState.trackingDerivatpion &&
     this.observers_.size === 0 && !this.keepAlive_)
-      jn(this) && (this.warnAboutUntrackedRead_(), L(), this.value_ = this.computeValue_(!1), z());
-    else if (ji(this), jn(this)) {
+      Vn(this) && (this.warnAboutUntrackedRead_(), L(), this.value_ = this.computeValue_(!1), z());
+    else if (ji(this), Vn(this)) {
       var r = f.trackingContext;
       this.keepAlive_ && !r && (f.trackingContext = this), this.trackAndCompute() && es(this), f.trackingContext = r;
     }
     var i = this.value_;
-    if (Mt(i))
+    if (Lt(i))
       throw i.cause;
     return i;
   }, t.set = function(r) {
@@ -1021,8 +1021,8 @@ var Ya = "create", xe = /* @__PURE__ */ function(e) {
     var r = this.value_, i = (
       /* see #1208 */
       this.dependenciesState_ === _.NOT_TRACKING_
-    ), o = this.computeValue_(!0), a = i || Mt(r) || Mt(o) || !this.equals_(r, o);
-    return a && (this.value_ = o, process.env.NODE_ENV !== "production" && C() && Pe({
+    ), o = this.computeValue_(!0), a = i || Lt(r) || Lt(o) || !this.equals_(r, o);
+    return a && (this.value_ = o, process.env.NODE_ENV !== "production" && C() && $e({
       observableKind: "computed",
       debugObjectName: this.name_,
       object: this.scope_,
@@ -1032,7 +1032,7 @@ var Ya = "create", xe = /* @__PURE__ */ function(e) {
     })), a;
   }, t.computeValue_ = function(r) {
     this.isComputing = !0;
-    var i = fn(!1), o;
+    var i = pn(!1), o;
     if (r)
       o = ki(this, this.derivation, this.scope_);
     else if (f.disableErrorBoundaries === !0)
@@ -1041,17 +1041,17 @@ var Ya = "create", xe = /* @__PURE__ */ function(e) {
       try {
         o = this.derivation.call(this.scope_);
       } catch (a) {
-        o = new Wt(a);
+        o = new Gt(a);
       }
-    return pn(i), this.isComputing = !1, o;
+    return vn(i), this.isComputing = !1, o;
   }, t.suspend_ = function() {
-    this.keepAlive_ || (Mn(this), this.value_ = void 0, process.env.NODE_ENV !== "production" && this.isTracing_ !== U.NONE && console.log("[mobx.trace] Computed value '" + this.name_ + "' was suspended and it will recompute on the next access."));
+    this.keepAlive_ || (jn(this), this.value_ = void 0, process.env.NODE_ENV !== "production" && this.isTracing_ !== U.NONE && console.log("[mobx.trace] Computed value '" + this.name_ + "' was suspended and it will recompute on the next access."));
   }, t.observe_ = function(r, i) {
     var o = this, a = !0, s = void 0;
     return qi(function() {
       var l = o.get();
       if (!a || i) {
-        var c = Te();
+        var c = Ie();
         r({
           observableKind: "computed",
           debugObjectName: o.name_,
@@ -1118,7 +1118,7 @@ F.isRunningSetterMask_ = 2;
 F.isBeingObservedMask_ = 4;
 F.isPendingUnobservationMask_ = 8;
 F.diffValueMask_ = 16;
-var vn = /* @__PURE__ */ ke("ComputedValue", F), _;
+var hn = /* @__PURE__ */ Te("ComputedValue", F), _;
 (function(e) {
   e[e.NOT_TRACKING_ = -1] = "NOT_TRACKING_", e[e.UP_TO_DATE_ = 0] = "UP_TO_DATE_", e[e.POSSIBLY_STALE_ = 1] = "POSSIBLY_STALE_", e[e.STALE_ = 2] = "STALE_";
 })(_ || (_ = {}));
@@ -1126,13 +1126,13 @@ var U;
 (function(e) {
   e[e.NONE = 0] = "NONE", e[e.LOG = 1] = "LOG", e[e.BREAK = 2] = "BREAK";
 })(U || (U = {}));
-var Wt = function(t) {
+var Gt = function(t) {
   this.cause = void 0, this.cause = t;
 };
-function Mt(e) {
-  return e instanceof Wt;
+function Lt(e) {
+  return e instanceof Gt;
 }
-function jn(e) {
+function Vn(e) {
   switch (e.dependenciesState_) {
     case _.UP_TO_DATE_:
       return !1;
@@ -1140,9 +1140,9 @@ function jn(e) {
     case _.STALE_:
       return !0;
     case _.POSSIBLY_STALE_: {
-      for (var t = Qn(!0), n = Te(), r = e.observing_, i = r.length, o = 0; o < i; o++) {
+      for (var t = Zn(!0), n = Ie(), r = e.observing_, i = r.length, o = 0; o < i; o++) {
         var a = r[o];
-        if (vn(a)) {
+        if (hn(a)) {
           if (f.disableErrorBoundaries)
             a.get();
           else
@@ -1169,7 +1169,7 @@ function Xa(e) {
   process.env.NODE_ENV !== "production" && !f.allowStateReads && f.observableRequiresReaction && console.warn("[mobx] Observable '" + e.name_ + "' being read outside a reactive context.");
 }
 function ki(e, t, n) {
-  var r = Qn(!0);
+  var r = Zn(!0);
   Ii(e), e.newObserving_ = new Array(
     // Reserve constant space for initial dependencies, dynamic space otherwise.
     // See https://github.com/mobxjs/mobx/pull/3833
@@ -1184,7 +1184,7 @@ function ki(e, t, n) {
     try {
       o = t.call(n);
     } catch (a) {
-      o = new Wt(a);
+      o = new Gt(a);
     }
   return f.inBatch--, f.trackingDerivation = i, Za(e), Ja(e), pt(r), o;
 }
@@ -1198,7 +1198,7 @@ function Za(e) {
   }
   for (n.length = i, e.newObserving_ = null, o = t.length; o--; ) {
     var l = t[o];
-    l.diffValue === 0 && Vi(l, e), l.diffValue = 0;
+    l.diffValue === 0 && Ri(l, e), l.diffValue = 0;
   }
   for (; i--; ) {
     var c = n[i];
@@ -1206,29 +1206,29 @@ function Za(e) {
   }
   r !== _.UP_TO_DATE_ && (e.dependenciesState_ = r, e.onBecomeStale_());
 }
-function Mn(e) {
+function jn(e) {
   var t = e.observing_;
   e.observing_ = [];
   for (var n = t.length; n--; )
-    Vi(t[n], e);
+    Ri(t[n], e);
   e.dependenciesState_ = _.NOT_TRACKING_;
 }
 function Ti(e) {
-  var t = Te();
+  var t = Ie();
   try {
     return e();
   } finally {
     se(t);
   }
 }
-function Te() {
+function Ie() {
   var e = f.trackingDerivation;
   return f.trackingDerivation = null, e;
 }
 function se(e) {
   f.trackingDerivation = e;
 }
-function Qn(e) {
+function Zn(e) {
   var t = f.allowStateReads;
   return f.allowStateReads = e, t;
 }
@@ -1245,7 +1245,7 @@ function Ii(e) {
 var wn = function() {
   this.version = 6, this.UNCHANGED = {}, this.trackingDerivation = null, this.trackingContext = null, this.runId = 0, this.mobxGuid = 0, this.inBatch = 0, this.pendingUnobservations = [], this.pendingReactions = [], this.isRunningReactions = !1, this.allowStateChanges = !1, this.allowStateReads = !0, this.enforceActions = !0, this.spyListeners = [], this.globalReactionErrorHandlers = [], this.computedRequiresReaction = !1, this.reactionRequiresObservable = !1, this.observableRequiresReaction = !1, this.disableErrorBoundaries = !1, this.suppressReactionErrors = !1, this.useProxies = !0, this.verifyProxies = !1, this.safeDescriptors = !0;
 }, En = !0, f = /* @__PURE__ */ function() {
-  var e = /* @__PURE__ */ Gn();
+  var e = /* @__PURE__ */ Wn();
   return e.__mobxInstanceCount > 0 && !e.__mobxGlobals && (En = !1), e.__mobxGlobals && e.__mobxGlobals.version !== new wn().version && (En = !1), En ? e.__mobxGlobals ? (e.__mobxInstanceCount += 1, e.__mobxGlobals.UNCHANGED || (e.__mobxGlobals.UNCHANGED = {}), e.__mobxGlobals) : (e.__mobxInstanceCount = 1, e.__mobxGlobals = /* @__PURE__ */ new wn()) : (setTimeout(function() {
     p(35);
   }, 1), new wn());
@@ -1253,10 +1253,10 @@ var wn = function() {
 function Qa(e, t) {
   e.observers_.add(t), e.lowestObserverState_ > t.dependenciesState_ && (e.lowestObserverState_ = t.dependenciesState_);
 }
-function Vi(e, t) {
-  e.observers_.delete(t), e.observers_.size === 0 && Ri(e);
+function Ri(e, t) {
+  e.observers_.delete(t), e.observers_.size === 0 && Vi(e);
 }
-function Ri(e) {
+function Vi(e) {
   e.isPendingUnobservation === !1 && (e.isPendingUnobservation = !0, f.pendingUnobservations.push(e));
 }
 function L() {
@@ -1275,7 +1275,7 @@ function z() {
 function ji(e) {
   Xa(e);
   var t = f.trackingDerivation;
-  return t !== null ? (t.runId_ !== e.lastAccessedBy_ && (e.lastAccessedBy_ = t.runId_, t.newObserving_[t.unboundDepsCount_++] = e, !e.isBeingObserved && f.trackingContext && (e.isBeingObserved = !0, e.onBO())), e.isBeingObserved) : (e.observers_.size === 0 && f.inBatch > 0 && Ri(e), !1);
+  return t !== null ? (t.runId_ !== e.lastAccessedBy_ && (e.lastAccessedBy_ = t.runId_, t.newObserving_[t.unboundDepsCount_++] = e, !e.isBeingObserved && f.trackingContext && (e.isBeingObserved = !0, e.onBO())), e.isBeingObserved) : (e.observers_.size === 0 && f.inBatch > 0 && Vi(e), !1);
 }
 function Mi(e) {
   e.lowestObserverState_ !== _.STALE_ && (e.lowestObserverState_ = _.STALE_, e.observers_.forEach(function(t) {
@@ -1335,10 +1335,10 @@ var te = /* @__PURE__ */ function() {
     if (!this.isDisposed) {
       L(), this.isScheduled = !1;
       var r = f.trackingContext;
-      if (f.trackingContext = this, jn(this)) {
+      if (f.trackingContext = this, Vn(this)) {
         this.isTrackPending = !0;
         try {
-          this.onInvalidate_(), process.env.NODE_ENV !== "production" && this.isTrackPending && C() && Pe({
+          this.onInvalidate_(), process.env.NODE_ENV !== "production" && this.isTrackPending && C() && $e({
             name: this.name_,
             type: "scheduled-reaction"
           });
@@ -1359,7 +1359,7 @@ var te = /* @__PURE__ */ function() {
       var a = f.trackingContext;
       f.trackingContext = this;
       var s = ki(this, r, void 0);
-      f.trackingContext = a, this.isRunning = !1, this.isTrackPending = !1, this.isDisposed && Mn(this), Mt(s) && this.reportExceptionInDerivation_(s.cause), process.env.NODE_ENV !== "production" && i && I({
+      f.trackingContext = a, this.isRunning = !1, this.isTrackPending = !1, this.isDisposed && jn(this), Lt(s) && this.reportExceptionInDerivation_(s.cause), process.env.NODE_ENV !== "production" && i && I({
         time: Date.now() - o
       }), z();
     }
@@ -1372,7 +1372,7 @@ var te = /* @__PURE__ */ function() {
     if (f.disableErrorBoundaries)
       throw r;
     var o = process.env.NODE_ENV !== "production" ? "[mobx] Encountered an uncaught exception that was thrown by a reaction or observer component, in: '" + this + "'" : "[mobx] uncaught error in '" + this + "'";
-    f.suppressReactionErrors ? process.env.NODE_ENV !== "production" && console.warn("[mobx] (error in reaction '" + this.name_ + "' suppressed, fix error of causing action below)") : console.error(o, r), process.env.NODE_ENV !== "production" && C() && Pe({
+    f.suppressReactionErrors ? process.env.NODE_ENV !== "production" && console.warn("[mobx] (error in reaction '" + this.name_ + "' suppressed, fix error of causing action below)") : console.error(o, r), process.env.NODE_ENV !== "production" && C() && $e({
       type: "error",
       name: this.name_,
       message: o,
@@ -1381,7 +1381,7 @@ var te = /* @__PURE__ */ function() {
       return a(r, i);
     });
   }, t.dispose = function() {
-    this.isDisposed || (this.isDisposed = !0, this.isRunning || (L(), Mn(this), z()));
+    this.isDisposed || (this.isDisposed = !0, this.isRunning || (L(), jn(this), z()));
   }, t.getDisposer_ = function(r) {
     var i = this, o = function a() {
       i.dispose(), r == null || r.removeEventListener == null || r.removeEventListener("abort", a);
@@ -1444,7 +1444,7 @@ function ns(e) {
     t >= 0 && f.globalReactionErrorHandlers.splice(t, 1);
   };
 }
-var br = 100, rs = function(t) {
+var mr = 100, rs = function(t) {
   return t();
 };
 function Ui() {
@@ -1453,17 +1453,17 @@ function Ui() {
 function is() {
   f.isRunningReactions = !0;
   for (var e = f.pendingReactions, t = 0; e.length > 0; ) {
-    ++t === br && (console.error(process.env.NODE_ENV !== "production" ? "Reaction doesn't converge to a stable state after " + br + " iterations." + (" Probably there is a cycle in the reactive function: " + e[0]) : "[mobx] cycle in reaction: " + e[0]), e.splice(0));
+    ++t === mr && (console.error(process.env.NODE_ENV !== "production" ? "Reaction doesn't converge to a stable state after " + mr + " iterations." + (" Probably there is a cycle in the reactive function: " + e[0]) : "[mobx] cycle in reaction: " + e[0]), e.splice(0));
     for (var n = e.splice(0), r = 0, i = n.length; r < i; r++)
       n[r].runReaction_();
   }
   f.isRunningReactions = !1;
 }
-var Gt = /* @__PURE__ */ ke("Reaction", te);
+var Yt = /* @__PURE__ */ Te("Reaction", te);
 function C() {
   return process.env.NODE_ENV !== "production" && !!f.spyListeners.length;
 }
-function Pe(e) {
+function $e(e) {
   if (process.env.NODE_ENV !== "production" && f.spyListeners.length)
     for (var t = f.spyListeners, n = 0, r = t.length; n < r; n++)
       t[n](e);
@@ -1473,7 +1473,7 @@ function T(e) {
     var t = ve({}, e, {
       spyReportStart: !0
     });
-    Pe(t);
+    $e(t);
   }
 }
 var os = {
@@ -1481,22 +1481,22 @@ var os = {
   spyReportEnd: !0
 };
 function I(e) {
-  process.env.NODE_ENV !== "production" && Pe(e ? ve({}, e, {
+  process.env.NODE_ENV !== "production" && $e(e ? ve({}, e, {
     type: "report-end",
     spyReportEnd: !0
   }) : os);
 }
 function as(e) {
   return process.env.NODE_ENV === "production" ? (console.warn("[mobx.spy] Is a no-op in production builds"), function() {
-  }) : (f.spyListeners.push(e), Xn(function() {
+  }) : (f.spyListeners.push(e), Yn(function() {
     f.spyListeners = f.spyListeners.filter(function(t) {
       return t !== e;
     });
   }));
 }
-var er = "action", ss = "action.bound", Fi = "autoAction", ls = "autoAction.bound", Bi = "<unnamed action>", Ln = /* @__PURE__ */ Nt(er), cs = /* @__PURE__ */ Nt(ss, {
+var Qn = "action", ss = "action.bound", Fi = "autoAction", ls = "autoAction.bound", Bi = "<unnamed action>", Mn = /* @__PURE__ */ Nt(Qn), cs = /* @__PURE__ */ Nt(ss, {
   bound: !0
-}), zn = /* @__PURE__ */ Nt(Fi, {
+}), Ln = /* @__PURE__ */ Nt(Fi, {
   autoAction: !0
 }), us = /* @__PURE__ */ Nt(ls, {
   autoAction: !0,
@@ -1505,15 +1505,15 @@ var er = "action", ss = "action.bound", Fi = "autoAction", ls = "autoAction.boun
 function Hi(e) {
   var t = function(r, i) {
     if (O(r))
-      return Ce(r.name || Bi, r, e);
+      return Pe(r.name || Bi, r, e);
     if (O(i))
-      return Ce(r, i, e);
+      return Pe(r, i, e);
     if (St(i))
-      return (e ? zn : Ln).decorate_20223_(r, i);
-    if (Se(i))
-      return xt(r, i, e ? zn : Ln);
-    if (Se(r))
-      return Q(Nt(e ? Fi : er, {
+      return (e ? Ln : Mn).decorate_20223_(r, i);
+    if (Ne(i))
+      return xt(r, i, e ? Ln : Mn);
+    if (Ne(r))
+      return Q(Nt(e ? Fi : Qn, {
         name: r,
         autoAction: e
       }));
@@ -1521,11 +1521,11 @@ function Hi(e) {
   };
   return t;
 }
-var Ae = /* @__PURE__ */ Hi(!1);
-Object.assign(Ae, Ln);
+var Oe = /* @__PURE__ */ Hi(!1);
+Object.assign(Oe, Mn);
 var bt = /* @__PURE__ */ Hi(!0);
-Object.assign(bt, zn);
-Ae.bound = /* @__PURE__ */ Q(cs);
+Object.assign(bt, Ln);
+Oe.bound = /* @__PURE__ */ Q(cs);
 bt.bound = /* @__PURE__ */ Q(us);
 function Cu(e) {
   return Di(e.name || Bi, !1, e, this, void 0);
@@ -1535,7 +1535,7 @@ function He(e) {
 }
 function qi(e, t) {
   var n, r, i, o;
-  t === void 0 && (t = Yn), process.env.NODE_ENV !== "production" && (O(e) || p("Autorun expects a function as first argument"), He(e) && p("Autorun does not accept actions since actions are untrackable"));
+  t === void 0 && (t = Gn), process.env.NODE_ENV !== "production" && (O(e) || p("Autorun expects a function as first argument"), He(e) && p("Autorun does not accept actions since actions are untrackable"));
   var a = (n = (r = t) == null ? void 0 : r.name) != null ? n : process.env.NODE_ENV !== "production" ? e.name || "Autorun@" + B() : "Autorun", s = !t.scheduler && !t.delay, l;
   if (s)
     l = new te(a, function() {
@@ -1562,10 +1562,10 @@ function Ki(e) {
     return setTimeout(t, e.delay);
   } : ds;
 }
-function tr(e, t, n) {
+function er(e, t, n) {
   var r, i, o;
-  n === void 0 && (n = Yn), process.env.NODE_ENV !== "production" && ((!O(e) || !O(t)) && p("First and second argument to reaction should be functions"), P(n) || p("Third argument of reactions should be an object"));
-  var a = (r = n.name) != null ? r : process.env.NODE_ENV !== "production" ? "Reaction@" + B() : "Reaction", s = Ae(a, n.onError ? fs(n.onError, t) : t), l = !n.scheduler && !n.delay, c = Ki(n), u = !0, d = !1, v, h = n.compareStructural ? Be.structural : n.equals || Be.default, b = new te(a, function() {
+  n === void 0 && (n = Gn), process.env.NODE_ENV !== "production" && ((!O(e) || !O(t)) && p("First and second argument to reaction should be functions"), P(n) || p("Third argument of reactions should be an object"));
+  var a = (r = n.name) != null ? r : process.env.NODE_ENV !== "production" ? "Reaction@" + B() : "Reaction", s = Oe(a, n.onError ? fs(n.onError, t) : t), l = !n.scheduler && !n.delay, c = Ki(n), u = !0, d = !1, v, h = n.compareStructural ? Be.structural : n.equals || Be.default, b = new te(a, function() {
     u || l ? E() : d || (d = !0, c(E));
   }, n.onError, n.requiresObservable);
   function E() {
@@ -1607,7 +1607,7 @@ function Gi(e, t, n, r) {
 function Yi(e, t, n, r) {
   process.env.NODE_ENV !== "production" && (arguments.length > 4 && p("'extendObservable' expected 2-4 arguments"), typeof e != "object" && p("'extendObservable' expects an object as first argument"), me(e) && p("'extendObservable' should not be used on maps, use map.merge instead"), P(t) || p("'extendObservable' only accepts plain objects as second argument"), (yt(t) || yt(n)) && p("Extending an object with another observable (object) is not supported"));
   var i = ea(t);
-  return Ie(function() {
+  return Re(function() {
     var o = Ze(e, r)[g];
     mt(i).forEach(function(a) {
       o.extend_(
@@ -1641,20 +1641,20 @@ var An = /* @__PURE__ */ Oi("flow"), _s = /* @__PURE__ */ Oi("flow.bound", {
 }), qe = /* @__PURE__ */ Object.assign(function(t, n) {
   if (St(n))
     return An.decorate_20223_(t, n);
-  if (Se(n))
+  if (Ne(n))
     return xt(t, n, An);
   process.env.NODE_ENV !== "production" && arguments.length !== 1 && p("Flow expects single argument with generator function");
   var r = t, i = r.name || "<unnamed flow>", o = function() {
-    var s = this, l = arguments, c = ++bs, u = Ae(i + " - runid: " + c + " - init", r).apply(s, l), d, v = void 0, h = new Promise(function(b, E) {
+    var s = this, l = arguments, c = ++bs, u = Oe(i + " - runid: " + c + " - init", r).apply(s, l), d, v = void 0, h = new Promise(function(b, E) {
       var S = 0;
       d = E;
       function Y($) {
         v = void 0;
         var ue;
         try {
-          ue = Ae(i + " - runid: " + c + " - yield " + S++, u.next).call(u, $);
-        } catch (be) {
-          return E(be);
+          ue = Oe(i + " - runid: " + c + " - yield " + S++, u.next).call(u, $);
+        } catch (_e) {
+          return E(_e);
         }
         nt(ue);
       }
@@ -1662,9 +1662,9 @@ var An = /* @__PURE__ */ Oi("flow"), _s = /* @__PURE__ */ Oi("flow.bound", {
         v = void 0;
         var ue;
         try {
-          ue = Ae(i + " - runid: " + c + " - yield " + S++, u.throw).call(u, $);
-        } catch (be) {
-          return E(be);
+          ue = Oe(i + " - runid: " + c + " - yield " + S++, u.throw).call(u, $);
+        } catch (_e) {
+          return E(_e);
         }
         nt(ue);
       }
@@ -1677,11 +1677,11 @@ var An = /* @__PURE__ */ Oi("flow"), _s = /* @__PURE__ */ Oi("flow.bound", {
       }
       Y(void 0);
     });
-    return h.cancel = Ae(i + " - runid: " + c + " - cancel", function() {
+    return h.cancel = Oe(i + " - runid: " + c + " - cancel", function() {
       try {
-        v && _r(v);
+        v && br(v);
         var b = u.return(void 0), E = Promise.resolve(b.value);
-        E.then(ze, ze), _r(E), d(new Ji());
+        E.then(ze, ze), br(E), d(new Ji());
       } catch (S) {
         d(S);
       }
@@ -1690,14 +1690,14 @@ var An = /* @__PURE__ */ Oi("flow"), _s = /* @__PURE__ */ Oi("flow.bound", {
   return o.isMobXFlow = !0, o;
 }, An);
 qe.bound = /* @__PURE__ */ Q(_s);
-function _r(e) {
+function br(e) {
   O(e.cancel) && e.cancel();
 }
 function _t(e) {
   return e?.isMobXFlow === !0;
 }
 function ys(e, t) {
-  return e ? Qe(e) || !!e[g] || Jn(e) || Gt(e) || vn(e) : !1;
+  return e ? Qe(e) || !!e[g] || Xn(e) || Yt(e) || hn(e) : !1;
 }
 function yt(e) {
   return process.env.NODE_ENV !== "production" && arguments.length !== 1 && p("isObservable expects only 1 argument. Use isObservableProp to inspect the observability of a property"), ys(e);
@@ -1731,30 +1731,30 @@ function ae(e, t) {
     z();
   }
 }
-function _e(e) {
+function ye(e) {
   return e[g];
 }
 var As = {
   has: function(t, n) {
-    return process.env.NODE_ENV !== "production" && f.trackingDerivation && rt("detect new properties using the 'in' operator. Use 'has' from 'mobx' instead."), _e(t).has_(n);
+    return process.env.NODE_ENV !== "production" && f.trackingDerivation && rt("detect new properties using the 'in' operator. Use 'has' from 'mobx' instead."), ye(t).has_(n);
   },
   get: function(t, n) {
-    return _e(t).get_(n);
+    return ye(t).get_(n);
   },
   set: function(t, n, r) {
     var i;
-    return Se(n) ? (process.env.NODE_ENV !== "production" && !_e(t).values_.has(n) && rt("add a new observable property through direct assignment. Use 'set' from 'mobx' instead."), (i = _e(t).set_(n, r, !0)) != null ? i : !0) : !1;
+    return Ne(n) ? (process.env.NODE_ENV !== "production" && !ye(t).values_.has(n) && rt("add a new observable property through direct assignment. Use 'set' from 'mobx' instead."), (i = ye(t).set_(n, r, !0)) != null ? i : !0) : !1;
   },
   deleteProperty: function(t, n) {
     var r;
-    return process.env.NODE_ENV !== "production" && rt("delete properties from an observable object. Use 'remove' from 'mobx' instead."), Se(n) ? (r = _e(t).delete_(n, !0)) != null ? r : !0 : !1;
+    return process.env.NODE_ENV !== "production" && rt("delete properties from an observable object. Use 'remove' from 'mobx' instead."), Ne(n) ? (r = ye(t).delete_(n, !0)) != null ? r : !0 : !1;
   },
   defineProperty: function(t, n, r) {
     var i;
-    return process.env.NODE_ENV !== "production" && rt("define property on an observable object. Use 'defineProperty' from 'mobx' instead."), (i = _e(t).defineProperty_(n, r)) != null ? i : !0;
+    return process.env.NODE_ENV !== "production" && rt("define property on an observable object. Use 'defineProperty' from 'mobx' instead."), (i = ye(t).defineProperty_(n, r)) != null ? i : !0;
   },
   ownKeys: function(t) {
-    return process.env.NODE_ENV !== "production" && f.trackingDerivation && rt("iterate keys to detect added / removed properties. Use 'keys' from 'mobx' instead."), _e(t).ownKeys_();
+    return process.env.NODE_ENV !== "production" && f.trackingDerivation && rt("iterate keys to detect added / removed properties. Use 'keys' from 'mobx' instead."), ye(t).ownKeys_();
   },
   preventExtensions: function(t) {
     p(13);
@@ -1769,13 +1769,13 @@ function j(e) {
 }
 function Ct(e, t) {
   var n = e.interceptors_ || (e.interceptors_ = []);
-  return n.push(t), Xn(function() {
+  return n.push(t), Yn(function() {
     var r = n.indexOf(t);
     r !== -1 && n.splice(r, 1);
   });
 }
 function M(e, t) {
-  var n = Te();
+  var n = Ie();
   try {
     for (var r = [].concat(e.interceptors_ || []), i = 0, o = r.length; i < o && (t = r[i](t), t && !t.type && p(14), !!t); i++)
       ;
@@ -1789,13 +1789,13 @@ function K(e) {
 }
 function Pt(e, t) {
   var n = e.changeListeners_ || (e.changeListeners_ = []);
-  return n.push(t), Xn(function() {
+  return n.push(t), Yn(function() {
     var r = n.indexOf(t);
     r !== -1 && n.splice(r, 1);
   });
 }
 function W(e, t) {
-  var n = Te(), r = e.changeListeners_;
+  var n = Ie(), r = e.changeListeners_;
   if (r) {
     r = r.slice();
     for (var i = 0, o = r.length; i < o; i++)
@@ -1805,11 +1805,11 @@ function W(e, t) {
 }
 var On = /* @__PURE__ */ Symbol("mobx-keys");
 function Je(e, t, n) {
-  return process.env.NODE_ENV !== "production" && (!P(e) && !P(Object.getPrototypeOf(e)) && p("'makeAutoObservable' can only be used for classes that don't have a superclass"), Qe(e) && p("makeAutoObservable can only be used on objects not already made observable")), P(e) ? Yi(e, e, t, n) : (Ie(function() {
+  return process.env.NODE_ENV !== "production" && (!P(e) && !P(Object.getPrototypeOf(e)) && p("'makeAutoObservable' can only be used for classes that don't have a superclass"), Qe(e) && p("makeAutoObservable can only be used on objects not already made observable")), P(e) ? Yi(e, e, t, n) : (Re(function() {
     var r = Ze(e, n)[g];
     if (!e[On]) {
       var i = Object.getPrototypeOf(e), o = new Set([].concat(mt(e), mt(i)));
-      o.delete("constructor"), o.delete(g), sn(i, On, o);
+      o.delete("constructor"), o.delete(g), ln(i, On, o);
     }
     e[On].forEach(function(a) {
       return r.make_(
@@ -1820,10 +1820,10 @@ function Je(e, t, n) {
     });
   }), e);
 }
-var yr = "splice", H = "update", xs = 1e4, Ss = {
+var _r = "splice", H = "update", xs = 1e4, Ss = {
   get: function(t, n) {
     var r = t[g];
-    return n === g ? r : n === "length" ? r.getArrayLength_() : typeof n == "string" && !isNaN(n) ? r.get_(parseInt(n)) : q(Yt, n) ? Yt[n] : t[n];
+    return n === g ? r : n === "length" ? r.getArrayLength_() : typeof n == "string" && !isNaN(n) ? r.get_(parseInt(n)) : q(Xt, n) ? Xt[n] : t[n];
   },
   set: function(t, n, r) {
     var i = t[g];
@@ -1832,7 +1832,7 @@ var yr = "splice", H = "update", xs = 1e4, Ss = {
   preventExtensions: function() {
     p(15);
   }
-}, nr = /* @__PURE__ */ function() {
+}, tr = /* @__PURE__ */ function() {
   function e(n, r, i, o) {
     n === void 0 && (n = process.env.NODE_ENV !== "production" ? "ObservableArray@" + B() : "ObservableArray"), this.owned_ = void 0, this.legacyMode_ = void 0, this.atom_ = void 0, this.values_ = [], this.interceptors_ = void 0, this.changeListeners_ = void 0, this.enhancer_ = void 0, this.dehancer = void 0, this.proxy_ = void 0, this.lastKnownLength_ = 0, this.owned_ = i, this.legacyMode_ = o, this.atom_ = new ge(n), this.enhancer_ = function(a, s) {
       return r(a, s, process.env.NODE_ENV !== "production" ? n + "[..]" : "ObservableArray[..]");
@@ -1875,16 +1875,16 @@ var yr = "splice", H = "update", xs = 1e4, Ss = {
     var a = this;
     J(this.atom_);
     var s = this.values_.length;
-    if (r === void 0 ? r = 0 : r > s ? r = s : r < 0 && (r = Math.max(0, s + r)), arguments.length === 1 ? i = s - r : i == null ? i = 0 : i = Math.max(0, Math.min(i, s - r)), o === void 0 && (o = Ht), j(this)) {
+    if (r === void 0 ? r = 0 : r > s ? r = s : r < 0 && (r = Math.max(0, s + r)), arguments.length === 1 ? i = s - r : i == null ? i = 0 : i = Math.max(0, Math.min(i, s - r)), o === void 0 && (o = qt), j(this)) {
       var l = M(this, {
         object: this.proxy_,
-        type: yr,
+        type: _r,
         index: r,
         removedCount: i,
         added: o
       });
       if (!l)
-        return Ht;
+        return qt;
       i = l.removedCount, o = l.added;
     }
     if (o = o.length === 0 ? o : o.map(function(d) {
@@ -1924,7 +1924,7 @@ var yr = "splice", H = "update", xs = 1e4, Ss = {
       observableKind: "array",
       object: this.proxy_,
       debugObjectName: this.atom_.name_,
-      type: yr,
+      type: _r,
       index: r,
       removed: o,
       added: i,
@@ -1966,14 +1966,14 @@ var yr = "splice", H = "update", xs = 1e4, Ss = {
   }, e;
 }();
 function Ns(e, t, n, r) {
-  return n === void 0 && (n = process.env.NODE_ENV !== "production" ? "ObservableArray@" + B() : "ObservableArray"), r === void 0 && (r = !1), gi(), Ie(function() {
-    var i = new nr(n, t, r, !1);
+  return n === void 0 && (n = process.env.NODE_ENV !== "production" ? "ObservableArray@" + B() : "ObservableArray"), r === void 0 && (r = !1), gi(), Re(function() {
+    var i = new tr(n, t, r, !1);
     bi(i.values_, g, i);
     var o = new Proxy(i.values_, Ss);
     return i.proxy_ = o, e && e.length && i.spliceWithArray_(0, 0, e), o;
   });
 }
-var Yt = {
+var Xt = {
   clear: function() {
     return this.splice(0);
   },
@@ -2037,19 +2037,19 @@ var Yt = {
     return r > -1 ? (this.splice(r, 1), !0) : !1;
   }
 };
-w("at", V);
-w("concat", V);
-w("flat", V);
-w("includes", V);
-w("indexOf", V);
-w("join", V);
-w("lastIndexOf", V);
-w("slice", V);
-w("toString", V);
-w("toLocaleString", V);
-w("toSorted", V);
-w("toSpliced", V);
-w("with", V);
+w("at", R);
+w("concat", R);
+w("flat", R);
+w("includes", R);
+w("indexOf", R);
+w("join", R);
+w("lastIndexOf", R);
+w("slice", R);
+w("toString", R);
+w("toLocaleString", R);
+w("toSorted", R);
+w("toSpliced", R);
+w("with", R);
 w("every", G);
 w("filter", G);
 w("find", G);
@@ -2064,9 +2064,9 @@ w("toReversed", G);
 w("reduce", Zi);
 w("reduceRight", Zi);
 function w(e, t) {
-  typeof Array.prototype[e] == "function" && (Yt[e] = t(e));
+  typeof Array.prototype[e] == "function" && (Xt[e] = t(e));
 }
-function V(e) {
+function R(e) {
   return function() {
     var t = this[g];
     t.atom_.reportObserved();
@@ -2094,14 +2094,14 @@ function Zi(e) {
     }, r[e].apply(r, arguments);
   };
 }
-var Cs = /* @__PURE__ */ ke("ObservableArrayAdministration", nr);
-function hn(e) {
-  return an(e) && Cs(e[g]);
+var Cs = /* @__PURE__ */ Te("ObservableArrayAdministration", tr);
+function gn(e) {
+  return sn(e) && Cs(e[g]);
 }
-var Ps = {}, fe = "add", Xt = "delete", Qi = /* @__PURE__ */ function() {
+var Ps = {}, fe = "add", Jt = "delete", Qi = /* @__PURE__ */ function() {
   function e(n, r, i) {
     var o = this;
-    r === void 0 && (r = Ne), i === void 0 && (i = process.env.NODE_ENV !== "production" ? "ObservableMap@" + B() : "ObservableMap"), this.enhancer_ = void 0, this.name_ = void 0, this[g] = Ps, this.data_ = void 0, this.hasMap_ = void 0, this.keysAtom_ = void 0, this.interceptors_ = void 0, this.changeListeners_ = void 0, this.dehancer = void 0, this.enhancer_ = r, this.name_ = i, O(Map) || p(18), Ie(function() {
+    r === void 0 && (r = Ce), i === void 0 && (i = process.env.NODE_ENV !== "production" ? "ObservableMap@" + B() : "ObservableMap"), this.enhancer_ = void 0, this.name_ = void 0, this[g] = Ps, this.data_ = void 0, this.hasMap_ = void 0, this.keysAtom_ = void 0, this.interceptors_ = void 0, this.changeListeners_ = void 0, this.dehancer = void 0, this.enhancer_ = r, this.name_ = i, O(Map) || p(18), Re(function() {
       o.keysAtom_ = Ei(process.env.NODE_ENV !== "production" ? o.name_ + ".keys()" : "ObservableMap.keys()"), o.data_ = /* @__PURE__ */ new Map(), o.hasMap_ = /* @__PURE__ */ new Map(), n && o.merge(n);
     });
   }
@@ -2114,7 +2114,7 @@ var Ps = {}, fe = "add", Xt = "delete", Qi = /* @__PURE__ */ function() {
       return this.has_(r);
     var o = this.hasMap_.get(r);
     if (!o) {
-      var a = o = new xe(this.has_(r), cn, process.env.NODE_ENV !== "production" ? this.name_ + "." + Tn(r) + "?" : "ObservableMap.key?", !1);
+      var a = o = new Se(this.has_(r), un, process.env.NODE_ENV !== "production" ? this.name_ + "." + kn(r) + "?" : "ObservableMap.key?", !1);
       this.hasMap_.set(r, a), Wi(a, function() {
         return i.hasMap_.delete(r);
       });
@@ -2138,7 +2138,7 @@ var Ps = {}, fe = "add", Xt = "delete", Qi = /* @__PURE__ */ function() {
     var i = this;
     if (J(this.keysAtom_), j(this)) {
       var o = M(this, {
-        type: Xt,
+        type: Jt,
         object: this,
         name: r
       });
@@ -2149,7 +2149,7 @@ var Ps = {}, fe = "add", Xt = "delete", Qi = /* @__PURE__ */ function() {
       var a = C(), s = K(this), l = s || a ? {
         observableKind: "map",
         debugObjectName: this.name_,
-        type: Xt,
+        type: Jt,
         object: this,
         oldValue: this.data_.get(r).value_,
         name: r
@@ -2179,7 +2179,7 @@ var Ps = {}, fe = "add", Xt = "delete", Qi = /* @__PURE__ */ function() {
   }, t.addValue_ = function(r, i) {
     var o = this;
     J(this.keysAtom_), ae(function() {
-      var c, u = new xe(i, o.enhancer_, process.env.NODE_ENV !== "production" ? o.name_ + "." + Tn(r) : "ObservableMap.key", !1);
+      var c, u = new Se(i, o.enhancer_, process.env.NODE_ENV !== "production" ? o.name_ + "." + kn(r) : "ObservableMap.key", !1);
       o.data_.set(r, u), i = u.value_, (c = o.hasMap_.get(r)) == null || c.setNewValue_(!0), o.keysAtom_.reportChanged();
     });
     var a = C(), s = K(this), l = s || a ? {
@@ -2199,7 +2199,7 @@ var Ps = {}, fe = "add", Xt = "delete", Qi = /* @__PURE__ */ function() {
     return this.keysAtom_.reportObserved(), this.data_.keys();
   }, t.values = function() {
     var r = this, i = this.keys();
-    return wr({
+    return yr({
       next: function() {
         var a = i.next(), s = a.done, l = a.value;
         return {
@@ -2210,7 +2210,7 @@ var Ps = {}, fe = "add", Xt = "delete", Qi = /* @__PURE__ */ function() {
     });
   }, t.entries = function() {
     var r = this, i = this.keys();
-    return wr({
+    return yr({
       next: function() {
         var a = i.next(), s = a.done, l = a.value;
         return {
@@ -2274,12 +2274,12 @@ var Ps = {}, fe = "add", Xt = "delete", Qi = /* @__PURE__ */ function() {
         if (i.data_.size !== a.size)
           i.keysAtom_.reportChanged();
         else
-          for (var $ = i.data_.keys(), ue = a.keys(), be = $.next(), pr = ue.next(); !be.done; ) {
-            if (be.value !== pr.value) {
+          for (var $ = i.data_.keys(), ue = a.keys(), _e = $.next(), fr = ue.next(); !_e.done; ) {
+            if (_e.value !== fr.value) {
               i.keysAtom_.reportChanged();
               break;
             }
-            be = $.next(), pr = ue.next();
+            _e = $.next(), fr = ue.next();
           }
       i.data_ = a;
     }), this;
@@ -2302,9 +2302,9 @@ var Ps = {}, fe = "add", Xt = "delete", Qi = /* @__PURE__ */ function() {
       return "Map";
     }
   }]);
-}(), me = /* @__PURE__ */ ke("ObservableMap", Qi);
-function wr(e) {
-  return e[Symbol.toStringTag] = "MapIterator", ir(e);
+}(), me = /* @__PURE__ */ Te("ObservableMap", Qi);
+function yr(e) {
+  return e[Symbol.toStringTag] = "MapIterator", rr(e);
 }
 function $s(e) {
   if (Ye(e) || me(e))
@@ -2322,9 +2322,9 @@ function $s(e) {
 var Ds = {}, eo = /* @__PURE__ */ function() {
   function e(n, r, i) {
     var o = this;
-    r === void 0 && (r = Ne), i === void 0 && (i = process.env.NODE_ENV !== "production" ? "ObservableSet@" + B() : "ObservableSet"), this.name_ = void 0, this[g] = Ds, this.data_ = /* @__PURE__ */ new Set(), this.atom_ = void 0, this.changeListeners_ = void 0, this.interceptors_ = void 0, this.dehancer = void 0, this.enhancer_ = void 0, this.name_ = i, O(Set) || p(22), this.enhancer_ = function(a, s) {
+    r === void 0 && (r = Ce), i === void 0 && (i = process.env.NODE_ENV !== "production" ? "ObservableSet@" + B() : "ObservableSet"), this.name_ = void 0, this[g] = Ds, this.data_ = /* @__PURE__ */ new Set(), this.atom_ = void 0, this.changeListeners_ = void 0, this.interceptors_ = void 0, this.dehancer = void 0, this.enhancer_ = void 0, this.name_ = i, O(Set) || p(22), this.enhancer_ = function(a, s) {
       return r(a, s, i);
-    }, Ie(function() {
+    }, Re(function() {
       o.atom_ = Ei(o.name_), n && o.replace(n);
     });
   }
@@ -2376,7 +2376,7 @@ var Ds = {}, eo = /* @__PURE__ */ function() {
     var i = this;
     if (j(this)) {
       var o = M(this, {
-        type: Xt,
+        type: Jt,
         object: this,
         oldValue: r
       });
@@ -2387,7 +2387,7 @@ var Ds = {}, eo = /* @__PURE__ */ function() {
       var a = process.env.NODE_ENV !== "production" && C(), s = K(this), l = s || a ? {
         observableKind: "set",
         debugObjectName: this.name_,
-        type: Xt,
+        type: Jt,
         object: this,
         oldValue: r
       } : null;
@@ -2400,7 +2400,7 @@ var Ds = {}, eo = /* @__PURE__ */ function() {
     return this.atom_.reportObserved(), this.data_.has(this.dehanceValue_(r));
   }, t.entries = function() {
     var r = this.values();
-    return Er({
+    return wr({
       next: function() {
         var o = r.next(), a = o.value, s = o.done;
         return s ? {
@@ -2417,7 +2417,7 @@ var Ds = {}, eo = /* @__PURE__ */ function() {
   }, t.values = function() {
     this.atom_.reportObserved();
     var r = this, i = this.data_.values();
-    return Er({
+    return wr({
       next: function() {
         var a = i.next(), s = a.value, l = a.done;
         return l ? {
@@ -2485,11 +2485,11 @@ var Ds = {}, eo = /* @__PURE__ */ function() {
       return "Set";
     }
   }]);
-}(), X = /* @__PURE__ */ ke("ObservableSet", eo);
-function Er(e) {
-  return e[Symbol.toStringTag] = "SetIterator", ir(e);
+}(), X = /* @__PURE__ */ Te("ObservableSet", eo);
+function wr(e) {
+  return e[Symbol.toStringTag] = "SetIterator", rr(e);
 }
-var Ar = /* @__PURE__ */ Object.create(null), Or = "remove", Un = /* @__PURE__ */ function() {
+var Er = /* @__PURE__ */ Object.create(null), Ar = "remove", zn = /* @__PURE__ */ function() {
   function e(n, r, i, o) {
     r === void 0 && (r = /* @__PURE__ */ new Map()), o === void 0 && (o = Ca), this.target_ = void 0, this.values_ = void 0, this.name_ = void 0, this.defaultAnnotation_ = void 0, this.keysAtom_ = void 0, this.changeListeners_ = void 0, this.interceptors_ = void 0, this.proxy_ = void 0, this.isPlainObject_ = void 0, this.appliedAnnotations_ = void 0, this.pendingKeys_ = void 0, this.target_ = n, this.values_ = r, this.name_ = i, this.defaultAnnotation_ = o, this.keysAtom_ = new ge(process.env.NODE_ENV !== "production" ? this.name_ + ".keys" : "ObservableObject.keys"), this.isPlainObject_ = P(this.target_), process.env.NODE_ENV !== "production" && !ao(this.defaultAnnotation_) && p("defaultAnnotation must be valid annotation"), process.env.NODE_ENV !== "production" && (this.appliedAnnotations_ = {});
   }
@@ -2538,17 +2538,17 @@ var Ar = /* @__PURE__ */ Object.create(null), Or = "remove", Un = /* @__PURE__ *
       return r in this.target_;
     this.pendingKeys_ || (this.pendingKeys_ = /* @__PURE__ */ new Map());
     var i = this.pendingKeys_.get(r);
-    return i || (i = new xe(r in this.target_, cn, process.env.NODE_ENV !== "production" ? this.name_ + "." + Tn(r) + "?" : "ObservableObject.key?", !1), this.pendingKeys_.set(r, i)), i.get();
+    return i || (i = new Se(r in this.target_, un, process.env.NODE_ENV !== "production" ? this.name_ + "." + kn(r) + "?" : "ObservableObject.key?", !1), this.pendingKeys_.set(r, i)), i.get();
   }, t.make_ = function(r, i) {
     if (i === !0 && (i = this.defaultAnnotation_), i !== !1) {
-      if (Nr(this, i, r), !(r in this.target_)) {
+      if (Sr(this, i, r), !(r in this.target_)) {
         var o;
         if ((o = this.target_[oe]) != null && o[r])
           return;
         p(1, i.annotationType_, this.name_ + "." + r.toString());
       }
-      for (var a = this.target_; a && a !== on; ) {
-        var s = Bt(a, r);
+      for (var a = this.target_; a && a !== an; ) {
+        var s = Ht(a, r);
         if (s) {
           var l = i.make_(this, r, s, a);
           if (l === 0)
@@ -2558,14 +2558,14 @@ var Ar = /* @__PURE__ */ Object.create(null), Or = "remove", Un = /* @__PURE__ *
         }
         a = Object.getPrototypeOf(a);
       }
-      Sr(this, i, r);
+      xr(this, i, r);
     }
   }, t.extend_ = function(r, i, o, a) {
     if (a === void 0 && (a = !1), o === !0 && (o = this.defaultAnnotation_), o === !1)
       return this.defineProperty_(r, i, a);
-    Nr(this, o, r);
+    Sr(this, o, r);
     var s = o.extend_(this, r, i, a);
-    return s && Sr(this, o, r), s;
+    return s && xr(this, o, r), s;
   }, t.defineProperty_ = function(r, i, o) {
     o === void 0 && (o = !1), J(this.keysAtom_);
     try {
@@ -2615,7 +2615,7 @@ var Ar = /* @__PURE__ */ Object.create(null), Or = "remove", Un = /* @__PURE__ *
           return null;
         i = l.newValue;
       }
-      var c = xr(r), u = {
+      var c = Or(r), u = {
         configurable: f.safeDescriptors ? this.isPlainObject_ : !0,
         enumerable: !0,
         get: c.get,
@@ -2626,7 +2626,7 @@ var Ar = /* @__PURE__ */ Object.create(null), Or = "remove", Un = /* @__PURE__ *
           return !1;
       } else
         Z(this.target_, r, u);
-      var d = new xe(i, o, process.env.NODE_ENV !== "production" ? this.name_ + "." + r.toString() : "ObservableObject.key", !1);
+      var d = new Se(i, o, process.env.NODE_ENV !== "production" ? this.name_ + "." + r.toString() : "ObservableObject.key", !1);
       this.values_.set(r, d), this.notifyPropertyAddition_(r, d.value_);
     } finally {
       z();
@@ -2650,7 +2650,7 @@ var Ar = /* @__PURE__ */ Object.create(null), Or = "remove", Un = /* @__PURE__ *
           return null;
       }
       i.name || (i.name = process.env.NODE_ENV !== "production" ? this.name_ + "." + r.toString() : "ObservableObject.key"), i.context = this.proxy_ || this.target_;
-      var l = xr(r), c = {
+      var l = Or(r), c = {
         configurable: f.safeDescriptors ? this.isPlainObject_ : !0,
         enumerable: !1,
         get: l.get,
@@ -2673,7 +2673,7 @@ var Ar = /* @__PURE__ */ Object.create(null), Or = "remove", Un = /* @__PURE__ *
       var o = M(this, {
         object: this.proxy_ || this.target_,
         name: r,
-        type: Or
+        type: Ar
       });
       if (!o)
         return null;
@@ -2684,16 +2684,16 @@ var Ar = /* @__PURE__ */ Object.create(null), Or = "remove", Un = /* @__PURE__ *
       var s = K(this), l = process.env.NODE_ENV !== "production" && C(), c = this.values_.get(r), u = void 0;
       if (!c && (s || l)) {
         var d;
-        u = (d = Bt(this.target_, r)) == null ? void 0 : d.value;
+        u = (d = Ht(this.target_, r)) == null ? void 0 : d.value;
       }
       if (i) {
         if (!Reflect.deleteProperty(this.target_, r))
           return !1;
       } else
         delete this.target_[r];
-      if (process.env.NODE_ENV !== "production" && delete this.appliedAnnotations_[r], c && (this.values_.delete(r), c instanceof xe && (u = c.value_), Mi(c)), this.keysAtom_.reportChanged(), (a = this.pendingKeys_) == null || (a = a.get(r)) == null || a.set(r in this.target_), s || l) {
+      if (process.env.NODE_ENV !== "production" && delete this.appliedAnnotations_[r], c && (this.values_.delete(r), c instanceof Se && (u = c.value_), Mi(c)), this.keysAtom_.reportChanged(), (a = this.pendingKeys_) == null || (a = a.get(r)) == null || a.set(r in this.target_), s || l) {
         var v = {
-          type: Or,
+          type: Ar,
           observableKind: "object",
           object: this.proxy_ || this.target_,
           debugObjectName: this.name_,
@@ -2733,16 +2733,16 @@ var Ar = /* @__PURE__ */ Object.create(null), Or = "remove", Un = /* @__PURE__ *
 function Ze(e, t) {
   var n;
   if (process.env.NODE_ENV !== "production" && t && Qe(e) && p("Options can't be provided for already observable objects."), q(e, g))
-    return process.env.NODE_ENV !== "production" && !(io(e) instanceof Un) && p("Cannot convert '" + Jt(e) + `' into observable object:
+    return process.env.NODE_ENV !== "production" && !(io(e) instanceof zn) && p("Cannot convert '" + Zt(e) + `' into observable object:
 The target is already observable of different type.
 Extending builtins is not supported.`), e;
   process.env.NODE_ENV !== "production" && !Object.isExtensible(e) && p("Cannot make the designated object observable; it is not extensible");
-  var r = (n = t?.name) != null ? n : process.env.NODE_ENV !== "production" ? (P(e) ? "ObservableObject" : e.constructor.name) + "@" + B() : "ObservableObject", i = new Un(e, /* @__PURE__ */ new Map(), String(r), La(t));
-  return sn(e, g, i), e;
+  var r = (n = t?.name) != null ? n : process.env.NODE_ENV !== "production" ? (P(e) ? "ObservableObject" : e.constructor.name) + "@" + B() : "ObservableObject", i = new zn(e, /* @__PURE__ */ new Map(), String(r), La(t));
+  return ln(e, g, i), e;
 }
-var ks = /* @__PURE__ */ ke("ObservableObjectAdministration", Un);
-function xr(e) {
-  return Ar[e] || (Ar[e] = {
+var ks = /* @__PURE__ */ Te("ObservableObjectAdministration", zn);
+function Or(e) {
+  return Er[e] || (Er[e] = {
     get: function() {
       return this[g].getObservablePropValue_(e);
     },
@@ -2752,14 +2752,14 @@ function xr(e) {
   });
 }
 function Qe(e) {
-  return an(e) ? ks(e[g]) : !1;
+  return sn(e) ? ks(e[g]) : !1;
 }
-function Sr(e, t, n) {
+function xr(e, t, n) {
   var r;
   process.env.NODE_ENV !== "production" && (e.appliedAnnotations_[n] = t), (r = e.target_[oe]) == null || delete r[n];
 }
-function Nr(e, t, n) {
-  if (process.env.NODE_ENV !== "production" && !ao(t) && p("Cannot annotate '" + e.name_ + "." + n.toString() + "': Invalid annotation."), process.env.NODE_ENV !== "production" && !qt(t) && q(e.appliedAnnotations_, n)) {
+function Sr(e, t, n) {
+  if (process.env.NODE_ENV !== "production" && !ao(t) && p("Cannot annotate '" + e.name_ + "." + n.toString() + "': Invalid annotation."), process.env.NODE_ENV !== "production" && !Kt(t) && q(e.appliedAnnotations_, n)) {
     var r = e.name_ + "." + n.toString(), i = e.appliedAnnotations_[n].annotationType_, o = t.annotationType_;
     p("Cannot apply '" + o + "' to '" + r + "':" + (`
 The field is already annotated with '` + i + "'.") + `
@@ -2776,15 +2776,15 @@ var Ts = /* @__PURE__ */ no(0), Is = /* @__PURE__ */ function() {
   }), Object.create(t)[0] = 1, e === !1;
 }(), xn = 0, to = function() {
 };
-function Vs(e, t) {
+function Rs(e, t) {
   Object.setPrototypeOf ? Object.setPrototypeOf(e.prototype, t) : e.prototype.__proto__ !== void 0 ? e.prototype.__proto__ = t : e.prototype = t;
 }
-Vs(to, Array.prototype);
-var rr = /* @__PURE__ */ function(e) {
+Rs(to, Array.prototype);
+var nr = /* @__PURE__ */ function(e) {
   function t(r, i, o, a) {
     var s;
-    return o === void 0 && (o = process.env.NODE_ENV !== "production" ? "ObservableArray@" + B() : "ObservableArray"), a === void 0 && (a = !1), s = e.call(this) || this, Ie(function() {
-      var l = new nr(o, i, a, !0);
+    return o === void 0 && (o = process.env.NODE_ENV !== "production" ? "ObservableArray@" + B() : "ObservableArray"), a === void 0 && (a = !1), s = e.call(this) || this, Re(function() {
+      var l = new tr(o, i, a, !0);
       l.proxy_ = s, bi(s, g, l), r && r.length && s.spliceWithArray(0, 0, r), Is && Object.defineProperty(s, "0", Ts);
     }), s;
   }
@@ -2798,12 +2798,12 @@ var rr = /* @__PURE__ */ function(e) {
       this.slice(),
       //@ts-ignore
       o.map(function(s) {
-        return hn(s) ? s.slice() : s;
+        return gn(s) ? s.slice() : s;
       })
     );
   }, n[Symbol.iterator] = function() {
     var r = this, i = 0;
-    return ir({
+    return rr({
       next: function() {
         return i < r.length ? {
           value: r[i++],
@@ -2829,9 +2829,9 @@ var rr = /* @__PURE__ */ function(e) {
     }
   }]);
 }(to);
-Object.entries(Yt).forEach(function(e) {
+Object.entries(Xt).forEach(function(e) {
   var t = e[0], n = e[1];
-  t !== "concat" && sn(rr.prototype, t, n);
+  t !== "concat" && ln(nr.prototype, t, n);
 });
 function no(e) {
   return {
@@ -2845,23 +2845,23 @@ function no(e) {
     }
   };
 }
-function Rs(e) {
-  Z(rr.prototype, "" + e, no(e));
+function Vs(e) {
+  Z(nr.prototype, "" + e, no(e));
 }
 function ro(e) {
   if (e > xn) {
     for (var t = xn; t < e + 100; t++)
-      Rs(t);
+      Vs(t);
     xn = e;
   }
 }
 ro(1e3);
 function js(e, t, n) {
-  return new rr(e, t, n);
+  return new nr(e, t, n);
 }
 function Ke(e, t) {
   if (typeof e == "object" && e !== null) {
-    if (hn(e))
+    if (gn(e))
       return t !== void 0 && p(23), e[g].atom_;
     if (X(e))
       return e.atom_;
@@ -2869,28 +2869,28 @@ function Ke(e, t) {
       if (t === void 0)
         return e.keysAtom_;
       var n = e.data_.get(t) || e.hasMap_.get(t);
-      return n || p(25, t, Jt(e)), n;
+      return n || p(25, t, Zt(e)), n;
     }
     if (Qe(e)) {
       if (!t)
         return p(26);
       var r = e[g].values_.get(t);
-      return r || p(27, t, Jt(e)), r;
+      return r || p(27, t, Zt(e)), r;
     }
-    if (Jn(e) || vn(e) || Gt(e))
+    if (Xn(e) || hn(e) || Yt(e))
       return e;
-  } else if (O(e) && Gt(e[g]))
+  } else if (O(e) && Yt(e[g]))
     return e[g];
   p(28);
 }
 function io(e, t) {
-  if (e || p(29), Jn(e) || vn(e) || Gt(e) || me(e) || X(e))
+  if (e || p(29), Xn(e) || hn(e) || Yt(e) || me(e) || X(e))
     return e;
   if (e[g])
     return e[g];
   p(24, e);
 }
-function Jt(e, t) {
+function Zt(e, t) {
   var n;
   if (t !== void 0)
     n = Ke(e, t);
@@ -2901,20 +2901,20 @@ function Jt(e, t) {
   }
   return n.name_;
 }
-function Ie(e) {
-  var t = Te(), n = fn(!0);
+function Re(e) {
+  var t = Ie(), n = pn(!0);
   L();
   try {
     return e();
   } finally {
-    z(), pn(n), se(t);
+    z(), vn(n), se(t);
   }
 }
-var Cr = on.toString;
+var Nr = an.toString;
 function oo(e, t, n) {
-  return n === void 0 && (n = -1), Fn(e, t, n);
+  return n === void 0 && (n = -1), Un(e, t, n);
 }
-function Fn(e, t, n, r, i) {
+function Un(e, t, n, r, i) {
   if (e === t)
     return e !== 0 || 1 / e === 1 / t;
   if (e == null || t == null)
@@ -2924,8 +2924,8 @@ function Fn(e, t, n, r, i) {
   var o = typeof e;
   if (o !== "function" && o !== "object" && typeof t != "object")
     return !1;
-  var a = Cr.call(e);
-  if (a !== Cr.call(t))
+  var a = Nr.call(e);
+  if (a !== Nr.call(t))
     return !1;
   switch (a) {
     // Strings, numbers, regular expressions, dates, and booleans are compared by value.
@@ -2945,7 +2945,7 @@ function Fn(e, t, n, r, i) {
       n >= 0 && n++;
       break;
   }
-  e = Pr(e), t = Pr(t);
+  e = Cr(e), t = Cr(t);
   var s = a === "[object Array]";
   if (!s) {
     if (typeof e != "object" || typeof t != "object")
@@ -2964,7 +2964,7 @@ function Fn(e, t, n, r, i) {
     if (u = e.length, u !== t.length)
       return !1;
     for (; u--; )
-      if (!Fn(e[u], t[u], n - 1, r, i))
+      if (!Un(e[u], t[u], n - 1, r, i))
         return !1;
   } else {
     var d = Object.keys(e), v = d.length;
@@ -2972,17 +2972,17 @@ function Fn(e, t, n, r, i) {
       return !1;
     for (var h = 0; h < v; h++) {
       var b = d[h];
-      if (!(q(t, b) && Fn(e[b], t[b], n - 1, r, i)))
+      if (!(q(t, b) && Un(e[b], t[b], n - 1, r, i)))
         return !1;
     }
   }
   return r.pop(), i.pop(), !0;
 }
-function Pr(e) {
-  return hn(e) ? e.slice() : Ye(e) || me(e) || ie(e) || X(e) ? Array.from(e.entries()) : e;
+function Cr(e) {
+  return gn(e) ? e.slice() : Ye(e) || me(e) || ie(e) || X(e) ? Array.from(e.entries()) : e;
 }
-var $r, Ms = (($r = Gn().Iterator) == null ? void 0 : $r.prototype) || {};
-function ir(e) {
+var Pr, Ms = ((Pr = Wn().Iterator) == null ? void 0 : Pr.prototype) || {};
+function rr(e) {
   return e[Symbol.iterator] = Ls, Object.assign(Object.create(Ms), e);
 }
 function Ls() {
@@ -2995,20 +2995,20 @@ function ao(e) {
   );
 }
 ["Symbol", "Map", "Set"].forEach(function(e) {
-  var t = Gn();
+  var t = Wn();
   typeof t[e] > "u" && p("MobX requires global '" + e + "' to be available or polyfilled");
 });
 typeof __MOBX_DEVTOOLS_GLOBAL_HOOK__ == "object" && __MOBX_DEVTOOLS_GLOBAL_HOOK__.injectMobx({
   spy: as,
   extras: {
-    getDebugName: Jt
+    getDebugName: Zt
   },
   $mobx: g
 });
-const Dr = "copilot-conf";
+const $r = "copilot-conf";
 class pe {
   static get sessionConfiguration() {
-    const t = sessionStorage.getItem(Dr);
+    const t = sessionStorage.getItem($r);
     return t ? JSON.parse(t) : {};
   }
   static saveCopilotActivation(t) {
@@ -3049,7 +3049,7 @@ class pe {
     return this.sessionConfiguration.sectionPanelState;
   }
   static persist(t) {
-    sessionStorage.setItem(Dr, JSON.stringify(t));
+    sessionStorage.setItem($r, JSON.stringify(t));
   }
   static savePrompts(t) {
     const n = this.sessionConfiguration;
@@ -3086,7 +3086,7 @@ class pe {
       return t.drillDownContext?.stack;
   }
 }
-var Ve = /* @__PURE__ */ ((e) => (e.INFORMATION = "information", e.WARNING = "warning", e.ERROR = "error", e))(Ve || {});
+var be = /* @__PURE__ */ ((e) => (e.INFORMATION = "information", e.WARNING = "warning", e.ERROR = "error", e))(be || {});
 const zs = Symbol.for("react.portal"), Us = Symbol.for("react.fragment"), Fs = Symbol.for("react.strict_mode"), Bs = Symbol.for("react.profiler"), Hs = Symbol.for("react.provider"), qs = Symbol.for("react.context"), so = Symbol.for("react.forward_ref"), Ks = Symbol.for("react.suspense"), Ws = Symbol.for("react.suspense_list"), Gs = Symbol.for("react.memo"), Ys = Symbol.for("react.lazy");
 function Xs(e, t, n) {
   const r = e.displayName;
@@ -3095,10 +3095,10 @@ function Xs(e, t, n) {
   const i = t.displayName || t.name || "";
   return i !== "" ? `${n}(${i})` : n;
 }
-function kr(e) {
+function Dr(e) {
   return e.displayName || "Context";
 }
-function Zt(e) {
+function Qt(e) {
   if (e === null)
     return null;
   if (typeof e == "function")
@@ -3122,18 +3122,18 @@ function Zt(e) {
   if (typeof e == "object")
     switch (e.$$typeof) {
       case qs:
-        return `${kr(e)}.Consumer`;
+        return `${Dr(e)}.Consumer`;
       case Hs:
-        return `${kr(e._context)}.Provider`;
+        return `${Dr(e._context)}.Provider`;
       case so:
         return Xs(e, e.render, "ForwardRef");
       case Gs:
         const t = e.displayName || null;
-        return t !== null ? t : Zt(e.type) || "Memo";
+        return t !== null ? t : Qt(e.type) || "Memo";
       case Ys: {
         const n = e, r = n._payload, i = n._init;
         try {
-          return Zt(i(r));
+          return Qt(i(r));
         } catch {
           return null;
         }
@@ -3141,7 +3141,7 @@ function Zt(e) {
     }
   return null;
 }
-let kt;
+let Tt;
 function Pu() {
   const e = /* @__PURE__ */ new Set();
   return Array.from(document.body.querySelectorAll("*")).flatMap(Qs).filter(Js).filter((n) => !n.fileName.includes("frontend/generated/")).forEach((n) => e.add(n.fileName)), Array.from(e);
@@ -3149,7 +3149,7 @@ function Pu() {
 function Js(e) {
   return !!e && e.fileName;
 }
-function Qt(e) {
+function en(e) {
   if (!e)
     return;
   if (e._debugSource)
@@ -3163,7 +3163,7 @@ function Zs(e) {
     return e.type.__debugSourceDefine;
 }
 function Qs(e) {
-  return Qt(en(e));
+  return en(tn(e));
 }
 function el() {
   return `__reactFiber$${lo()}`;
@@ -3172,22 +3172,22 @@ function tl() {
   return `__reactContainer$${lo()}`;
 }
 function lo() {
-  if (!(!kt && (kt = Array.from(document.querySelectorAll("*")).flatMap((e) => Object.keys(e)).filter((e) => e.startsWith("__reactFiber$")).map((e) => e.replace("__reactFiber$", "")).find((e) => e), !kt)))
-    return kt;
+  if (!(!Tt && (Tt = Array.from(document.querySelectorAll("*")).flatMap((e) => Object.keys(e)).filter((e) => e.startsWith("__reactFiber$")).map((e) => e.replace("__reactFiber$", "")).find((e) => e), !Tt)))
+    return Tt;
 }
 function dt(e) {
   const t = e.type;
-  return t?.$$typeof === so && !t.displayName && e.child ? dt(e.child) : Zt(e.type) ?? Zt(e.elementType) ?? "???";
+  return t?.$$typeof === so && !t.displayName && e.child ? dt(e.child) : Qt(e.type) ?? Qt(e.elementType) ?? "???";
 }
 function nl() {
-  const e = Array.from(document.querySelectorAll("body > *")).flatMap((n) => n[tl()]).find((n) => n), t = $e(e);
-  return $e(t?.child);
+  const e = Array.from(document.querySelectorAll("body > *")).flatMap((n) => n[tl()]).find((n) => n), t = De(e);
+  return De(t?.child);
 }
 function rl(e) {
   const t = [];
-  let n = $e(e.child);
+  let n = De(e.child);
   for (; n; )
-    t.push(n), n = $e(n.sibling);
+    t.push(n), n = De(n.sibling);
   return t;
 }
 function il(e) {
@@ -3196,7 +3196,7 @@ function il(e) {
 function ol(e) {
   return e.hasOwnProperty("stateNode") && e.hasOwnProperty("pendingProps");
 }
-function $e(e) {
+function De(e) {
   const t = e?.stateNode;
   if (t?.current && (il(t) || ol(t)))
     return t?.current;
@@ -3207,27 +3207,27 @@ function $e(e) {
   const n = e.alternate, r = e?.actualStartTime, i = n?.actualStartTime;
   return i !== r && i > r ? n : e;
 }
-function en(e) {
-  const t = el(), n = $e(e[t]);
-  if (Qt(n))
+function tn(e) {
+  const t = el(), n = De(e[t]);
+  if (en(n))
     return n;
   let r = n?.return || void 0;
-  for (; r && !Qt(r); )
+  for (; r && !en(r); )
     r = r.return || void 0;
   return r;
 }
-function tn(e) {
+function nn(e) {
   if (e.stateNode?.isConnected === !0)
     return e.stateNode;
   if (e.child)
-    return tn(e.child);
+    return nn(e.child);
 }
-function Tr(e) {
-  const t = tn(e);
-  return t && $e(en(t)) === e;
+function kr(e) {
+  const t = nn(e);
+  return t && De(tn(t)) === e;
 }
 function al(e) {
-  return typeof e.type != "function" || co(e) ? !1 : !!(Qt(e) || Zs(e));
+  return typeof e.type != "function" || co(e) ? !1 : !!(en(e) || Zs(e));
 }
 function co(e) {
   if (!e)
@@ -3235,7 +3235,7 @@ function co(e) {
   const t = e;
   return typeof e.type == "function" && t.tag === 1;
 }
-const gn = async (e, t, n) => window.Vaadin.copilot.comm(e, t, n), Re = "copilot-", sl = "24.9.3", ll = "undefined", $u = "attention-required", Du = "https://plugins.jetbrains.com/plugin/23758-vaadin", ku = "https://marketplace.visualstudio.com/items?itemName=vaadin.vaadin-vscode", Tu = "https://marketplace.eclipse.org/content/vaadin-tools";
+const mn = async (e, t, n) => window.Vaadin.copilot.comm(e, t, n), Ve = "copilot-", sl = "24.10.5", ll = "undefined", $u = "attention-required", Du = "https://plugins.jetbrains.com/plugin/23758-vaadin", ku = "https://marketplace.visualstudio.com/items?itemName=vaadin.vaadin-vscode", Tu = "https://marketplace.eclipse.org/content/vaadin-tools";
 function Iu(e) {
   return e === void 0 ? !1 : e.nodeId >= 0;
 }
@@ -3266,7 +3266,7 @@ function Sn(e) {
     }
   }
 }
-function Vu() {
+function Ru() {
   const e = window.Vaadin;
   let t;
   if (e && e.Flow) {
@@ -3278,7 +3278,7 @@ function Vu() {
   }
   return t;
 }
-function Ru(e) {
+function Vu(e) {
   return {
     uiId: e.uiId,
     nodeId: e.nodeId
@@ -3311,7 +3311,7 @@ async function fl(e) {
   }, 10);
   return r;
 }
-function nn(e) {
+function rn(e) {
   return x.box(e, { deep: !1 });
 }
 function pl(e) {
@@ -3329,14 +3329,14 @@ function Mu(e) {
 function vl(e) {
   return Array.from(new Set(e));
 }
-function mn(e) {
+function $t(e) {
   Promise.resolve().then(() => _c).then(({ showNotification: t }) => {
     t(e);
   });
 }
 function hl() {
-  mn({
-    type: Ve.INFORMATION,
+  $t({
+    type: be.INFORMATION,
     message: "The previous operation is still in progress. Please wait for it to finish."
   });
 }
@@ -3350,7 +3350,15 @@ async function fo() {
   });
 }
 function ne(e, t) {
-  fo().then((n) => n.send(e, t));
+  fo().then((n) => {
+    n.canSend ? n.send(e, t) : $t({
+      type: be.INFORMATION,
+      message: "Connection lost",
+      details: "Please refresh the page and start the server if it is not running",
+      delay: 1e4,
+      dismissId: "connection-lost"
+    });
+  });
 }
 const ml = () => {
   ne("copilot-browser-info", {
@@ -3367,7 +3375,7 @@ const ml = () => {
 };
 class bl {
   constructor() {
-    this.spotlightActive = !1, this.welcomeActive = !1, this.loginCheckActive = !1, this.userInfo = void 0, this.active = !1, this.activatedFrom = null, this.activatedAtLeastOnce = !1, this.operationInProgress = void 0, this.operationWaitsHmrUpdate = void 0, this.operationWaitsHmrUpdateTimeout = void 0, this.idePluginState = void 0, this.notifications = [], this.infoTooltip = null, this.sectionPanelDragging = !1, this.spotlightDragging = !1, this.sectionPanelResizing = !1, this.drawerResizing = !1, this.featureFlags = [], this.newVaadinVersionState = void 0, this.pointerEventsDisabledForScrolling = !1, this.editComponent = void 0, this.componentProperties = void 0, this.serverRestartRequiringToggledFeatureFlags = [], Je(this, {
+    this.spotlightActive = !1, this.welcomeActive = !1, this.loginCheckActive = !1, this.userInfo = void 0, this.active = !1, this.activatedFrom = null, this.activatedAtLeastOnce = !1, this.operationInProgress = void 0, this.operationWaitsHmrUpdate = void 0, this.operationWaitsHmrUpdateTimeout = void 0, this.idePluginState = void 0, this.notifications = [], this.infoTooltip = null, this.sectionPanelDragging = !1, this.spotlightDragging = !1, this.sectionPanelResizing = !1, this.drawerResizing = !1, this.featureFlags = [], this.newVaadinVersionState = void 0, this.pointerEventsDisabledForScrolling = !1, this.editComponent = void 0, this.componentProperties = void 0, this.serverRestartRequiringToggledFeatureFlags = [], this.escapeEventHandler = void 0, Je(this, {
       notifications: x.shallow
     }), this.spotlightActive = pe.getSpotlightActivation() ?? !1;
   }
@@ -3478,12 +3486,18 @@ class bl {
     const n = [...this.serverRestartRequiringToggledFeatureFlags], r = n.findIndex((i) => i.id === t.id);
     r === -1 ? n.push(t) : n.splice(r, 1), this.serverRestartRequiringToggledFeatureFlags = n;
   }
+  setEscapeEventHandler(t) {
+    this.escapeEventHandler = t;
+  }
+  clearEscapeEventHandler() {
+    this.escapeEventHandler = void 0;
+  }
 }
-const _l = (e, t, n) => t >= e.left && t <= e.right && n >= e.top && n <= e.bottom, or = (e) => {
+const _l = (e, t, n) => t >= e.left && t <= e.right && n >= e.top && n <= e.bottom, ir = (e) => {
   const t = [];
-  let n = Ir(e);
+  let n = Tr(e);
   for (; n; )
-    t.push(n), n = Ir(n);
+    t.push(n), n = Tr(n);
   return t;
 }, yl = (e) => {
   if (e.length === 0)
@@ -3494,9 +3508,9 @@ const _l = (e, t, n) => t >= e.left && t <= e.right && n >= e.top && n <= e.bott
     const s = a.getBoundingClientRect();
     s.x < t && (t = s.x), s.y < n && (n = s.y), s.right > r && (r = s.right), s.bottom > i && (i = s.bottom);
   }), o.x = t, o.y = n, o.width = r - t, o.height = i - n, o;
-}, Bn = (e, t) => {
+}, Fn = (e, t) => {
   let n = e;
-  for (; !(n instanceof HTMLElement && n.localName === `${Re}main`); ) {
+  for (; !(n instanceof HTMLElement && n.localName === `${Ve}main`); ) {
     if (!n.isConnected)
       return null;
     if (n.parentNode)
@@ -3510,12 +3524,12 @@ const _l = (e, t, n) => t >= e.left && t <= e.right && n >= e.top && n <= e.bott
   }
   return null;
 };
-function Ir(e) {
+function Tr(e) {
   return e.parentElement ?? e.parentNode?.host;
 }
-function Hn(e) {
+function Bn(e) {
   if (e.assignedSlot)
-    return Hn(e.assignedSlot);
+    return Bn(e.assignedSlot);
   if (e.parentElement)
     return e.parentElement;
   if (e.parentNode instanceof ShadowRoot)
@@ -3523,18 +3537,18 @@ function Hn(e) {
 }
 function We(e) {
   if (e instanceof Node) {
-    const t = or(e);
-    return e instanceof HTMLElement && t.push(e), t.map((n) => n.localName).some((n) => n.startsWith(Re));
+    const t = ir(e);
+    return e instanceof HTMLElement && t.push(e), t.map((n) => n.localName).some((n) => n.startsWith(Ve));
   }
   return !1;
 }
-function Vr(e) {
+function Ir(e) {
   return e instanceof Element;
 }
 function Rr(e) {
   return e.startsWith("vaadin-") ? e.substring(7).split("-").map((r) => r.charAt(0).toUpperCase() + r.slice(1)).join(" ") : e;
 }
-function jr(e) {
+function Vr(e) {
   if (!e)
     return;
   if (e.id)
@@ -3566,12 +3580,12 @@ function Al() {
   return e;
 }
 function Ol(e) {
-  let t = Hn(e);
+  let t = Bn(e);
   for (; t && t !== document.body; ) {
     const n = window.getComputedStyle(t), r = n.overflowY, i = n.overflowX, o = /(auto|scroll)/.test(r) && t.scrollHeight > t.clientHeight, a = /(auto|scroll)/.test(i) && t.scrollWidth > t.clientWidth;
     if (o || a)
       return t;
-    t = Hn(t);
+    t = Bn(t);
   }
   return document.documentElement;
 }
@@ -3608,6 +3622,11 @@ function po(e) {
       if (i)
         return [i];
     }
+    if (n.localName === "vaadin-login-overlay") {
+      const i = r.shadowRoot?.querySelector("vaadin-login-overlay-wrapper")?.shadowRoot?.querySelector('[part="card"]');
+      if (i)
+        return [i];
+    }
     return [n];
   }
   return t.children.flatMap((r) => po(r));
@@ -3637,22 +3656,24 @@ function Cl(e) {
   return t === 0 && n === 0 || // Safari and Firefox returns the last position where mouse left the screen with adding some offset value, something like 356, -1.
   !_l(document.documentElement.getBoundingClientRect(), t, n);
 }
-function Mr(e) {
+function jr(e) {
+  if (e.localName === "vaadin-login-overlay")
+    return !1;
   const t = wl(e);
   return t.width === 0 || t.height === 0;
 }
 function Pl(e) {
   return typeof e.close == "function";
 }
-function Lr(e) {
+function Mr(e) {
   return Pl(e) ? (e.close(), !0) : !1;
 }
 var vo = /* @__PURE__ */ ((e) => (e["vaadin-combo-box"] = "vaadin-combo-box", e["vaadin-date-picker"] = "vaadin-date-picker", e["vaadin-dialog"] = "vaadin-dialog", e["vaadin-multi-select-combo-box"] = "vaadin-multi-select-combo-box", e["vaadin-select"] = "vaadin-select", e["vaadin-time-picker"] = "vaadin-time-picker", e["vaadin-popover"] = "vaadin-popover", e))(vo || {});
 const it = {
   "vaadin-combo-box": {
     hideOnActivation: !0,
-    open: (e) => Tt(e),
-    close: (e) => It(e)
+    open: (e) => It(e),
+    close: (e) => Rt(e)
   },
   "vaadin-select": {
     hideOnActivation: !0,
@@ -3667,21 +3688,21 @@ const it = {
   },
   "vaadin-multi-select-combo-box": {
     hideOnActivation: !0,
-    open: (e) => Tt(e.$.comboBox),
+    open: (e) => It(e.$.comboBox),
     close: (e) => {
-      It(e.$.comboBox), e.removeAttribute("focused");
+      Rt(e.$.comboBox), e.removeAttribute("focused");
     }
   },
   "vaadin-date-picker": {
     hideOnActivation: !0,
-    open: (e) => Tt(e),
-    close: (e) => It(e)
+    open: (e) => It(e),
+    close: (e) => Rt(e)
   },
   "vaadin-time-picker": {
     hideOnActivation: !0,
-    open: (e) => Tt(e.$.comboBox),
+    open: (e) => It(e.$.comboBox),
     close: (e) => {
-      It(e.$.comboBox), e.removeAttribute("focused");
+      Rt(e.$.comboBox), e.removeAttribute("focused");
     }
   },
   "vaadin-dialog": {
@@ -3692,9 +3713,9 @@ const it = {
   }
 }, ho = (e) => {
   e.preventDefault(), e.stopImmediatePropagation();
-}, Tt = (e) => {
-  e.addEventListener("focusout", ho, { capture: !0 }), go(e), e.opened = !0;
 }, It = (e) => {
+  e.addEventListener("focusout", ho, { capture: !0 }), go(e), e.opened = !0;
+}, Rt = (e) => {
   mo(e), e.removeAttribute("focused"), e.removeEventListener("focusout", ho, { capture: !0 }), e.opened = !1;
 }, go = (e, t) => {
   const n = t ?? e.$.overlay;
@@ -3789,15 +3810,15 @@ class bo {
 class Dl {
   constructor() {
     this.dismissedNotifications = [], this.termsSummaryDismissed = !1, this.activationButtonPosition = null, this.paletteState = null, this.activationShortcut = !0, this.activationAnimation = !0, this.recentSwitchedUsernames = [], this.newVersionPreReleasesVisible = !1, this.aiUsageAllowed = "ask", this.sendErrorReportsAllowed = !0, this.feedbackDisplayedAtLeastOnce = !1, this.aiProvider = "ANY", Je(this), this.initializer = new bo(), this.initializer.promise.then(() => {
-      tr(
+      er(
         () => JSON.stringify(this),
         () => {
-          ne("copilot-set-machine-configuration", { conf: JSON.stringify(zr(this)) });
+          ne("copilot-set-machine-configuration", { conf: JSON.stringify(Lr(this)) });
         }
       );
     }), window.Vaadin.copilot.eventbus.on("copilot-machine-configuration", (t) => {
       const n = t.detail.conf;
-      n.aiProvider || (n.aiProvider = "ANY"), Object.assign(this, zr(n)), this.initializer.done(!0), t.preventDefault();
+      n.aiProvider || (n.aiProvider = "ANY"), Object.assign(this, Lr(n)), this.initializer.done(!0), t.preventDefault();
     }), this.loadData();
   }
   loadData() {
@@ -3885,7 +3906,7 @@ class Dl {
     return this.feedbackDisplayedAtLeastOnce;
   }
 }
-function zr(e) {
+function Lr(e) {
   const t = { ...e };
   return delete t.initializer, t;
 }
@@ -3915,7 +3936,7 @@ class kl {
     this._previewActivated = !1, this._active = !1, this._configurationLoaded = !1, this._remainingTimeInMillis = -1;
   }
   loadPreviewConfiguration() {
-    gn(`${Re}get-preview`, {}, (t) => {
+    mn(`${Ve}get-preview`, {}, (t) => {
       const n = t.data;
       this.setConfiguration(n);
     }).catch((t) => {
@@ -4048,18 +4069,18 @@ class Il {
     this.jdkInfo = t;
   }
 }
-class Vl {
+class Rl {
   constructor() {
     this.palette = { components: [] }, Je(this), this.initializer = new bo(), this.initializer.promise.then(() => {
-      tr(
+      er(
         () => JSON.stringify(this),
         () => {
-          ne("copilot-set-project-state-configuration", { conf: JSON.stringify(Ur(this)) });
+          ne("copilot-set-project-state-configuration", { conf: JSON.stringify(zr(this)) });
         }
       );
     }), window.Vaadin.copilot.eventbus.on("copilot-project-state-configuration", (t) => {
       const n = t.detail.conf;
-      Object.assign(this, Ur(n)), this.initializer.done(!0), t.preventDefault();
+      Object.assign(this, zr(n)), this.initializer.done(!0), t.preventDefault();
     }), this.loadData();
   }
   loadData() {
@@ -4091,7 +4112,7 @@ class Vl {
     return this.palette?.components || [];
   }
 }
-function Ur(e) {
+function zr(e) {
   const t = { ...e };
   return delete t.initializer, t;
 }
@@ -4105,7 +4126,7 @@ window.Vaadin.copilot._uiState = new bl();
 window.Vaadin.copilot.eventbus = new Ko();
 window.Vaadin.copilot.overlayManager = new $l();
 window.Vaadin.copilot._machineState = new Dl();
-window.Vaadin.copilot._storedProjectState = new Vl();
+window.Vaadin.copilot._storedProjectState = new Rl();
 window.Vaadin.copilot._previewState = new kl();
 window.Vaadin.copilot._sectionPanelUiState = new Tl();
 window.Vaadin.copilot._earlyProjectState = new Il();
@@ -4114,7 +4135,7 @@ window.Vaadin.copilot._earlyProjectState = new Il();
  * Copyright 2017 Google LLC
  * SPDX-License-Identifier: BSD-3-Clause
  */
-const Rl = (e) => (t, n) => {
+const Vl = (e) => (t, n) => {
   n !== void 0 ? n.addInitializer(() => {
     customElements.define(e, t);
   }) : customElements.define(e, t);
@@ -4124,18 +4145,18 @@ const Rl = (e) => (t, n) => {
  * Copyright 2019 Google LLC
  * SPDX-License-Identifier: BSD-3-Clause
  */
-const Lt = globalThis, ar = Lt.ShadowRoot && (Lt.ShadyCSS === void 0 || Lt.ShadyCSS.nativeShadow) && "adoptedStyleSheets" in Document.prototype && "replace" in CSSStyleSheet.prototype, sr = Symbol(), Fr = /* @__PURE__ */ new WeakMap();
+const zt = globalThis, or = zt.ShadowRoot && (zt.ShadyCSS === void 0 || zt.ShadyCSS.nativeShadow) && "adoptedStyleSheets" in Document.prototype && "replace" in CSSStyleSheet.prototype, ar = Symbol(), Ur = /* @__PURE__ */ new WeakMap();
 let _o = class {
   constructor(t, n, r) {
-    if (this._$cssResult$ = !0, r !== sr) throw Error("CSSResult is not constructable. Use `unsafeCSS` or `css` instead.");
+    if (this._$cssResult$ = !0, r !== ar) throw Error("CSSResult is not constructable. Use `unsafeCSS` or `css` instead.");
     this.cssText = t, this.t = n;
   }
   get styleSheet() {
     let t = this.o;
     const n = this.t;
-    if (ar && t === void 0) {
+    if (or && t === void 0) {
       const r = n !== void 0 && n.length === 1;
-      r && (t = Fr.get(n)), t === void 0 && ((this.o = t = new CSSStyleSheet()).replaceSync(this.cssText), r && Fr.set(n, t));
+      r && (t = Ur.get(n)), t === void 0 && ((this.o = t = new CSSStyleSheet()).replaceSync(this.cssText), r && Ur.set(n, t));
     }
     return t;
   }
@@ -4143,30 +4164,30 @@ let _o = class {
     return this.cssText;
   }
 };
-const R = (e) => new _o(typeof e == "string" ? e : e + "", void 0, sr), jl = (e, ...t) => {
+const V = (e) => new _o(typeof e == "string" ? e : e + "", void 0, ar), jl = (e, ...t) => {
   const n = e.length === 1 ? e[0] : t.reduce((r, i, o) => r + ((a) => {
     if (a._$cssResult$ === !0) return a.cssText;
     if (typeof a == "number") return a;
     throw Error("Value passed to 'css' function must be a 'css' function result: " + a + ". Use 'unsafeCSS' to pass non-literal values, but take care to ensure page security.");
   })(i) + e[o + 1], e[0]);
-  return new _o(n, e, sr);
+  return new _o(n, e, ar);
 }, Ml = (e, t) => {
-  if (ar) e.adoptedStyleSheets = t.map((n) => n instanceof CSSStyleSheet ? n : n.styleSheet);
+  if (or) e.adoptedStyleSheets = t.map((n) => n instanceof CSSStyleSheet ? n : n.styleSheet);
   else for (const n of t) {
-    const r = document.createElement("style"), i = Lt.litNonce;
+    const r = document.createElement("style"), i = zt.litNonce;
     i !== void 0 && r.setAttribute("nonce", i), r.textContent = n.cssText, e.appendChild(r);
   }
-}, Br = ar ? (e) => e : (e) => e instanceof CSSStyleSheet ? ((t) => {
+}, Fr = or ? (e) => e : (e) => e instanceof CSSStyleSheet ? ((t) => {
   let n = "";
   for (const r of t.cssRules) n += r.cssText;
-  return R(n);
+  return V(n);
 })(e) : e;
 /**
  * @license
  * Copyright 2017 Google LLC
  * SPDX-License-Identifier: BSD-3-Clause
  */
-const { is: Ll, defineProperty: zl, getOwnPropertyDescriptor: Ul, getOwnPropertyNames: Fl, getOwnPropertySymbols: Bl, getPrototypeOf: Hl } = Object, bn = globalThis, Hr = bn.trustedTypes, ql = Hr ? Hr.emptyScript : "", Kl = bn.reactiveElementPolyfillSupport, vt = (e, t) => e, qn = { toAttribute(e, t) {
+const { is: Ll, defineProperty: zl, getOwnPropertyDescriptor: Ul, getOwnPropertyNames: Fl, getOwnPropertySymbols: Bl, getPrototypeOf: Hl } = Object, bn = globalThis, Br = bn.trustedTypes, ql = Br ? Br.emptyScript : "", Kl = bn.reactiveElementPolyfillSupport, vt = (e, t) => e, Hn = { toAttribute(e, t) {
   switch (t) {
     case Boolean:
       e = e ? ql : null;
@@ -4194,7 +4215,7 @@ const { is: Ll, defineProperty: zl, getOwnPropertyDescriptor: Ul, getOwnProperty
       }
   }
   return n;
-} }, yo = (e, t) => !Ll(e, t), qr = { attribute: !0, type: String, converter: qn, reflect: !1, useDefault: !1, hasChanged: yo };
+} }, yo = (e, t) => !Ll(e, t), Hr = { attribute: !0, type: String, converter: Hn, reflect: !1, useDefault: !1, hasChanged: yo };
 Symbol.metadata ??= Symbol("metadata"), bn.litPropertyMetadata ??= /* @__PURE__ */ new WeakMap();
 let Le = class extends HTMLElement {
   static addInitializer(t) {
@@ -4203,7 +4224,7 @@ let Le = class extends HTMLElement {
   static get observedAttributes() {
     return this.finalize(), this._$Eh && [...this._$Eh.keys()];
   }
-  static createProperty(t, n = qr) {
+  static createProperty(t, n = Hr) {
     if (n.state && (n.attribute = !1), this._$Ei(), this.prototype.hasOwnProperty(t) && ((n = Object.create(n)).wrapped = !0), this.elementProperties.set(t, n), !n.noAccessor) {
       const r = Symbol(), i = this.getPropertyDescriptor(t, r, n);
       i !== void 0 && zl(this.prototype, t, i);
@@ -4221,7 +4242,7 @@ let Le = class extends HTMLElement {
     }, configurable: !0, enumerable: !0 };
   }
   static getPropertyOptions(t) {
-    return this.elementProperties.get(t) ?? qr;
+    return this.elementProperties.get(t) ?? Hr;
   }
   static _$Ei() {
     if (this.hasOwnProperty(vt("elementProperties"))) return;
@@ -4250,8 +4271,8 @@ let Le = class extends HTMLElement {
     const n = [];
     if (Array.isArray(t)) {
       const r = new Set(t.flat(1 / 0).reverse());
-      for (const i of r) n.unshift(Br(i));
-    } else t !== void 0 && n.push(Br(t));
+      for (const i of r) n.unshift(Fr(i));
+    } else t !== void 0 && n.push(Fr(t));
     return n;
   }
   static _$Eu(t, n) {
@@ -4293,14 +4314,14 @@ let Le = class extends HTMLElement {
   _$ET(t, n) {
     const r = this.constructor.elementProperties.get(t), i = this.constructor._$Eu(t, r);
     if (i !== void 0 && r.reflect === !0) {
-      const o = (r.converter?.toAttribute !== void 0 ? r.converter : qn).toAttribute(n, r.type);
+      const o = (r.converter?.toAttribute !== void 0 ? r.converter : Hn).toAttribute(n, r.type);
       this._$Em = t, o == null ? this.removeAttribute(i) : this.setAttribute(i, o), this._$Em = null;
     }
   }
   _$AK(t, n) {
     const r = this.constructor, i = r._$Eh.get(t);
     if (i !== void 0 && this._$Em !== i) {
-      const o = r.getPropertyOptions(i), a = typeof o.converter == "function" ? { fromAttribute: o.converter } : o.converter?.fromAttribute !== void 0 ? o.converter : qn;
+      const o = r.getPropertyOptions(i), a = typeof o.converter == "function" ? { fromAttribute: o.converter } : o.converter?.fromAttribute !== void 0 ? o.converter : Hn;
       this._$Em = i, this[i] = a.fromAttribute(n, o.type) ?? this._$Ej?.get(i) ?? null, this._$Em = null;
     }
   }
@@ -4376,7 +4397,7 @@ let Le = class extends HTMLElement {
   }
 };
 Le.elementStyles = [], Le.shadowRootOptions = { mode: "open" }, Le[vt("elementProperties")] = /* @__PURE__ */ new Map(), Le[vt("finalized")] = /* @__PURE__ */ new Map(), Kl?.({ ReactiveElement: Le }), (bn.reactiveElementVersions ??= []).push("2.1.0");
-const Me = Symbol("LitMobxRenderReaction"), Kr = Symbol("LitMobxRequestUpdate");
+const Me = Symbol("LitMobxRenderReaction"), qr = Symbol("LitMobxRequestUpdate");
 function Wl(e, t) {
   var n, r;
   return r = class extends e {
@@ -4388,7 +4409,7 @@ function Wl(e, t) {
     connectedCallback() {
       super.connectedCallback();
       const o = this.constructor.name || this.nodeName;
-      this[Me] = new t(`${o}.update()`, this[Kr]), this.hasUpdated && this.requestUpdate();
+      this[Me] = new t(`${o}.update()`, this[qr]), this.hasUpdated && this.requestUpdate();
     }
     disconnectedCallback() {
       super.disconnectedCallback(), this[Me] && (this[Me].dispose(), this[Me] = void 0);
@@ -4396,7 +4417,7 @@ function Wl(e, t) {
     update(o) {
       this[Me] ? this[Me].track(super.update.bind(this, o)) : super.update(o);
     }
-  }, n = Kr, r;
+  }, n = qr, r;
 }
 function Gl(e) {
   return Wl(e, te);
@@ -4406,12 +4427,12 @@ function Gl(e) {
  * Copyright 2017 Google LLC
  * SPDX-License-Identifier: BSD-3-Clause
  */
-const lr = globalThis, rn = lr.trustedTypes, Wr = rn ? rn.createPolicy("lit-html", { createHTML: (e) => e }) : void 0, wo = "$lit$", de = `lit$${Math.random().toFixed(9).slice(2)}$`, Eo = "?" + de, Yl = `<${Eo}>`, De = document, Et = () => De.createComment(""), At = (e) => e === null || typeof e != "object" && typeof e != "function", cr = Array.isArray, Xl = (e) => cr(e) || typeof e?.[Symbol.iterator] == "function", Cn = `[ 	
-\f\r]`, ot = /<(?:(!--|\/[^a-zA-Z])|(\/?[a-zA-Z][^>\s]*)|(\/?$))/g, Gr = /-->/g, Yr = />/g, ye = RegExp(`>|${Cn}(?:([^\\s"'>=/]+)(${Cn}*=${Cn}*(?:[^ 	
-\f\r"'\`<>=]|("|')|))|$)`, "g"), Xr = /'/g, Jr = /"/g, Ao = /^(?:script|style|textarea|title)$/i, Oo = (e) => (t, ...n) => ({ _$litType$: e, strings: t, values: n }), ee = Oo(1), Wu = Oo(2), he = Symbol.for("lit-noChange"), A = Symbol.for("lit-nothing"), Zr = /* @__PURE__ */ new WeakMap(), Oe = De.createTreeWalker(De, 129);
+const sr = globalThis, on = sr.trustedTypes, Kr = on ? on.createPolicy("lit-html", { createHTML: (e) => e }) : void 0, wo = "$lit$", de = `lit$${Math.random().toFixed(9).slice(2)}$`, Eo = "?" + de, Yl = `<${Eo}>`, ke = document, Et = () => ke.createComment(""), At = (e) => e === null || typeof e != "object" && typeof e != "function", lr = Array.isArray, Xl = (e) => lr(e) || typeof e?.[Symbol.iterator] == "function", Cn = `[ 	
+\f\r]`, ot = /<(?:(!--|\/[^a-zA-Z])|(\/?[a-zA-Z][^>\s]*)|(\/?$))/g, Wr = /-->/g, Gr = />/g, we = RegExp(`>|${Cn}(?:([^\\s"'>=/]+)(${Cn}*=${Cn}*(?:[^ 	
+\f\r"'\`<>=]|("|')|))|$)`, "g"), Yr = /'/g, Xr = /"/g, Ao = /^(?:script|style|textarea|title)$/i, Oo = (e) => (t, ...n) => ({ _$litType$: e, strings: t, values: n }), ee = Oo(1), Wu = Oo(2), he = Symbol.for("lit-noChange"), A = Symbol.for("lit-nothing"), Jr = /* @__PURE__ */ new WeakMap(), xe = ke.createTreeWalker(ke, 129);
 function xo(e, t) {
-  if (!cr(e) || !e.hasOwnProperty("raw")) throw Error("invalid template strings array");
-  return Wr !== void 0 ? Wr.createHTML(t) : t;
+  if (!lr(e) || !e.hasOwnProperty("raw")) throw Error("invalid template strings array");
+  return Kr !== void 0 ? Kr.createHTML(t) : t;
 }
 const Jl = (e, t) => {
   const n = e.length - 1, r = [];
@@ -4419,8 +4440,8 @@ const Jl = (e, t) => {
   for (let s = 0; s < n; s++) {
     const l = e[s];
     let c, u, d = -1, v = 0;
-    for (; v < l.length && (a.lastIndex = v, u = a.exec(l), u !== null); ) v = a.lastIndex, a === ot ? u[1] === "!--" ? a = Gr : u[1] !== void 0 ? a = Yr : u[2] !== void 0 ? (Ao.test(u[2]) && (i = RegExp("</" + u[2], "g")), a = ye) : u[3] !== void 0 && (a = ye) : a === ye ? u[0] === ">" ? (a = i ?? ot, d = -1) : u[1] === void 0 ? d = -2 : (d = a.lastIndex - u[2].length, c = u[1], a = u[3] === void 0 ? ye : u[3] === '"' ? Jr : Xr) : a === Jr || a === Xr ? a = ye : a === Gr || a === Yr ? a = ot : (a = ye, i = void 0);
-    const h = a === ye && e[s + 1].startsWith("/>") ? " " : "";
+    for (; v < l.length && (a.lastIndex = v, u = a.exec(l), u !== null); ) v = a.lastIndex, a === ot ? u[1] === "!--" ? a = Wr : u[1] !== void 0 ? a = Gr : u[2] !== void 0 ? (Ao.test(u[2]) && (i = RegExp("</" + u[2], "g")), a = we) : u[3] !== void 0 && (a = we) : a === we ? u[0] === ">" ? (a = i ?? ot, d = -1) : u[1] === void 0 ? d = -2 : (d = a.lastIndex - u[2].length, c = u[1], a = u[3] === void 0 ? we : u[3] === '"' ? Xr : Yr) : a === Xr || a === Yr ? a = we : a === Wr || a === Gr ? a = ot : (a = we, i = void 0);
+    const h = a === we && e[s + 1].startsWith("/>") ? " " : "";
     o += a === ot ? l + Yl : d >= 0 ? (r.push(c), l.slice(0, d) + wo + l.slice(d) + de + h) : l + de + (d === -2 ? s : h);
   }
   return [xo(e, o + (e[n] || "<?>") + (t === 2 ? "</svg>" : t === 3 ? "</math>" : "")), r];
@@ -4431,11 +4452,11 @@ class Ot {
     this.parts = [];
     let o = 0, a = 0;
     const s = t.length - 1, l = this.parts, [c, u] = Jl(t, n);
-    if (this.el = Ot.createElement(c, r), Oe.currentNode = this.el.content, n === 2 || n === 3) {
+    if (this.el = Ot.createElement(c, r), xe.currentNode = this.el.content, n === 2 || n === 3) {
       const d = this.el.content.firstChild;
       d.replaceWith(...d.childNodes);
     }
-    for (; (i = Oe.nextNode()) !== null && l.length < s; ) {
+    for (; (i = xe.nextNode()) !== null && l.length < s; ) {
       if (i.nodeType === 1) {
         if (i.hasAttributes()) for (const d of i.getAttributeNames()) if (d.endsWith(wo)) {
           const v = u[a++], h = i.getAttribute(d).split(de), b = /([.?@])?(.*)/.exec(v);
@@ -4444,8 +4465,8 @@ class Ot {
         if (Ao.test(i.tagName)) {
           const d = i.textContent.split(de), v = d.length - 1;
           if (v > 0) {
-            i.textContent = rn ? rn.emptyScript : "";
-            for (let h = 0; h < v; h++) i.append(d[h], Et()), Oe.nextNode(), l.push({ type: 2, index: ++o });
+            i.textContent = on ? on.emptyScript : "";
+            for (let h = 0; h < v; h++) i.append(d[h], Et()), xe.nextNode(), l.push({ type: 2, index: ++o });
             i.append(d[v], Et());
           }
         }
@@ -4458,7 +4479,7 @@ class Ot {
     }
   }
   static createElement(t, n) {
-    const r = De.createElement("template");
+    const r = ke.createElement("template");
     return r.innerHTML = t, r;
   }
 }
@@ -4479,17 +4500,17 @@ let Zl = class {
     return this._$AM._$AU;
   }
   u(t) {
-    const { el: { content: n }, parts: r } = this._$AD, i = (t?.creationScope ?? De).importNode(n, !0);
-    Oe.currentNode = i;
-    let o = Oe.nextNode(), a = 0, s = 0, l = r[0];
+    const { el: { content: n }, parts: r } = this._$AD, i = (t?.creationScope ?? ke).importNode(n, !0);
+    xe.currentNode = i;
+    let o = xe.nextNode(), a = 0, s = 0, l = r[0];
     for (; l !== void 0; ) {
       if (a === l.index) {
         let c;
         l.type === 2 ? c = new et(o, o.nextSibling, this, t) : l.type === 1 ? c = new l.ctor(o, l.name, l.strings, this, t) : l.type === 6 && (c = new nc(o, this, t)), this._$AV.push(c), l = r[++s];
       }
-      a !== l?.index && (o = Oe.nextNode(), a++);
+      a !== l?.index && (o = xe.nextNode(), a++);
     }
-    return Oe.currentNode = De, i;
+    return xe.currentNode = ke, i;
   }
   p(t) {
     let n = 0;
@@ -4524,7 +4545,7 @@ class et {
     this._$AH !== t && (this._$AR(), this._$AH = this.O(t));
   }
   _(t) {
-    this._$AH !== A && At(this._$AH) ? this._$AA.nextSibling.data = t : this.T(De.createTextNode(t)), this._$AH = t;
+    this._$AH !== A && At(this._$AH) ? this._$AA.nextSibling.data = t : this.T(ke.createTextNode(t)), this._$AH = t;
   }
   $(t) {
     const { values: n, _$litType$: r } = t, i = typeof r == "number" ? this._$AC(t) : (r.el === void 0 && (r.el = Ot.createElement(xo(r.h, r.h[0]), this.options)), r);
@@ -4535,11 +4556,11 @@ class et {
     }
   }
   _$AC(t) {
-    let n = Zr.get(t.strings);
-    return n === void 0 && Zr.set(t.strings, n = new Ot(t)), n;
+    let n = Jr.get(t.strings);
+    return n === void 0 && Jr.set(t.strings, n = new Ot(t)), n;
   }
   k(t) {
-    cr(this._$AH) || (this._$AH = [], this._$AR());
+    lr(this._$AH) || (this._$AH = [], this._$AR());
     const n = this._$AH;
     let r, i = 0;
     for (const o of t) i === n.length ? n.push(r = new et(this.O(Et()), this.O(Et()), this, this.options)) : r = n[i], r._$AI(o), i++;
@@ -4620,8 +4641,8 @@ class nc {
     Ge(this, t);
   }
 }
-const rc = { I: et }, ic = lr.litHtmlPolyfillSupport;
-ic?.(Ot, et), (lr.litHtmlVersions ??= []).push("3.3.0");
+const rc = { I: et }, ic = sr.litHtmlPolyfillSupport;
+ic?.(Ot, et), (sr.litHtmlVersions ??= []).push("3.3.0");
 const oc = (e, t, n) => {
   const r = n?.renderBefore ?? t;
   let i = r._$litPart$;
@@ -4636,7 +4657,7 @@ const oc = (e, t, n) => {
  * Copyright 2017 Google LLC
  * SPDX-License-Identifier: BSD-3-Clause
  */
-const ur = globalThis;
+const cr = globalThis;
 let ht = class extends Le {
   constructor() {
     super(...arguments), this.renderOptions = { host: this }, this._$Do = void 0;
@@ -4659,10 +4680,10 @@ let ht = class extends Le {
     return he;
   }
 };
-ht._$litElement$ = !0, ht.finalized = !0, ur.litElementHydrateSupport?.({ LitElement: ht });
-const ac = ur.litElementPolyfillSupport;
+ht._$litElement$ = !0, ht.finalized = !0, cr.litElementHydrateSupport?.({ LitElement: ht });
+const ac = cr.litElementPolyfillSupport;
 ac?.({ LitElement: ht });
-(ur.litElementVersions ??= []).push("4.2.0");
+(cr.litElementVersions ??= []).push("4.2.0");
 class sc extends Gl(ht) {
 }
 class lc extends sc {
@@ -4675,7 +4696,7 @@ class lc extends sc {
    * This should be called from `connectedCallback` to ensure that the reaction is active also if the element is attached again later.
    */
   reaction(t, n, r) {
-    this.disposers.push(tr(t, n, r));
+    this.disposers.push(er(t, n, r));
   }
   /**
    * Creates a MobX autorun using the given parameters and disposes it when this element is detached.
@@ -4694,9 +4715,9 @@ class lc extends sc {
 const le = window.Vaadin.copilot._sectionPanelUiState;
 if (!le)
   throw new Error("Tried to access copilot section panel ui state before it was initialized.");
-let Ee = [];
-const Qr = [];
-function ei(e) {
+let Ae = [];
+const Zr = [];
+function Qr(e) {
   e.init({
     addPanel: (t) => {
       le.addPanel(t);
@@ -4707,7 +4728,7 @@ function ei(e) {
   });
 }
 function cc() {
-  Ee.push(import("./copilot-log-plugin-CptYNSET.js")), Ee.push(import("./copilot-info-plugin-BOT7p3AQ.js")), Ee.push(import("./copilot-features-plugin-BbOm_doI.js")), Ee.push(import("./copilot-feedback-plugin-fammb62Q.js")), Ee.push(import("./copilot-shortcuts-plugin-BfSJokl_.js"));
+  Ae.push(import("./copilot-log-plugin-ByoZNZNK.js")), Ae.push(import("./copilot-info-plugin-BSY0zk3t.js")), Ae.push(import("./copilot-features-plugin-DC-pwEkm.js")), Ae.push(import("./copilot-feedback-plugin-B2_bpkcY.js")), Ae.push(import("./copilot-shortcuts-plugin-BkXMCZVK.js"));
 }
 function uc() {
   {
@@ -4721,15 +4742,15 @@ function uc() {
   }
 }
 function dc() {
-  Promise.all(Ee).then(() => {
+  Promise.all(Ae).then(() => {
     const e = window.Vaadin;
     if (e.copilot.plugins) {
       const t = e.copilot.plugins;
-      e.copilot.plugins.push = (n) => ei(n), Array.from(t).forEach((n) => {
-        Qr.includes(n) || (ei(n), Qr.push(n));
+      e.copilot.plugins.push = (n) => Qr(n), Array.from(t).forEach((n) => {
+        Zr.includes(n) || (Qr(n), Zr.push(n));
       });
     }
-  }), Ee = [];
+  }), Ae = [];
 }
 function Xu(e) {
   return Object.assign({
@@ -4811,7 +4832,7 @@ class Co {
  * Copyright 2017 Google LLC
  * SPDX-License-Identifier: BSD-3-Clause
  */
-class Kn extends Co {
+class qn extends Co {
   constructor(t) {
     if (super(t), this.it = A, t.type !== So.CHILD) throw Error(this.constructor.directiveName + "() can only be used in child bindings");
   }
@@ -4825,12 +4846,12 @@ class Kn extends Co {
     return n.raw = n, this._t = { _$litType$: this.constructor.resultType, strings: n, values: [] };
   }
 }
-Kn.directiveName = "unsafeHTML", Kn.resultType = 1;
-const pc = No(Kn), tt = window.Vaadin.copilot._machineState;
+qn.directiveName = "unsafeHTML", qn.resultType = 1;
+const pc = No(qn), tt = window.Vaadin.copilot._machineState;
 if (!tt)
   throw new Error("Trying to use stored machine state before it was initialized");
 const vc = 5e3;
-let ti = 1;
+let ei = 1;
 function Po(e) {
   m.notifications.includes(e) && (e.dontShowAgain && e.dismissId && hc(e.dismissId), m.removeNotification(e), y.emit("notification-dismissed", e));
 }
@@ -4845,13 +4866,11 @@ function gc(e) {
 }
 function mc() {
   const e = "A server restart is required";
-  return fr() ? nn(ee`${e} <br />${dr()}`) : nn(ee`${e}`);
+  return dr() ? rn(ee`${e} <br />${ur()}`) : rn(ee`${e}`);
 }
-function dr() {
-  return fr() ? ee`<vaadin-button
-      style="align-self:start;padding:0"
-      class="text-white"
-      theme="tertiary"
+function ur() {
+  return dr() ? ee`<vaadin-button
+      theme="primary"
       @click=${(e) => {
     const t = e.target;
     t.disabled = !0, t.innerText = "Restarting...", yc();
@@ -4864,8 +4883,8 @@ function Do(e) {
     return bc(e);
 }
 function bc(e) {
-  const t = ti;
-  ti += 1;
+  const t = ei;
+  ei += 1;
   const n = { ...e, id: t, dontShowAgain: !1, animatingOut: !1 };
   return m.setNotifications([...m.notifications, n]), (e.delay || !e.link && !e.dismissId) && setTimeout(() => {
     Po(n);
@@ -4875,16 +4894,16 @@ const _c = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   dismissNotification: Po,
   getRestartRequiredMessage: mc,
-  renderRestartButton: dr,
+  renderRestartButton: ur,
   showNotification: Do
 }, Symbol.toStringTag, { value: "Module" })), yn = window.Vaadin.copilot._earlyProjectState;
 if (!yn)
   throw new Error("Tried to access early project state before it was initialized.");
-function fr() {
+function dr() {
   return m.idePluginState?.supportedActions?.find((e) => e === "restartApplication");
 }
 function yc() {
-  gn(`${Re}plugin-restart-application`, {}, () => {
+  mn(`${Ve}plugin-restart-application`, {}, () => {
   }).catch((e) => {
     ce("Error restarting server", e);
   });
@@ -4898,11 +4917,11 @@ function wc() {
 }
 const Ec = (e) => {
   ce("Unspecified error", e), y.emit("vite-after-update", {});
-}, Ac = (e, t) => e.error ? (Oc(e.error, t), !0) : !1, ni = (e, t, n) => {
-  mn({
-    type: Ve.ERROR,
+}, Ac = (e, t) => e.error ? (Oc(e.error, t), !0) : !1, ti = (e, t, n) => {
+  $t({
+    type: be.ERROR,
     message: e,
-    details: nn(
+    details: rn(
       ee`<vaadin-details summary="Details" style="color: var(--dev-tools-text-color)"
           ><div>
             <code class="codeblock"><copilot-copy></copilot-copy>${pc(t)}</code>
@@ -4910,8 +4929,7 @@ const Ec = (e) => {
         </vaadin-details>
         ${n !== void 0 ? ee`
               <vaadin-button
-                class="text-white"
-                theme="tertiary"
+                theme="primary"
                 @click="${() => {
         n && y.emit("submit-exception-report-clicked", n);
       }}"
@@ -4926,12 +4944,12 @@ const Ec = (e) => {
   i && o ? Sc(
     i,
     (a) => {
-      ni(e, t, a);
+      ti(e, t, a);
     },
     e,
     t,
     n
-  ) : ni(e, t), wc() && (r?.templateData && typeof r.templateData == "string" && r.templateData.startsWith("data") && (r.templateData = "<IMAGE_DATA>"), y.emit("system-info-with-callback", {
+  ) : ti(e, t), wc() && (r?.templateData && typeof r.templateData == "string" && r.templateData.startsWith("data") && (r.templateData = "<IMAGE_DATA>"), y.emit("system-info-with-callback", {
     callback: (a) => y.send("copilot-error", {
       message: e,
       details: String(n).replace("	", `
@@ -4971,12 +4989,12 @@ function Pn(e) {
 }
 function ce(e, t) {
   const n = Pn(t) ? t.exceptionMessage ?? t.message : t, r = {
-    type: Ve.ERROR,
+    type: be.ERROR,
     message: "Copilot internal error",
     details: e + (n ? `
 ${n}` : "")
   };
-  Pn(t) && t.suggestRestart && fr() && (r.details = nn(ee`${e}<br />${n} ${dr()}`), r.delay = 3e4), mn(r);
+  Pn(t) && t.suggestRestart && dr() && (r.details = rn(ee`${e}<br />${n} ${ur()}`), r.delay = 3e4), $t(r);
   let i;
   t instanceof Error ? i = t.stack : Pn(t) ? i = t?.exceptionStacktrace?.join(`
 `) : i = t?.toString(), y.emit("system-info-with-callback", {
@@ -4988,25 +5006,25 @@ ${n}` : "")
     notify: !1
   });
 }
-function ri(e) {
+function ni(e) {
   return e?.stack?.includes("cdn.vaadin.com/copilot") || e?.stack?.includes("/copilot/copilot/") || e?.stack?.includes("/copilot/copilot-private/");
 }
 function Io() {
   const e = window.onerror;
   window.onerror = (n, r, i, o, a) => {
-    if (ri(a)) {
+    if (ni(a)) {
       ce(n.toString(), a);
       return;
     }
     e && e(n, r, i, o, a);
   }, ns((n) => {
-    ri(n) && ce("", n);
+    ni(n) && ce("", n);
   });
   const t = window.Vaadin.ConsoleErrors;
   if (Array.isArray(t))
     for (const n of t)
-      Array.isArray(n) ? zt.push(...n) : zt.push(n);
-  Vo((n) => zt.push(n));
+      Array.isArray(n) ? Ut.push(...n) : Ut.push(n);
+  Ro((n) => Ut.push(n));
 }
 function Sc(e, t, n, r, i, o) {
   const a = { ...e }, s = window.Vaadin.copilot.tree, l = window.Vaadin.copilot.customComponentHandler;
@@ -5046,18 +5064,18 @@ Additional Info:`), a.relevantPairs.forEach((d) => {
     notify: !1
   });
 }
-const zt = [];
-function Vo(e) {
+const Ut = [];
+function Ro(e) {
   const t = window.Vaadin.ConsoleErrors;
   window.Vaadin.ConsoleErrors = {
     push: (n) => {
-      n[0].type !== void 0 && n[0].message !== void 0 ? e({
+      n[0] === null || n[0] === void 0 || (n[0].type !== void 0 && n[0].message !== void 0 ? e({
         type: n[0].type,
         message: n[0].message,
         internal: !!n[0].internal,
         details: n[0].details,
         link: n[0].link
-      }) : e({ type: Ve.ERROR, message: n.map((r) => Nc(r)).join(" "), internal: !1 }), t.push(n);
+      }) : e({ type: be.ERROR, message: n.map((r) => Nc(r)).join(" "), internal: !1 }), t.push(n));
     }
   };
 }
@@ -5065,27 +5083,27 @@ function Nc(e) {
   return e.message ? e.message.toString() : e.toString();
 }
 function Cc(e) {
-  mn({
-    type: Ve.ERROR,
+  $t({
+    type: be.ERROR,
     message: `Unable to ${e}`,
     details: "Could not find sources for React components, probably because the project is not a React (or Flow) project"
   });
 }
 const Pc = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  catchErrors: Vo,
-  consoleErrorsQueue: zt,
+  catchErrors: Ro,
+  consoleErrorsQueue: Ut,
   handleBrowserOperationError: xc,
   handleCopilotError: ce,
   handleErrorDuringOperation: Ec,
   handleServerOperationErrorIfNeeded: Ac,
   installErrorHandlers: Io,
   showNotReactFlowProject: Cc
-}, Symbol.toStringTag, { value: "Module" })), Ro = () => {
+}, Symbol.toStringTag, { value: "Module" })), Vo = () => {
   $c().then((e) => m.setUserInfo(e)).catch((e) => ce("Failed to load userInfo", e));
-}, $c = async () => gn(`${Re}get-user-info`, {}, (e) => (delete e.data.reqId, e.data));
+}, $c = async () => mn(`${Ve}get-user-info`, {}, (e) => (delete e.data.reqId, e.data));
 y.on("copilot-prokey-received", (e) => {
-  Ro(), e.preventDefault();
+  Vo(), e.preventDefault();
 });
 /**
  * @license
@@ -5094,7 +5112,7 @@ y.on("copilot-prokey-received", (e) => {
  */
 const jo = Symbol.for(""), Dc = (e) => {
   if (e?.r === jo) return e?._$litStatic$;
-}, Mo = (e) => ({ _$litStatic$: e, r: jo }), ii = /* @__PURE__ */ new Map(), kc = (e) => (t, ...n) => {
+}, Mo = (e) => ({ _$litStatic$: e, r: jo }), ri = /* @__PURE__ */ new Map(), kc = (e) => (t, ...n) => {
   const r = n.length;
   let i, o;
   const a = [], s = [];
@@ -5105,7 +5123,7 @@ const jo = Symbol.for(""), Dc = (e) => {
   }
   if (c === r && a.push(t[r]), u) {
     const d = a.join("$$lit$$");
-    (t = ii.get(d)) === void 0 && (a.raw = a, ii.set(d, t = a)), n = s;
+    (t = ri.get(d)) === void 0 && (a.raw = a, ri.set(d, t = a)), n = s;
   }
   return e(t, ...n);
 }, gt = kc(ee);
@@ -5114,10 +5132,10 @@ const jo = Symbol.for(""), Dc = (e) => {
  * Copyright 2020 Google LLC
  * SPDX-License-Identifier: BSD-3-Clause
  */
-const { I: Tc } = rc, Zu = (e) => e.strings === void 0, oi = () => document.createComment(""), lt = (e, t, n) => {
+const { I: Tc } = rc, Zu = (e) => e.strings === void 0, ii = () => document.createComment(""), lt = (e, t, n) => {
   const r = e._$AA.parentNode, i = t === void 0 ? e._$AB : t._$AA;
   if (n === void 0) {
-    const o = r.insertBefore(oi(), i), a = r.insertBefore(oi(), i);
+    const o = r.insertBefore(ii(), i), a = r.insertBefore(ii(), i);
     n = new Tc(o, a, e, e.options);
   } else {
     const o = n._$AB.nextSibling, a = n._$AM, s = a !== e;
@@ -5134,7 +5152,7 @@ const { I: Tc } = rc, Zu = (e) => e.strings === void 0, oi = () => document.crea
     }
   }
   return n;
-}, we = (e, t, n = e) => (e._$AI(t, n), e), Ic = {}, Vc = (e, t = Ic) => e._$AH = t, Rc = (e) => e._$AH, $n = (e) => {
+}, Ee = (e, t, n = e) => (e._$AI(t, n), e), Ic = {}, Rc = (e, t = Ic) => e._$AH = t, Vc = (e) => e._$AH, $n = (e) => {
   e._$AP?.(!1, !0);
   let t = e._$AA;
   const n = e._$AB.nextSibling;
@@ -5148,7 +5166,7 @@ const { I: Tc } = rc, Zu = (e) => e.strings === void 0, oi = () => document.crea
  * Copyright 2017 Google LLC
  * SPDX-License-Identifier: BSD-3-Clause
  */
-const ai = (e, t, n) => {
+const oi = (e, t, n) => {
   const r = /* @__PURE__ */ new Map();
   for (let i = t; i <= n; i++) r.set(e[i], i);
   return r;
@@ -5168,36 +5186,36 @@ const ai = (e, t, n) => {
     return this.dt(e, t, n).values;
   }
   update(e, [t, n, r]) {
-    const i = Rc(e), { values: o, keys: a } = this.dt(t, n, r);
+    const i = Vc(e), { values: o, keys: a } = this.dt(t, n, r);
     if (!Array.isArray(i)) return this.ut = a, o;
     const s = this.ut ??= [], l = [];
     let c, u, d = 0, v = i.length - 1, h = 0, b = o.length - 1;
     for (; d <= v && h <= b; ) if (i[d] === null) d++;
     else if (i[v] === null) v--;
-    else if (s[d] === a[h]) l[h] = we(i[d], o[h]), d++, h++;
-    else if (s[v] === a[b]) l[b] = we(i[v], o[b]), v--, b--;
-    else if (s[d] === a[b]) l[b] = we(i[d], o[b]), lt(e, l[b + 1], i[d]), d++, b--;
-    else if (s[v] === a[h]) l[h] = we(i[v], o[h]), lt(e, i[d], i[v]), v--, h++;
-    else if (c === void 0 && (c = ai(a, h, b), u = ai(s, d, v)), c.has(s[d])) if (c.has(s[v])) {
+    else if (s[d] === a[h]) l[h] = Ee(i[d], o[h]), d++, h++;
+    else if (s[v] === a[b]) l[b] = Ee(i[v], o[b]), v--, b--;
+    else if (s[d] === a[b]) l[b] = Ee(i[d], o[b]), lt(e, l[b + 1], i[d]), d++, b--;
+    else if (s[v] === a[h]) l[h] = Ee(i[v], o[h]), lt(e, i[d], i[v]), v--, h++;
+    else if (c === void 0 && (c = oi(a, h, b), u = oi(s, d, v)), c.has(s[d])) if (c.has(s[v])) {
       const E = u.get(a[h]), S = E !== void 0 ? i[E] : null;
       if (S === null) {
         const Y = lt(e, i[d]);
-        we(Y, o[h]), l[h] = Y;
-      } else l[h] = we(S, o[h]), lt(e, i[d], S), i[E] = null;
+        Ee(Y, o[h]), l[h] = Y;
+      } else l[h] = Ee(S, o[h]), lt(e, i[d], S), i[E] = null;
       h++;
     } else $n(i[v]), v--;
     else $n(i[d]), d++;
     for (; h <= b; ) {
       const E = lt(e, l[b + 1]);
-      we(E, o[h]), l[h++] = E;
+      Ee(E, o[h]), l[h++] = E;
     }
     for (; d <= v; ) {
       const E = i[d++];
       E !== null && $n(E);
     }
-    return this.ut = a, Vc(e, l), he;
+    return this.ut = a, Rc(e, l), he;
   }
-}), Ut = /* @__PURE__ */ new Map(), jc = (e) => {
+}), Ft = /* @__PURE__ */ new Map(), jc = (e) => {
   const n = le.panels.filter((r) => !r.floating && r.panel === e).sort((r, i) => r.panelOrder - i.panelOrder);
   return gt`
     ${Lo(
@@ -5228,13 +5246,13 @@ const ai = (e, t, n) => {
   `;
 }, Qu = (e) => {
   const t = e.panelTag, n = e.querySelector('[slot="content"]');
-  n && e.panelInfo?.panel && Ut.set(t, n);
+  n && e.panelInfo?.panel && Ft.set(t, n);
 }, ed = (e) => {
-  if (Ut.has(e.panelTag)) {
-    const t = Ut.get(e.panelTag);
+  if (Ft.has(e.panelTag)) {
+    const t = Ft.get(e.panelTag);
     e.querySelector('[slot="content"]').replaceWith(t);
   }
-  Ut.delete(e.panelTag);
+  Ft.delete(e.panelTag);
 }, N = [];
 for (let e = 0; e < 256; ++e)
   N.push((e + 256).toString(16).slice(1));
@@ -5251,23 +5269,23 @@ function Uc() {
   }
   return Dn(zc);
 }
-const Fc = typeof crypto < "u" && crypto.randomUUID && crypto.randomUUID.bind(crypto), si = { randomUUID: Fc };
+const Fc = typeof crypto < "u" && crypto.randomUUID && crypto.randomUUID.bind(crypto), ai = { randomUUID: Fc };
 function zo(e, t, n) {
-  if (si.randomUUID && !e)
-    return si.randomUUID();
+  if (ai.randomUUID && !e)
+    return ai.randomUUID();
   e = e || {};
   const r = e.random ?? e.rng?.() ?? Uc();
   if (r.length < 16)
     throw new Error("Random bytes length must be >= 16");
   return r[6] = r[6] & 15 | 64, r[8] = r[8] & 63 | 128, Lc(r);
 }
-const Ft = [], ft = [], td = async (e, t, n) => {
+const Bt = [], ft = [], td = async (e, t, n) => {
   let r, i;
   t.reqId = zo();
   const o = new Promise((a, s) => {
     r = a, i = s;
   });
-  return Ft.push({
+  return Bt.push({
     handleMessage(a) {
       if (a?.data?.reqId !== t.reqId)
         return !1;
@@ -5281,9 +5299,9 @@ const Ft = [], ft = [], td = async (e, t, n) => {
   }), ne(e, t), o;
 };
 function Bc(e) {
-  for (const t of Ft)
+  for (const t of Bt)
     if (t.handleMessage(e))
-      return Ft.splice(Ft.indexOf(t), 1), !0;
+      return Bt.splice(Bt.indexOf(t), 1), !0;
   if (y.emitUnsafe({ type: e.command, data: e.data }))
     return !0;
   for (const t of Fo())
@@ -5304,7 +5322,7 @@ function Fo() {
   const e = document.querySelector("copilot-main");
   return e ? e.renderRoot.querySelectorAll("copilot-section-panel-wrapper *") : [];
 }
-const qc = "@keyframes bounce{0%{transform:scale(.8)}50%{transform:scale(1.5)}to{transform:scale(1)}}@keyframes bounceLeft{0%{transform:translate(0)}30%{transform:translate(-10px)}50%{transform:translate(0)}70%{transform:translate(-5px)}to{transform:translate(0)}}@keyframes bounceRight{0%{transform:translate(0)}30%{transform:translate(10px)}50%{transform:translate(0)}70%{transform:translate(5px)}to{transform:translate(0)}}@keyframes bounceBottom{0%{transform:translateY(0)}30%{transform:translateY(10px)}50%{transform:translateY(0)}70%{transform:translateY(5px)}to{transform:translateY(0)}}@keyframes around-we-go-again{0%{background-position:0 0,0 0,calc(var(--glow-size) * -.5) calc(var(--glow-size) * -.5),calc(100% + calc(var(--glow-size) * .5)) calc(100% + calc(var(--glow-size) * .5))}25%{background-position:0 0,0 0,calc(100% + calc(var(--glow-size) * .5)) calc(var(--glow-size) * -.5),calc(var(--glow-size) * -.5) calc(100% + calc(var(--glow-size) * .5))}50%{background-position:0 0,0 0,calc(100% + calc(var(--glow-size) * .5)) calc(100% + calc(var(--glow-size) * .5)),calc(var(--glow-size) * -.5) calc(var(--glow-size) * -.5)}75%{background-position:0 0,0 0,calc(var(--glow-size) * -.5) calc(100% + calc(var(--glow-size) * .5)),calc(100% + calc(var(--glow-size) * .5)) calc(var(--glow-size) * -.5)}to{background-position:0 0,0 0,calc(var(--glow-size) * -.5) calc(var(--glow-size) * -.5),calc(100% + calc(var(--glow-size) * .5)) calc(100% + calc(var(--glow-size) * .5))}}@keyframes swirl{0%{rotate:0deg;filter:hue-rotate(20deg)}50%{filter:hue-rotate(-30deg)}to{rotate:360deg;filter:hue-rotate(20deg)}}@keyframes button-focus-in{0%{box-shadow:0 0 0 0 var(--focus-color)}to{box-shadow:0 0 0 var(--focus-size) var(--focus-color)}}@keyframes button-focus-out{0%{box-shadow:0 0 0 var(--focus-size) var(--focus-color)}}@keyframes button-primary-focus-in{0%{box-shadow:0 0 0 0 var(--focus-color)}to{box-shadow:0 0 0 1px var(--background-color),0 0 0 calc(var(--focus-size) + 2px) var(--focus-color)}}@keyframes button-primary-focus-out{0%{box-shadow:0 0 0 1px var(--background-color),0 0 0 calc(var(--focus-size) + 2px) var(--focus-color)}}@keyframes link-focus-in{0%{box-shadow:0 0 0 0 var(--blue-color)}to{box-shadow:0 0 0 var(--focus-size) var(--blue-color)}}@keyframes link-focus-out{0%{box-shadow:0 0 0 var(--focus-size) var(--blue-color)}}@keyframes ping{75%,to{transform:scale(2);opacity:0}}@keyframes fadeInOut{0%,to{opacity:0}50%{opacity:1}}", Kc = "button{align-items:center;-webkit-appearance:none;appearance:none;background:transparent;background-origin:border-box;border:1px solid transparent;border-radius:var(--radius-1);color:var(--body-text-color);display:inline-flex;flex-shrink:0;font:var(--font-button);height:var(--size-m);justify-content:center;outline-offset:calc(var(--focus-size) / -1);padding:0 var(--space-100)}vaadin-button{box-shadow:none;min-width:var(--size-m);outline-offset:calc(var(--focus-size) / -1)}vaadin-button[theme~=primary]{outline-offset:1px}button:focus,vaadin-button[focus-ring]{animation-delay:0s,.15s;animation-duration:.15s,.45s;animation-name:button-focus-in,button-focus-out;animation-timing-function:cubic-bezier(.2,0,0,1),cubic-bezier(.2,0,0,1);outline:var(--focus-size) solid var(--focus-color)}vaadin-button[theme~=primary][focus-ring]{animation-name:button-primary-focus-in,button-primary-focus-out}button.icon{padding:0;width:var(--size-m)}button.icon span:has(svg){display:contents}button.primary{background:var(--primary-color);color:var(--primary-contrast-text-color)}button .prefix,button .suffix{align-items:center;display:flex;height:var(--size-m);justify-content:center;width:var(--size-m)}button:has(.prefix){padding-inline-start:0}button:has(.suffix){padding-inline-end:0}button svg{height:var(--icon-size-s);width:var(--icon-size-s)}button:active:not([disabled]){background:var(--active-color)}button[disabled]{opacity:.5}button[hidden]{display:none}button.link-button{all:initial;font-family:inherit;font-size:var(--dev-tools-font-size-small);line-height:1;white-space:nowrap;color:inherit;font-weight:600;text-decoration:underline;cursor:pointer}button.link-button:focus,button.link-button:hover{color:var(--dev-tools-text-color-emphasis)}", Wc = "code.codeblock{background:var(--contrast-color-5);border-radius:var(--radius-2);display:block;font-family:var(--monospace-font-family);font-size:var(--font-size-1);line-height:var(--line-height-1);overflow:hidden;padding:calc((var(--size-m) - var(--line-height-1)) / 2) var(--size-m) calc((var(--size-m) - var(--line-height-1)) / 2) var(--space-100);position:relative;text-overflow:ellipsis;white-space:pre;min-height:var(--line-height-1)}copilot-copy{position:absolute;right:0;top:0}div.message.error code.codeblock copilot-copy svg{color:#ffffffb3}", Gc = ":host{--gray-h: 220;--gray-s: 30%;--gray-l: 30%;--gray-hsl: var(--gray-h) var(--gray-s) var(--gray-l);--gray: hsl(var(--gray-hsl));--gray-50: hsl(var(--gray-hsl) / .05);--gray-100: hsl(var(--gray-hsl) / .1);--gray-150: hsl(var(--gray-hsl) / .16);--gray-200: hsl(var(--gray-hsl) / .24);--gray-250: hsl(var(--gray-hsl) / .34);--gray-300: hsl(var(--gray-hsl) / .46);--gray-350: hsl(var(--gray-hsl) / .6);--gray-400: hsl(var(--gray-hsl) / .7);--gray-450: hsl(var(--gray-hsl) / .8);--gray-500: hsl(var(--gray-hsl) / .9);--gray-550: hsl(var(--gray-hsl));--gray-600: hsl(var(--gray-h) var(--gray-s) calc(var(--gray-l) - 2%));--gray-650: hsl(var(--gray-h) var(--gray-s) calc(var(--gray-l) - 4%));--gray-700: hsl(var(--gray-h) var(--gray-s) calc(var(--gray-l) - 8%));--gray-750: hsl(var(--gray-h) var(--gray-s) calc(var(--gray-l) - 12%));--gray-800: hsl(var(--gray-h) var(--gray-s) calc(var(--gray-l) - 20%));--gray-850: hsl(var(--gray-h) var(--gray-s) calc(var(--gray-l) - 23%));--gray-900: hsl(var(--gray-h) var(--gray-s) calc(var(--gray-l) - 30%));--blue-h: 220;--blue-s: 90%;--blue-l: 53%;--blue-hsl: var(--blue-h) var(--blue-s) var(--blue-l);--blue: hsl(var(--blue-hsl));--blue-50: hsl(var(--blue-hsl) / .05);--blue-100: hsl(var(--blue-hsl) / .1);--blue-150: hsl(var(--blue-hsl) / .2);--blue-200: hsl(var(--blue-hsl) / .3);--blue-250: hsl(var(--blue-hsl) / .4);--blue-300: hsl(var(--blue-hsl) / .5);--blue-350: hsl(var(--blue-hsl) / .6);--blue-400: hsl(var(--blue-hsl) / .7);--blue-450: hsl(var(--blue-hsl) / .8);--blue-500: hsl(var(--blue-hsl) / .9);--blue-550: hsl(var(--blue-hsl));--blue-600: hsl(var(--blue-h) var(--blue-s) calc(var(--blue-l) - 4%));--blue-650: hsl(var(--blue-h) var(--blue-s) calc(var(--blue-l) - 8%));--blue-700: hsl(var(--blue-h) var(--blue-s) calc(var(--blue-l) - 12%));--blue-750: hsl(var(--blue-h) var(--blue-s) calc(var(--blue-l) - 15%));--blue-800: hsl(var(--blue-h) var(--blue-s) calc(var(--blue-l) - 18%));--blue-850: hsl(var(--blue-h) var(--blue-s) calc(var(--blue-l) - 24%));--blue-900: hsl(var(--blue-h) var(--blue-s) calc(var(--blue-l) - 27%));--purple-h: 246;--purple-s: 90%;--purple-l: 60%;--purple-hsl: var(--purple-h) var(--purple-s) var(--purple-l);--purple: hsl(var(--purple-hsl));--purple-50: hsl(var(--purple-hsl) / .05);--purple-100: hsl(var(--purple-hsl) / .1);--purple-150: hsl(var(--purple-hsl) / .2);--purple-200: hsl(var(--purple-hsl) / .3);--purple-250: hsl(var(--purple-hsl) / .4);--purple-300: hsl(var(--purple-hsl) / .5);--purple-350: hsl(var(--purple-hsl) / .6);--purple-400: hsl(var(--purple-hsl) / .7);--purple-450: hsl(var(--purple-hsl) / .8);--purple-500: hsl(var(--purple-hsl) / .9);--purple-550: hsl(var(--purple-hsl));--purple-600: hsl(var(--purple-h) calc(var(--purple-s) - 4%) calc(var(--purple-l) - 2%));--purple-650: hsl(var(--purple-h) calc(var(--purple-s) - 8%) calc(var(--purple-l) - 4%));--purple-700: hsl(var(--purple-h) calc(var(--purple-s) - 15%) calc(var(--purple-l) - 7%));--purple-750: hsl(var(--purple-h) calc(var(--purple-s) - 23%) calc(var(--purple-l) - 11%));--purple-800: hsl(var(--purple-h) calc(var(--purple-s) - 24%) calc(var(--purple-l) - 15%));--purple-850: hsl(var(--purple-h) calc(var(--purple-s) - 24%) calc(var(--purple-l) - 19%));--purple-900: hsl(var(--purple-h) calc(var(--purple-s) - 27%) calc(var(--purple-l) - 23%));--green-h: 150;--green-s: 80%;--green-l: 42%;--green-hsl: var(--green-h) var(--green-s) var(--green-l);--green: hsl(var(--green-hsl));--green-50: hsl(var(--green-hsl) / .05);--green-100: hsl(var(--green-hsl) / .1);--green-150: hsl(var(--green-hsl) / .2);--green-200: hsl(var(--green-hsl) / .3);--green-250: hsl(var(--green-hsl) / .4);--green-300: hsl(var(--green-hsl) / .5);--green-350: hsl(var(--green-hsl) / .6);--green-400: hsl(var(--green-hsl) / .7);--green-450: hsl(var(--green-hsl) / .8);--green-500: hsl(var(--green-hsl) / .9);--green-550: hsl(var(--green-hsl));--green-600: hsl(var(--green-h) var(--green-s) calc(var(--green-l) - 2%));--green-650: hsl(var(--green-h) var(--green-s) calc(var(--green-l) - 4%));--green-700: hsl(var(--green-h) var(--green-s) calc(var(--green-l) - 8%));--green-750: hsl(var(--green-h) var(--green-s) calc(var(--green-l) - 12%));--green-800: hsl(var(--green-h) var(--green-s) calc(var(--green-l) - 15%));--green-850: hsl(var(--green-h) var(--green-s) calc(var(--green-l) - 19%));--green-900: hsl(var(--green-h) var(--green-s) calc(var(--green-l) - 23%));--yellow-h: 38;--yellow-s: 98%;--yellow-l: 64%;--yellow-hsl: var(--yellow-h) var(--yellow-s) var(--yellow-l);--yellow: hsl(var(--yellow-hsl));--yellow-50: hsl(var(--yellow-hsl) / .07);--yellow-100: hsl(var(--yellow-hsl) / .12);--yellow-150: hsl(var(--yellow-hsl) / .2);--yellow-200: hsl(var(--yellow-hsl) / .3);--yellow-250: hsl(var(--yellow-hsl) / .4);--yellow-300: hsl(var(--yellow-hsl) / .5);--yellow-350: hsl(var(--yellow-hsl) / .6);--yellow-400: hsl(var(--yellow-hsl) / .7);--yellow-450: hsl(var(--yellow-hsl) / .8);--yellow-500: hsl(var(--yellow-hsl) / .9);--yellow-550: hsl(var(--yellow-hsl));--yellow-600: hsl(var(--yellow-h) var(--yellow-s) calc(var(--yellow-l) - 5%));--yellow-650: hsl(var(--yellow-h) var(--yellow-s) calc(var(--yellow-l) - 10%));--yellow-700: hsl(var(--yellow-h) var(--yellow-s) calc(var(--yellow-l) - 15%));--yellow-750: hsl(var(--yellow-h) var(--yellow-s) calc(var(--yellow-l) - 20%));--yellow-800: hsl(var(--yellow-h) var(--yellow-s) calc(var(--yellow-l) - 25%));--yellow-850: hsl(var(--yellow-h) var(--yellow-s) calc(var(--yellow-l) - 30%));--yellow-900: hsl(var(--yellow-h) var(--yellow-s) calc(var(--yellow-l) - 35%));--red-h: 355;--red-s: 75%;--red-l: 55%;--red-hsl: var(--red-h) var(--red-s) var(--red-l);--red: hsl(var(--red-hsl));--red-50: hsl(var(--red-hsl) / .05);--red-100: hsl(var(--red-hsl) / .1);--red-150: hsl(var(--red-hsl) / .2);--red-200: hsl(var(--red-hsl) / .3);--red-250: hsl(var(--red-hsl) / .4);--red-300: hsl(var(--red-hsl) / .5);--red-350: hsl(var(--red-hsl) / .6);--red-400: hsl(var(--red-hsl) / .7);--red-450: hsl(var(--red-hsl) / .8);--red-500: hsl(var(--red-hsl) / .9);--red-550: hsl(var(--red-hsl));--red-600: hsl(var(--red-h) calc(var(--red-s) - 5%) calc(var(--red-l) - 2%));--red-650: hsl(var(--red-h) calc(var(--red-s) - 10%) calc(var(--red-l) - 4%));--red-700: hsl(var(--red-h) calc(var(--red-s) - 15%) calc(var(--red-l) - 8%));--red-750: hsl(var(--red-h) calc(var(--red-s) - 20%) calc(var(--red-l) - 12%));--red-800: hsl(var(--red-h) calc(var(--red-s) - 25%) calc(var(--red-l) - 15%));--red-850: hsl(var(--red-h) calc(var(--red-s) - 30%) calc(var(--red-l) - 19%));--red-900: hsl(var(--red-h) calc(var(--red-s) - 35%) calc(var(--red-l) - 23%));--codeblock-bg: #f4f4f4;--background-color: rgba(255, 255, 255, .87);--primary-color: #0368de;--input-border-color: rgba(0, 0, 0, .42);--divider-primary-color: rgba(0, 0, 0, .1);--divider-secondary-color: rgba(0, 0, 0, .05);--switch-active-color: #0d875b;--switch-inactive-color: #757575;--body-text-color: rgba(0, 0, 0, .87);--secondary-text-color: rgba(0, 0, 0, .6);--primary-contrast-text-color: white;--active-color: rgba(3, 104, 222, .1);--focus-color: #0377ff;--hover-color: rgba(0, 0, 0, .05);--info-color: var(--blue-400);--success-color: var(--success-color-80);--error-color: var(--error-color-70);--warning-color: #fec941;--success-color-5: #f0fffa;--success-color-10: #eafaf4;--success-color-20: #d2f0e5;--success-color-30: #8ce4c5;--success-color-40: #39c693;--success-color-50: #1ba875;--success-color-60: #0e9c69;--success-color-70: #0d8b5e;--success-color-80: #066845;--success-color-90: #004d31;--error-color-5: #fff5f6;--error-color-10: #ffedee;--error-color-20: #ffd0d4;--error-color-30: #f8a8ae;--error-color-40: #ff707a;--error-color-50: #ff3a49;--error-color-60: #ff0013;--error-color-70: #ce0010;--error-color-80: #97000b;--error-color-90: #680008;--contrast-color-5: rgba(0, 0, 0, .05);--contrast-color-10: rgba(0, 0, 0, .1);--contrast-color-20: rgba(0, 0, 0, .2);--contrast-color-30: rgba(0, 0, 0, .3);--contrast-color-40: rgba(0, 0, 0, .4);--contrast-color-50: rgba(0, 0, 0, .5);--contrast-color-60: rgba(0, 0, 0, .6);--contrast-color-70: rgba(0, 0, 0, .7);--contrast-color-80: rgba(0, 0, 0, .8);--contrast-color-90: rgba(0, 0, 0, .9);--contrast-color-100: black;--blue-color: #0368de;--violet-color: #7b2bff}:host(.dark){--gray-s: 15%;--gray-l: 70%;--gray-600: hsl(var(--gray-h) calc(var(--gray-s) - 2%) calc(var(--gray-l) + 6%));--gray-650: hsl(var(--gray-h) calc(var(--gray-s) - 5%) calc(var(--gray-l) + 14%));--gray-700: hsl(var(--gray-h) calc(var(--gray-s) - 2%) calc(var(--gray-l) + 26%));--gray-750: hsl(var(--gray-h) calc(var(--gray-s) - 2%) calc(var(--gray-l) + 36%));--gray-800: hsl(var(--gray-h) calc(var(--gray-s) - 2%) calc(var(--gray-l) + 48%));--gray-850: hsl(var(--gray-h) calc(var(--gray-s) - 2%) calc(var(--gray-l) + 62%));--gray-900: hsl(var(--gray-h) calc(var(--gray-s) - 2%) calc(var(--gray-l) + 70%));--blue-s: 90%;--blue-l: 58%;--blue-600: hsl(var(--blue-h) var(--blue-s) calc(var(--blue-l) + 6%));--blue-650: hsl(var(--blue-h) var(--blue-s) calc(var(--blue-l) + 12%));--blue-700: hsl(var(--blue-h) var(--blue-s) calc(var(--blue-l) + 17%));--blue-750: hsl(var(--blue-h) var(--blue-s) calc(var(--blue-l) + 22%));--blue-800: hsl(var(--blue-h) var(--blue-s) calc(var(--blue-l) + 28%));--blue-850: hsl(var(--blue-h) var(--blue-s) calc(var(--blue-l) + 35%));--blue-900: hsl(var(--blue-h) var(--blue-s) calc(var(--blue-l) + 43%));--purple-600: hsl(var(--purple-h) var(--purple-s) calc(var(--purple-l) + 4%));--purple-650: hsl(var(--purple-h) var(--purple-s) calc(var(--purple-l) + 9%));--purple-700: hsl(var(--purple-h) var(--purple-s) calc(var(--purple-l) + 12%));--purple-750: hsl(var(--purple-h) var(--purple-s) calc(var(--purple-l) + 18%));--purple-800: hsl(var(--purple-h) var(--purple-s) calc(var(--purple-l) + 24%));--purple-850: hsl(var(--purple-h) var(--purple-s) calc(var(--purple-l) + 29%));--purple-900: hsl(var(--purple-h) var(--purple-s) calc(var(--purple-l) + 33%));--green-600: hsl(calc(var(--green-h) - 1) calc(var(--green-s) - 5%) calc(var(--green-l) + 5%));--green-650: hsl(calc(var(--green-h) - 2) calc(var(--green-s) - 10%) calc(var(--green-l) + 12%));--green-700: hsl(calc(var(--green-h) - 4) calc(var(--green-s) - 15%) calc(var(--green-l) + 20%));--green-750: hsl(calc(var(--green-h) - 6) calc(var(--green-s) - 20%) calc(var(--green-l) + 29%));--green-800: hsl(calc(var(--green-h) - 8) calc(var(--green-s) - 25%) calc(var(--green-l) + 37%));--green-850: hsl(calc(var(--green-h) - 10) calc(var(--green-s) - 30%) calc(var(--green-l) + 42%));--green-900: hsl(calc(var(--green-h) - 12) calc(var(--green-s) - 35%) calc(var(--green-l) + 48%));--yellow-600: hsl(calc(var(--yellow-h) + 1) var(--yellow-s) calc(var(--yellow-l) + 4%));--yellow-650: hsl(calc(var(--yellow-h) + 2) var(--yellow-s) calc(var(--yellow-l) + 7%));--yellow-700: hsl(calc(var(--yellow-h) + 4) var(--yellow-s) calc(var(--yellow-l) + 11%));--yellow-750: hsl(calc(var(--yellow-h) + 6) var(--yellow-s) calc(var(--yellow-l) + 16%));--yellow-800: hsl(calc(var(--yellow-h) + 8) var(--yellow-s) calc(var(--yellow-l) + 20%));--yellow-850: hsl(calc(var(--yellow-h) + 10) var(--yellow-s) calc(var(--yellow-l) + 24%));--yellow-900: hsl(calc(var(--yellow-h) + 12) var(--yellow-s) calc(var(--yellow-l) + 29%));--red-600: hsl(calc(var(--red-h) - 1) calc(var(--red-s) - 5%) calc(var(--red-l) + 3%));--red-650: hsl(calc(var(--red-h) - 2) calc(var(--red-s) - 10%) calc(var(--red-l) + 7%));--red-700: hsl(calc(var(--red-h) - 4) calc(var(--red-s) - 15%) calc(var(--red-l) + 14%));--red-750: hsl(calc(var(--red-h) - 6) calc(var(--red-s) - 20%) calc(var(--red-l) + 19%));--red-800: hsl(calc(var(--red-h) - 8) calc(var(--red-s) - 25%) calc(var(--red-l) + 24%));--red-850: hsl(calc(var(--red-h) - 10) calc(var(--red-s) - 30%) calc(var(--red-l) + 30%));--red-900: hsl(calc(var(--red-h) - 12) calc(var(--red-s) - 35%) calc(var(--red-l) + 36%));--codeblock-bg: var(--gray-100);--background-color: rgba(0, 0, 0, .87);--primary-color: white;--input-border-color: rgba(255, 255, 255, .42);--divider-primary-color: rgba(255, 255, 255, .2);--divider-secondary-color: rgba(255, 255, 255, .1);--body-text-color: white;--secondary-text-color: rgba(255, 255, 255, .7);--primary-contrast-text-color: rgba(0, 0, 0, .87);--active-color: rgba(255, 255, 255, .15);--focus-color: rgba(255, 255, 255, .5);--hover-color: rgba(255, 255, 255, .1);--success-color: var(--success-color-50);--error-color: var(--error-color-50);--warning-color: #fec941;--success-color-5: #004d31;--success-color-10: #066845;--success-color-20: #0d8b5e;--success-color-30: #0e9c69;--success-color-40: #1ba875;--success-color-50: #39c693;--success-color-60: #8ce4c5;--success-color-70: #d2f0e5;--success-color-80: #eafaf4;--success-color-90: #f0fffa;--error-color-5: #680008;--error-color-10: #97000b;--error-color-20: #ce0010;--error-color-30: #ff0013;--error-color-40: #ff3a49;--error-color-50: #ff707a;--error-color-60: #f8a8ae;--error-color-70: #ffd0d4;--error-color-80: #ffedee;--error-color-90: #fff5f6;--contrast-color-5: rgba(255, 255, 255, .05);--contrast-color-10: rgba(255, 255, 255, .1);--contrast-color-20: rgba(255, 255, 255, .2);--contrast-color-30: rgba(255, 255, 255, .3);--contrast-color-40: rgba(255, 255, 255, .4);--contrast-color-50: rgba(255, 255, 255, .5);--contrast-color-60: rgba(255, 255, 255, .6);--contrast-color-70: rgba(255, 255, 255, .7);--contrast-color-80: rgba(255, 255, 255, .8);--contrast-color-90: rgba(255, 255, 255, .9);--contrast-color-100: white;--blue-color: #95c6ff;--violet-color: #cbb4ff}.bg-blue{background-color:var(--blue-color)}.bg-error{background-color:var(--error-color)}.bg-success{background-color:var(--success-color)}.bg-violet{background-color:var(--violet-color)}.bg-warning{background-color:var(--warning-color)}.blue-text{color:var(--blue-color)}.error-text{color:var(--error-color)}.success-text{color:var(--success-color)}.violet-text{color:var(--violet-color)}.warning-text{color:var(--warning-color)}", Yc = ":host{--vaadin-select-label-font-size: var(--font-size-1);--vaadin-checkbox-label-font-size: var(--font-size-1);--vaadin-input-field-value-font-size: var(--font-xsmall);--vaadin-button-border-radius: var(--radius-1);--vaadin-button-font-size: var(--font-size-1);--vaadin-button-font-weight: var(--font-weight-semibold);--vaadin-button-margin: 0;--vaadin-button-padding: 0 var(--space-100);--vaadin-button-primary-font-weight: var(--font-weight-semibold);--vaadin-button-primary-text-color: var(--primary-contrast-text-color);--vaadin-button-tertiary-font-weight: var(--font-weight-semibold);--vaadin-button-tertiary-padding: 0 var(--space-100);--vaadin-input-field-background: transparent;--vaadin-input-field-border-color: var(--input-border-color);--vaadin-input-field-border-radius: var(--radius-1);--vaadin-input-field-border-width: 1px;--vaadin-input-field-height: var(--size-m);--vaadin-input-field-label-font-size: var(--font-size-1);--vaadin-input-field-label-font-weight: var(--font-weight-medium);--vaadin-input-field-helper-font-size: var(--font-size-1);--vaadin-input-field-helper-font-weight: var(--font-weight-normal);--vaadin-input-field-helper-spacing: var(--space-50);--vaadin-input-field-hover-highlight-opacity: 0;--vaadin-input-field-hovered-label-color: var(--body-text-color)}", Xc = "vaadin-dialog-overlay::part(overlay){background:var(--background-color);-webkit-backdrop-filter:var(--surface-backdrop-filter);backdrop-filter:var(--surface-backdrop-filter);border:1px solid var(--contrast-color-5);border-radius:var(--radius-2);box-shadow:var(--surface-box-shadow-1)}vaadin-dialog-overlay::part(header){background:none;border-bottom:1px solid var(--divider-primary-color);box-sizing:border-box;font:var(--font-xsmall-semibold);min-height:var(--size-xl);padding:var(--space-50) var(--space-50) var(--space-50) var(--space-150)}vaadin-dialog-overlay h2{font:var(--font-xsmall-bold);margin:0;padding:0}vaadin-dialog-overlay::part(content){font:var(--font-xsmall);padding:var(--space-150)}vaadin-dialog-overlay::part(footer){background:none;padding:var(--space-100)}vaadin-dialog-overlay.ai-dialog::part(overlay){max-width:20rem}vaadin-dialog-overlay.ai-dialog::part(header){border:none}vaadin-dialog-overlay.ai-dialog [slot=header-content] svg{color:var(--blue-color)}vaadin-dialog-overlay.ai-dialog::part(content){display:flex;flex-direction:column;gap:var(--space-200)}vaadin-dialog-overlay.ai-dialog p{margin:0}vaadin-dialog-overlay.ai-dialog label:has(input[type=checkbox]){align-items:center;display:flex}vaadin-dialog-overlay.ai-dialog input[type=checkbox]{height:.875rem;margin:calc((var(--size-m) - .875rem) / 2);width:.875rem}vaadin-dialog-overlay.ai-dialog button.primary{min-width:calc(var(--size-m) * 2)}vaadin-dialog-overlay.drop-api-dialog-overlay::part(overlay){width:35em}vaadin-dialog-overlay.drop-api-dialog-overlay::part(header-content){width:unset;justify-content:unset;flex:unset}vaadin-dialog-overlay.drop-api-dialog-overlay::part(title){font-size:var(--font-size-2)}vaadin-dialog-overlay.drop-api-dialog-overlay::part(header){border-bottom:unset;justify-content:space-between}vaadin-dialog-overlay.drop-api-dialog-overlay::part(content){padding:var(--space-100);max-height:250px;overflow:auto}vaadin-dialog-overlay.drop-api-dialog-overlay div.item-content{display:flex;justify-content:center;align-items:start;flex-direction:column}vaadin-dialog-overlay.drop-api-dialog-overlay div.method-row-container{display:flex;justify-content:space-between;width:100%;align-items:center}vaadin-dialog-overlay.drop-api-dialog-overlay div.method-row-container div.class-method-name{padding-left:var(--space-150)}vaadin-dialog-overlay.drop-api-dialog-overlay div.method-row-container div.action-btn-container{width:150px}vaadin-dialog-overlay.drop-api-dialog-overlay div.method-row-container div.action-btn-container button.action-btn.selected{color:var(--selection-color)}vaadin-dialog-overlay.edit-component-dialog-overlay{width:25em}vaadin-dialog-overlay.edit-component-dialog-overlay #component-icon{width:75px}vaadin-dialog-overlay.report-exception-dialog{z-index:calc(var(--copilot-notifications-container-z-index) + 1)}vaadin-dialog-overlay.report-exception-dialog::part(overlay){height:600px}vaadin-dialog-overlay.report-exception-dialog vaadin-text-area{width:100%;min-height:120px}vaadin-dialog-overlay.report-exception-dialog .list-preview-container{display:flex;flex-direction:row;gap:var(--space-100);margin-top:var(--space-50)}vaadin-dialog-overlay.report-exception-dialog .left-menu{display:flex;flex-direction:column;min-width:200px;width:200px}vaadin-dialog-overlay.report-exception-dialog .right-menu{display:flex;flex-direction:column;white-space:break-spaces;overflow:auto;border-radius:var(--radius-2);align-items:start;height:300px;width:800px}vaadin-dialog-overlay.report-exception-dialog .right-menu pre{margin:0}vaadin-dialog-overlay.report-exception-dialog vaadin-item div.item-content{display:inline-block}vaadin-dialog-overlay.report-exception-dialog vaadin-item div.item-content span{max-width:150px;white-space:nowrap;text-overflow:ellipsis;overflow:hidden;display:block}vaadin-dialog-overlay.report-exception-dialog vaadin-item div.item-content span.item-description{color:var(--secondary-text-color)}vaadin-dialog-overlay.report-exception-dialog vaadin-item[selected]{background-color:var(--active-color);border-left:2px solid var(--primary-color)}vaadin-dialog-overlay.report-exception-dialog vaadin-item::part(content){display:flex;align-items:center;gap:var(--space-100)}vaadin-dialog-overlay.report-exception-dialog vaadin-item::part(checkmark){display:none}vaadin-dialog-overlay.report-exception-dialog div.section-title{color:var(--secondary-text-color);padding-top:var(--space-50);padding-bottom:var(--space-50)}vaadin-dialog-overlay.report-exception-dialog code.codeblock{width:100%;box-sizing:border-box;overflow:auto;text-overflow:unset}", Jc = ':is(vaadin-context-menu-overlay,vaadin-menu-bar-overlay,vaadin-select-overlay){z-index:var(--z-index-popover)}:is(vaadin-context-menu-overlay,vaadin-menu-bar-overlay,vaadin-select-overlay):first-of-type{padding-top:0}:is(vaadin-combo-box-overlay,vaadin-context-menu-overlay,vaadin-menu-bar-overlay,vaadin-popover-overlay,vaadin-select-overlay,vaadin-tooltip-overlay,vaadin-multi-select-combo-box-overlay)::part(overlay){background:var(--background-color);-webkit-backdrop-filter:var(--surface-backdrop-filter);backdrop-filter:var(--surface-backdrop-filter);border-radius:var(--radius-1);box-shadow:var(--surface-box-shadow-1);margin-top:0}:is(vaadin-context-menu-overlay,vaadin-menu-bar-overlay,vaadin-select-overlay)::part(content){padding:var(--space-50)}:is(vaadin-combo-box-item,vaadin-context-menu-item,vaadin-menu-bar-item,vaadin-select-item){--_lumo-item-selected-icon-display: none;align-items:center;border-radius:var(--radius-1);color:var(--body-text-color);cursor:default;display:flex;font:var(--font-xsmall-medium);min-height:0;padding:calc((var(--size-m) - var(--line-height-1)) / 2) var(--space-100)}:is(vaadin-combo-box-item,vaadin-context-menu-item,vaadin-menu-bar-item,vaadin-select-item,vaadin-multi-select-combo-box-item)[disabled],:is(vaadin-combo-box-item,vaadin-context-menu-item,vaadin-menu-bar-item,vaadin-select-item,vaadin-multi-select-combo-box-item)[disabled] .hint,:is(vaadin-combo-box-item,vaadin-context-menu-item,vaadin-menu-bar-item,vaadin-select-item,vaadin-multi-select-combo-box-item)[disabled] vaadin-icon{color:var(--lumo-disabled-text-color)}:is(vaadin-context-menu-item,vaadin-menu-bar-item):hover:not([disabled]),:is(vaadin-context-menu-item,vaadin-menu-bar-item)[expanded]:not([disabled]){background:var(--hover-color)}:is(vaadin-context-menu-item,vaadin-menu-bar-item):hover:is(.no-hover-effect){background:#0000}:is(vaadin-combo-box-item,vaadin-context-menu-item,vaadin-menu-bar-item,vaadin-select-item,vaadin-multi-select-combo-box-item)[focus-ring]{outline:2px solid var(--selection-color);outline-offset:-2px}:is(vaadin-combo-box-item,vaadin-context-menu-item,vaadin-menu-bar-item,vaadin-select-item,vaadin-multi-select-combo-box-item):is([aria-haspopup=true]):after{align-items:center;display:flex;height:var(--icon-size-m);justify-content:center;margin:0;padding:0;width:var(--icon-size-m)}:is(vaadin-combo-box-item,vaadin-context-menu-item,vaadin-menu-bar-item,vaadin-select-item,vaadin-multi-select-combo-box-item).danger{color:var(--error-color);--color: currentColor}:is(vaadin-combo-box-item,vaadin-context-menu-item,vaadin-menu-bar-item,vaadin-select-item,vaadin-multi-select-combo-box-item)::part(content){display:flex;align-items:center;gap:var(--space-100)}:is(vaadin-combo-box-item,vaadin-context-menu-item,vaadin-menu-bar-item,vaadin-select-item,vaadin-multi-select-combo-box-item) vaadin-icon{width:1em;height:1em;padding:0;color:var(--color)}:is(vaadin-context-menu-overlay,vaadin-menu-bar-overlay,vaadin-select-overlay) hr{margin:var(--space-50)}:is(vaadin-context-menu-item,vaadin-menu-bar-item,vaadin-select-item)>svg:first-child{color:var(--secondary-text-color)}:is(vaadin-context-menu-item,vaadin-menu-bar-item,vaadin-select-item) .label{margin-inline-end:auto;padding-inline-end:var(--space-300)}:is(vaadin-context-menu-item,vaadin-menu-bar-item,vaadin-select-item) .hint{color:var(--secondary-text-color)}:is(vaadin-context-menu-item,vaadin-menu-bar-item,vaadin-select-item) kbd{align-items:center;display:inline-flex;border-radius:var(--radius-1);font:var(--font-xsmall);outline:1px solid var(--divider-primary-color);outline-offset:-1px;padding:0 var(--space-50)}:is(vaadin-context-menu-item,vaadin-menu-bar-item,vaadin-select-item) .switch{align-items:center;border-radius:9999px;box-sizing:border-box;display:flex;height:.75rem;padding:var(--space-25);width:1.25rem}:is(vaadin-context-menu-item,vaadin-menu-bar-item,vaadin-select-item) .switch.on{background:var(--switch-active-color);justify-content:end}:is(vaadin-context-menu-item,vaadin-menu-bar-item,vaadin-select-item) .switch.off{background:var(--switch-inactive-color);justify-content:start}:is(vaadin-context-menu-item,vaadin-menu-bar-item,vaadin-select-item) .switch:before{background:#fff;border-radius:9999px;box-shadow:var(--shadow-m);content:"";display:flex;height:.5rem;width:.5rem}copilot-activation-button-user-info,copilot-activation-button-development-workflow,copilot-activation-button-feedback{display:contents}:is(copilot-activation-button-user-info,copilot-activation-button-development-workflow,copilot-activation-button-feedback) .prefix,:is(copilot-activation-button-user-info,copilot-activation-button-development-workflow,copilot-activation-button-feedback) .suffix{align-items:center;display:flex;height:var(--icon-size-m);justify-content:center;width:var(--icon-size-m)}:is(copilot-activation-button-user-info,copilot-activation-button-development-workflow,copilot-activation-button-feedback) .content{display:flex;flex-direction:column;margin-inline-end:auto}:is(copilot-activation-button-user-info,copilot-activation-button-development-workflow,copilot-activation-button-feedback) .info{color:var(--info-color)}:is(copilot-activation-button-user-info,copilot-activation-button-development-workflow,copilot-activation-button-feedback) .error{color:var(--error-color)}:is(copilot-activation-button-user-info,copilot-activation-button-development-workflow,copilot-activation-button-feedback) .warning{color:var(--warning-color)}:is(copilot-activation-button-user-info,copilot-activation-button-development-workflow,copilot-activation-button-feedback) .portrait{background-size:cover;border-radius:9999px;height:var(--icon-size-m);width:var(--icon-size-m)}:is(copilot-activation-button-user-info,copilot-activation-button-development-workflow,copilot-activation-button-feedback) .dot{background-color:currentColor;border-radius:9999px;height:var(--space-75);width:var(--space-75)}vaadin-menu-bar-item[aria-selected=true]>svg:first-child{color:var(--blue-color)}:is(copilot-alignment-overlay)::part(content){padding:0}vaadin-item.no-checkmark::part(checkmark){display:none}copilot-wrap-with-other-menu vaadin-item{padding:unset}copilot-wrap-with-other-menu vaadin-item:hover{background:var(--hover-color)}', Zc = "vaadin-popover-overlay::part(overlay){background:var(--surface);font:var(--font-xsmall)}vaadin-popover-overlay{--vaadin-button-font-size: var(--font-size-1);--vaadin-button-height: var(--line-height-4)}", Qc = "vaadin-select::part(input-field){padding-inline-start:0}vaadin-select-value-button{padding:0}", eu = ':host{--font-family: "Manrope", sans-serif;--monospace-font-family: Inconsolata, Monaco, Consolas, Courier New, Courier, monospace;--font-size-0: .6875rem;--font-size-1: .75rem;--font-size-2: .875rem;--font-size-3: 1rem;--font-size-4: 1.125rem;--font-size-5: 1.25rem;--font-size-6: 1.375rem;--font-size-7: 1.5rem;--line-height-0: 1rem;--line-height-1: 1.125rem;--line-height-2: 1.25rem;--line-height-3: 1.5rem;--line-height-4: 1.75rem;--line-height-5: 2rem;--line-height-6: 2.25rem;--line-height-7: 2.5rem;--font-weight-normal: 440;--font-weight-medium: 540;--font-weight-semibold: 640;--font-weight-bold: 740;--font: normal var(--font-weight-normal) var(--font-size-3) / var(--line-height-3) var(--font-family);--font-medium: normal var(--font-weight-medium) var(--font-size-3) / var(--line-height-3) var(--font-family);--font-semibold: normal var(--font-weight-semibold) var(--font-size-3) / var(--line-height-3) var(--font-family);--font-bold: normal var(--font-weight-bold) var(--font-size-3) / var(--line-height-3) var(--font-family);--font-small: normal var(--font-weight-normal) var(--font-size-2) / var(--line-height-2) var(--font-family);--font-small-medium: normal var(--font-weight-medium) var(--font-size-2) / var(--line-height-2) var(--font-family);--font-small-semibold: normal var(--font-weight-semibold) var(--font-size-2) / var(--line-height-2) var(--font-family);--font-small-bold: normal var(--font-weight-bold) var(--font-size-2) / var(--line-height-2) var(--font-family);--font-xsmall: normal var(--font-weight-normal) var(--font-size-1) / var(--line-height-1) var(--font-family);--font-xsmall-medium: normal var(--font-weight-medium) var(--font-size-1) / var(--line-height-1) var(--font-family);--font-xsmall-semibold: normal var(--font-weight-semibold) var(--font-size-1) / var(--line-height-1) var(--font-family);--font-xsmall-bold: normal var(--font-weight-bold) var(--font-size-1) / var(--line-height-1) var(--font-family);--font-xxsmall: normal var(--font-weight-normal) var(--font-size-0) / var(--line-height-0) var(--font-family);--font-xxsmall-medium: normal var(--font-weight-medium) var(--font-size-0) / var(--line-height-0) var(--font-family);--font-xxsmall-semibold: normal var(--font-weight-semibold) var(--font-size-0) / var(--line-height-0) var(--font-family);--font-xxsmall-bold: normal var(--font-weight-bold) var(--font-size-0) / var(--line-height-0) var(--font-family);--font-button: normal var(--font-weight-semibold) var(--font-size-1) / var(--line-height-1) var(--font-family);--font-tooltip: normal var(--font-weight-medium) var(--font-size-1) / var(--line-height-2) var(--font-family);--z-index-component-selector: 100;--z-index-floating-panel: 101;--z-index-drawer: 150;--z-index-opened-drawer: 151;--z-index-spotlight: 200;--z-index-popover: 300;--z-index-activation-button: 1000;--copilot-notifications-container-z-index: 10000;--duration-1: .1s;--duration-2: .2s;--duration-3: .3s;--duration-4: .4s;--button-background: var(--gray-100);--button-background-hover: var(--gray-150);--focus-size: 2px;--icon-size-xs: .75rem;--icon-size-s: 1rem;--icon-size-m: 1.125rem;--shadow-xs: 0 1px 2px 0 rgb(0 0 0 / .05);--shadow-s: 0 1px 3px 0 rgb(0 0 0 / .1), 0 1px 2px -1px rgb(0 0 0 / .1);--shadow-m: 0 4px 6px -1px rgb(0 0 0 / .1), 0 2px 4px -2px rgb(0 0 0 / .1);--shadow-l: 0 10px 15px -3px rgb(0 0 0 / .1), 0 4px 6px -4px rgb(0 0 0 / .1);--shadow-xl: 0 20px 25px -5px rgb(0 0 0 / .1), 0 8px 10px -6px rgb(0 0 0 / .1);--shadow-2xl: 0 25px 50px -12px rgb(0 0 0 / .25);--size-xs: 1.25rem;--size-s: 1.5rem;--size-m: 1.75rem;--size-l: 2rem;--size-xl: 2.25rem;--space-25: 2px;--space-50: 4px;--space-75: 6px;--space-100: 8px;--space-150: 12px;--space-200: 16px;--space-300: 24px;--space-400: 32px;--space-450: 36px;--space-500: 40px;--space-600: 48px;--space-700: 56px;--space-800: 64px;--space-900: 72px;--radius-1: .1875rem;--radius-2: .375rem;--radius-3: .75rem}:host{--lumo-font-family: var(--font-family);--lumo-font-size-xs: var(--font-size-1);--lumo-font-size-s: var(--font-size-2);--lumo-font-size-l: var(--font-size-4);--lumo-font-size-xl: var(--font-size-5);--lumo-font-size-xxl: var(--font-size-6);--lumo-font-size-xxxl: var(--font-size-7);--lumo-line-height-s: var(--line-height-2);--lumo-line-height-m: var(--line-height-3);--lumo-line-height-l: var(--line-height-4);--lumo-border-radius-s: var(--radius-1);--lumo-border-radius-m: var(--radius-2);--lumo-border-radius-l: var(--radius-3);--lumo-base-color: var(--surface-0);--lumo-header-text-color: var(--color-high-contrast);--lumo-tertiary-text-color: var(--color);--lumo-primary-text-color: var(--color-high-contrast);--lumo-primary-color: var(--color-high-contrast);--lumo-primary-color-50pct: var(--color-accent);--lumo-primary-contrast-color: var(--lumo-secondary-text-color);--lumo-space-xs: var(--space-50);--lumo-space-s: var(--space-100);--lumo-space-m: var(--space-200);--lumo-space-l: var(--space-300);--lumo-space-xl: var(--space-500);--lumo-icon-size-xs: var(--font-size-1);--lumo-icon-size-s: var(--font-size-2);--lumo-icon-size-m: var(--font-size-3);--lumo-icon-size-l: var(--font-size-4);--lumo-icon-size-xl: var(--font-size-5);--vaadin-focus-ring-color: var(--focus-color);--vaadin-focus-ring-width: var(--focus-size);--lumo-font-size-m: var(--font-size-1);--lumo-body-text-color: var(--body-text-color);--lumo-secondary-text-color: var(--secondary-text-color);--lumo-error-text-color: var(--error-color);--lumo-size-m: var(--size-m);--source-file-link-color: var(--blue-600);--source-file-link-decoration-color: currentColor;--source-file-link-text-decoration: none;--source-file-link-font-weight: normal;--source-file-link-button-color: currentColor}:host{color-scheme:light;--surface-0: hsl(var(--gray-h) var(--gray-s) 90% / .8);--surface-1: hsl(var(--gray-h) var(--gray-s) 95% / .8);--surface-2: hsl(var(--gray-h) var(--gray-s) 100% / .8);--surface-background: linear-gradient( hsl(var(--gray-h) var(--gray-s) 95% / .7), hsl(var(--gray-h) var(--gray-s) 95% / .65) );--surface-glow: radial-gradient(circle at 30% 0%, hsl(var(--gray-h) var(--gray-s) 98% / .7), transparent 50%);--surface-border-glow: radial-gradient(at 50% 50%, hsl(var(--purple-h) 90% 90% / .8) 0, transparent 50%);--surface: var(--surface-glow) no-repeat border-box, var(--surface-background) no-repeat padding-box, hsl(var(--gray-h) var(--gray-s) 98% / .2);--surface-with-border-glow: var(--surface-glow) no-repeat border-box, linear-gradient(var(--background-color), var(--background-color)) no-repeat padding-box, var(--surface-border-glow) no-repeat border-box 0 0 / var(--glow-size, 600px) var(--glow-size, 600px);--surface-border-color: hsl(var(--gray-h) var(--gray-s) 100% / .7);--surface-backdrop-filter: blur(10px);--surface-box-shadow-1: 0 0 0 .5px hsl(var(--gray-h) var(--gray-s) 5% / .15), 0 6px 12px -1px hsl(var(--shadow-hsl) / .3);--surface-box-shadow-2: 0 0 0 .5px hsl(var(--gray-h) var(--gray-s) 5% / .15), 0 24px 40px -4px hsl(var(--shadow-hsl) / .4);--background-button: linear-gradient( hsl(var(--gray-h) var(--gray-s) 98% / .4), hsl(var(--gray-h) var(--gray-s) 90% / .2) );--background-button-active: hsl(var(--gray-h) var(--gray-s) 80% / .2);--color: var(--gray-500);--color-high-contrast: var(--gray-900);--color-accent: var(--purple-700);--color-danger: var(--red-700);--border-color: var(--gray-150);--border-color-high-contrast: var(--gray-300);--border-color-button: var(--gray-350);--border-color-popover: hsl(var(--gray-hsl) / .08);--border-color-dialog: hsl(var(--gray-hsl) / .08);--accent-color: var(--purple-600);--selection-color: hsl(var(--blue-hsl));--shadow-hsl: var(--gray-h) var(--gray-s) 20%;--lumo-contrast-5pct: var(--gray-100);--lumo-contrast-10pct: var(--gray-200);--lumo-contrast-60pct: var(--gray-400);--lumo-contrast-80pct: var(--gray-600);--lumo-contrast-90pct: var(--gray-800);--card-bg: rgba(255, 255, 255, .5);--card-hover-bg: rgba(255, 255, 255, .65);--card-open-bg: rgba(255, 255, 255, .8);--card-border: 1px solid rgba(0, 50, 100, .15);--card-open-shadow: 0px 1px 4px -1px rgba(28, 52, 84, .26);--card-section-border: var(--card-border);--card-field-bg: var(--lumo-contrast-5pct);--indicator-border: white}:host(.dark){color-scheme:dark;--surface-0: hsl(var(--gray-h) var(--gray-s) 10% / .85);--surface-1: hsl(var(--gray-h) var(--gray-s) 14% / .85);--surface-2: hsl(var(--gray-h) var(--gray-s) 18% / .85);--surface-background: linear-gradient( hsl(var(--gray-h) var(--gray-s) 8% / .65), hsl(var(--gray-h) var(--gray-s) 8% / .7) );--surface-glow: radial-gradient( circle at 30% 0%, hsl(var(--gray-h) calc(var(--gray-s) * 2) 90% / .12), transparent 50% );--surface: var(--surface-glow) no-repeat border-box, var(--surface-background) no-repeat padding-box, hsl(var(--gray-h) var(--gray-s) 20% / .4);--surface-border-glow: hsl(var(--gray-h) var(--gray-s) 20% / .4) radial-gradient(at 50% 50%, hsl(250 40% 80% / .4) 0, transparent 50%);--surface-border-color: hsl(var(--gray-h) var(--gray-s) 50% / .2);--surface-box-shadow-1: 0 0 0 .5px hsl(var(--purple-h) 40% 5% / .4), 0 6px 12px -1px hsl(var(--shadow-hsl) / .4);--surface-box-shadow-2: 0 0 0 .5px hsl(var(--purple-h) 40% 5% / .4), 0 24px 40px -4px hsl(var(--shadow-hsl) / .5);--color: var(--gray-650);--background-button: linear-gradient( hsl(var(--gray-h) calc(var(--gray-s) * 2) 80% / .1), hsl(var(--gray-h) calc(var(--gray-s) * 2) 80% / 0) );--background-button-active: hsl(var(--gray-h) var(--gray-s) 10% / .1);--border-color-popover: hsl(var(--gray-h) var(--gray-s) 90% / .1);--border-color-dialog: hsl(var(--gray-h) var(--gray-s) 90% / .1);--shadow-hsl: 0 0% 0%;--lumo-disabled-text-color: var(--lumo-contrast-60pct);--card-bg: rgba(255, 255, 255, .05);--card-hover-bg: rgba(255, 255, 255, .065);--card-open-bg: rgba(255, 255, 255, .1);--card-border: 1px solid rgba(255, 255, 255, .11);--card-open-shadow: 0px 1px 4px -1px rgba(0, 0, 0, .26);--card-section-border: var(--card-border);--card-field-bg: var(--lumo-contrast-10pct);--indicator-border: var(--lumo-base-color)}', tu = ".items-baseline{align-items:baseline}.items-center{align-items:center}.items-end{align-items:end}.items-start{align-items:start}.border-b{border-bottom:1px var(--border-style, solid) var(--border-color, inherit)}.border-e-0{border-inline-end:none}.border-s-0{border-inline-start:none}.border-t-0{border-top:none}.border-white\\/10{--border-color: rgba(255, 255, 255, .1)}.rounded-full{border-radius:9999px}.text-blue{color:var(--blue-color)}.text-blue-violet{background-clip:text;background-image:linear-gradient(90deg,var(--blue-color),var(--violet-color));color:transparent}.text-inherit{color:inherit}.text-white,.hover\\:text-white:hover{color:#fff}.contents{display:contents}.flex{display:flex}.inline-flex{display:inline-flex}.flex-1{flex:1}.flex-col{flex-direction:column}.text-1{font-size:var(--font-size-1);line-height:var(--line-height-1)}.font-normal{font-weight:var(--font-weight-normal)}.font-medium{font-weight:var(--font-weight-medium)}.font-semibold{font-weight:var(--font-weight-semibold)}.font-bold{font-weight:var(--font-weight-bold)}.gap-25{gap:var(--space-25)}.gap-50{gap:var(--space-50)}.gap-75{gap:var(--space-75)}.gap-100{gap:var(--space-100)}.gap-150{gap:var(--space-150)}.gap-200{gap:var(--space-200)}.gap-300{gap:var(--space-300)}.gap-400{gap:var(--space-400)}.icon-s svg{height:var(--icon-size-s);width:var(--icon-size-s)}.justify-center{justify-content:center}.justify-end{justify-content:end}.list-none{list-style-type:none}.m-0{margin:0}.m-25{margin:var(--space-25)}.m-50{margin:var(--space-50)}.m-75{margin:var(--space-75)}.m-100{margin:var(--space-100)}.m-150{margin:var(--space-150)}.m-200{margin:var(--space-200)}.m-300{margin:var(--space-300)}.m-400{margin:var(--space-400)}.mb-0{margin-bottom:0}.mb-25{margin-bottom:var(--space-25)}.mb-50{margin-bottom:var(--space-50)}.mb-75{margin-bottom:var(--space-75)}.mb-100{margin-bottom:var(--space-100)}.mb-150{margin-bottom:var(--space-150)}.mb-200{margin-bottom:var(--space-200)}.mb-300{margin-bottom:var(--space-300)}.mb-400{margin-bottom:var(--space-400)}.me-25{margin-inline-end:var(--space-25)}.me-50{margin-inline-end:var(--space-50)}.me-75{margin-inline-end:var(--space-75)}.me-100{margin-inline-end:var(--space-100)}.me-150{margin-inline-end:var(--space-150)}.me-200{margin-inline-end:var(--space-200)}.me-300{margin-inline-end:var(--space-300)}.me-400{margin-inline-end:var(--space-400)}.-me-25{margin-inline-end:calc(var(--space-25) * -1)}.-me-50{margin-inline-end:calc(var(--space-50) * -1)}.-me-75{margin-inline-end:calc(var(--space-75) * -1)}.-me-100{margin-inline-end:calc(var(--space-100) * -1)}.-me-150{margin-inline-end:calc(var(--space-150) * -1)}.-me-200{margin-inline-end:calc(var(--space-200) * -1)}.-me-300{margin-inline-end:calc(var(--space-300) * -1)}.-me-400{margin-inline-end:calc(var(--space-400) * -1)}.ms-25{margin-inline-start:var(--space-25)}.ms-50{margin-inline-start:var(--space-50)}.ms-75{margin-inline-start:var(--space-75)}.ms-100{margin-inline-start:var(--space-100)}.ms-150{margin-inline-start:var(--space-150)}.ms-200{margin-inline-start:var(--space-200)}.ms-300{margin-inline-start:var(--space-300)}.ms-400{margin-inline-start:var(--space-400)}.-ms-25{margin-inline-start:calc(var(--space-25) / -1)}.-ms-50{margin-inline-start:calc(var(--space-50) / -1)}.-ms-75{margin-inline-start:calc(var(--space-75) / -1)}.-ms-100{margin-inline-start:calc(var(--space-100) / -1)}.-ms-150{margin-inline-start:calc(var(--space-150) / -1)}.-ms-200{margin-inline-start:calc(var(--space-200) / -1)}.-ms-300{margin-inline-start:var(--space-300)}.-ms-400{margin-inline-start:var(--space-400)}.mt-25{margin-top:var(--space-25)}.mt-50{margin-top:var(--space-50)}.mt-75{margin-top:var(--space-75)}.mt-100{margin-top:var(--space-100)}.mt-150{margin-top:var(--space-150)}.mt-200{margin-top:var(--space-200)}.mt-300{margin-top:var(--space-300)}.mt-400{margin-top:var(--space-400)}.-mt-25{margin-top:calc(var(--space-25) * -1)}.-mt-50{margin-top:calc(var(--space-50) * -1)}.-mt-75{margin-top:calc(var(--space-75) * -1)}.-mt-100{margin-top:calc(var(--space-100) * -1)}.-mt-150{margin-top:calc(var(--space-150) * -1)}.-mt-200{margin-top:calc(var(--space-200) * -1)}.-mt-300{margin-top:calc(var(--space-300) * -1)}.-mt-400{margin-top:calc(var(--space-400) * -1)}.mx-25{margin-inline:var(--space-25)}.mx-50{margin-inline:var(--space-50)}.mx-75{margin-inline:var(--space-75)}.mx-100{margin-inline:var(--space-100)}.mx-150{margin-inline:var(--space-150)}.mx-200{margin-inline:var(--space-200)}.mx-300{margin-inline:var(--space-300)}.mx-400{margin-inline:var(--space-400)}.my-25{margin-block:var(--space-25)}.my-50{margin-block:var(--space-50)}.my-75{margin-block:var(--space-75)}.my-100{margin-block:var(--space-100)}.my-150{margin-block:var(--space-150)}.my-200{margin-block:var(--space-200)}.my-300{margin-block:var(--space-300)}.my-400{margin-block:var(--space-400)}.-my-25{margin-block:calc(var(--space-25) * -1)}.-my-50{margin-block:calc(var(--space-50) * -1)}.-my-75{margin-block:calc(var(--space-75) * -1)}.-my-100{margin-block:calc(var(--space-100) * -1)}.-my-150{margin-block:calc(var(--space-150) * -1)}.-my-200{margin-block:calc(var(--space-200) * -1)}.-my-300{margin-block:calc(var(--space-300) * -1)}.-my-400{margin-block:calc(var(--space-400) * -1)}.truncate{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.p-0{padding:0}.p-25{padding:var(--space-25)}.p-50{padding:var(--space-50)}.p-75{padding:var(--space-75)}.p-100{padding:var(--space-100)}.p-150{padding:var(--space-150)}.p-200{padding:var(--space-200)}.p-300{padding:var(--space-300)}.p-400{padding:var(--space-400)}.pb-25{padding-bottom:var(--space-25)}.pb-50{padding-bottom:var(--space-50)}.pb-75{padding-bottom:var(--space-75)}.pb-100{padding-bottom:var(--space-100)}.pb-150{padding-bottom:var(--space-150)}.pb-200{padding-bottom:var(--space-200)}.pb-300{padding-bottom:var(--space-300)}.pb-400{padding-bottom:var(--space-400)}.pe-25{padding-inline-end:var(--space-25)}.pe-50{padding-inline-end:var(--space-50)}.pe-75{padding-inline-end:var(--space-75)}.pe-100{padding-inline-end:var(--space-100)}.pe-150{padding-inline-end:var(--space-150)}.pe-200{padding-inline-end:var(--space-200)}.pe-300{padding-inline-end:var(--space-300)}.pe-400{padding-inline-end:var(--space-400)}.ps-25{padding-inline-start:var(--space-25)}.ps-50{padding-inline-start:var(--space-50)}.ps-75{padding-inline-start:var(--space-75)}.ps-100{padding-inline-start:var(--space-100)}.ps-150{padding-inline-start:var(--space-150)}.ps-200{padding-inline-start:var(--space-200)}.ps-300{padding-inline-start:var(--space-300)}.ps-400{padding-inline-start:var(--space-400)}.pt-25{padding-top:var(--space-25)}.pt-50{padding-top:var(--space-50)}.pt-75{padding-top:var(--space-75)}.pt-100{padding-top:var(--space-100)}.pt-150{padding-top:var(--space-150)}.pt-200{padding-top:var(--space-200)}.pt-300{padding-top:var(--space-300)}.pt-400{padding-top:var(--space-400)}.px-25{padding-inline:var(--space-25)}.px-50{padding-inline:var(--space-50)}.px-75{padding-inline:var(--space-75)}.px-100{padding-inline:var(--space-100)}.px-150{padding-inline:var(--space-150)}.px-200{padding-inline:var(--space-200)}.px-300{padding-inline:var(--space-300)}.px-400{padding-inline:var(--space-400)}.py-25{padding-block:var(--space-25)}.py-50{padding-block:var(--space-50)}.py-75{padding-block:var(--space-75)}.py-100{padding-block:var(--space-100)}.py-150{padding-block:var(--space-150)}.py-200{padding-block:var(--space-200)}.py-300{padding-block:var(--space-300)}.py-400{padding-block:var(--space-400)}.absolute{position:absolute}.relative{position:relative}.end-0{inset-inline-end:0}.start-0{inset-inline-start:0}.top-0{top:0}.h-m{height:var(--size-m)}.h-75{height:var(--space-75)}.h-900{height:var(--space-900)}.size-m{height:var(--size-m);width:var(--size-m)}.w-75{width:var(--space-75)}.rotate-90{transform:rotate(90deg)}";
+const qc = "@keyframes bounce{0%{transform:scale(.8)}50%{transform:scale(1.5)}to{transform:scale(1)}}@keyframes bounceLeft{0%{transform:translate(0)}30%{transform:translate(-10px)}50%{transform:translate(0)}70%{transform:translate(-5px)}to{transform:translate(0)}}@keyframes bounceRight{0%{transform:translate(0)}30%{transform:translate(10px)}50%{transform:translate(0)}70%{transform:translate(5px)}to{transform:translate(0)}}@keyframes bounceBottom{0%{transform:translateY(0)}30%{transform:translateY(10px)}50%{transform:translateY(0)}70%{transform:translateY(5px)}to{transform:translateY(0)}}@keyframes around-we-go-again{0%{background-position:0 0,0 0,calc(var(--glow-size) * -.5) calc(var(--glow-size) * -.5),calc(100% + calc(var(--glow-size) * .5)) calc(100% + calc(var(--glow-size) * .5))}25%{background-position:0 0,0 0,calc(100% + calc(var(--glow-size) * .5)) calc(var(--glow-size) * -.5),calc(var(--glow-size) * -.5) calc(100% + calc(var(--glow-size) * .5))}50%{background-position:0 0,0 0,calc(100% + calc(var(--glow-size) * .5)) calc(100% + calc(var(--glow-size) * .5)),calc(var(--glow-size) * -.5) calc(var(--glow-size) * -.5)}75%{background-position:0 0,0 0,calc(var(--glow-size) * -.5) calc(100% + calc(var(--glow-size) * .5)),calc(100% + calc(var(--glow-size) * .5)) calc(var(--glow-size) * -.5)}to{background-position:0 0,0 0,calc(var(--glow-size) * -.5) calc(var(--glow-size) * -.5),calc(100% + calc(var(--glow-size) * .5)) calc(100% + calc(var(--glow-size) * .5))}}@keyframes swirl{0%{rotate:0deg;filter:hue-rotate(20deg)}50%{filter:hue-rotate(-30deg)}to{rotate:360deg;filter:hue-rotate(20deg)}}@keyframes button-focus-in{0%{box-shadow:0 0 0 0 var(--focus-color)}to{box-shadow:0 0 0 var(--focus-size) var(--focus-color)}}@keyframes button-focus-out{0%{box-shadow:0 0 0 var(--focus-size) var(--focus-color)}}@keyframes button-primary-focus-in{0%{box-shadow:0 0 0 0 var(--focus-color)}to{box-shadow:0 0 0 1px var(--background-color),0 0 0 calc(var(--focus-size) + 2px) var(--focus-color)}}@keyframes button-primary-focus-out{0%{box-shadow:0 0 0 1px var(--background-color),0 0 0 calc(var(--focus-size) + 2px) var(--focus-color)}}@keyframes link-focus-in{0%{box-shadow:0 0 0 0 var(--blue-color)}to{box-shadow:0 0 0 var(--focus-size) var(--blue-color)}}@keyframes link-focus-out{0%{box-shadow:0 0 0 var(--focus-size) var(--blue-color)}}@keyframes ping{75%,to{transform:scale(2);opacity:0}}@keyframes fadeInOut{0%,to{opacity:0}50%{opacity:1}}", Kc = 'button{align-items:center;-webkit-appearance:none;appearance:none;background:transparent;background-origin:border-box;border:1px solid transparent;border-radius:var(--radius-1);color:var(--body-text-color);cursor:pointer;display:inline-flex;flex-shrink:0;font:var(--font-button);height:var(--size-m);justify-content:center;outline-offset:calc(var(--focus-size) / -1);padding:0 var(--space-100)}vaadin-button{box-shadow:none;min-width:var(--size-m);outline-offset:calc(var(--focus-size) / -1)}vaadin-button[theme~=primary]{outline-offset:1px}button:hover{background:var(--hover-color)}button:focus,vaadin-button[focus-ring]{animation-delay:0s,.15s;animation-duration:.15s,.45s;animation-name:button-focus-in,button-focus-out;animation-timing-function:cubic-bezier(.2,0,0,1),cubic-bezier(.2,0,0,1);outline:var(--focus-size) solid var(--focus-color)}vaadin-button[theme~=primary][focus-ring]{animation-name:button-primary-focus-in,button-primary-focus-out}button:active:not([disabled]){background:var(--active-color)}button.primary{background:var(--primary-color);color:var(--primary-contrast-text-color)}button.icon{padding:0;width:var(--size-m)}button.icon span:has(svg){display:flex;width:fit-content}button svg{height:var(--icon-size-s);width:var(--icon-size-s)}button .prefix,button .suffix{align-items:center;display:flex;height:var(--size-m);justify-content:center;width:var(--size-m)}button:has(.prefix){padding-inline-start:0}button:has(.suffix){padding-inline-end:0}button[role=switch]{justify-content:start;min-width:3.75rem;padding:0}button[role=switch] span.switch{align-items:center;border:2px solid var(--secondary-text-color);border-radius:9999px;box-sizing:border-box;display:flex;flex-shrink:0;height:.875rem;margin-inline:.3125rem;transition:.2s;width:1.25rem}button[role=switch] span.switch:before{background:var(--secondary-text-color);border-radius:9999px;content:"";display:flex;height:.375rem;transition:.2s;translate:.125rem 0;width:.375rem}button[role=switch][aria-checked=true] span.switch{background:var(--blue-11);border-color:var(--blue-11)}button[role=switch][aria-checked=true] span.switch:before{background:var(--blue-5);height:.5rem;translate:.4375rem 0;width:.5rem}button[disabled]{cursor:not-allowed;opacity:.3}button[hidden]{display:none}button.link-button{all:initial;color:inherit;cursor:pointer;font-family:inherit;font-size:var(--dev-tools-font-size-small);font-weight:600;line-height:1;text-decoration:underline;white-space:nowrap}button.link-button:focus,button.link-button:hover{color:var(--dev-tools-text-color-emphasis)}', Wc = "code.codeblock{background:var(--contrast-color-5);border-radius:var(--radius-2);display:block;font-family:var(--monospace-font-family);font-size:var(--font-size-1);line-height:var(--line-height-1);overflow:hidden;padding:calc((var(--size-m) - var(--line-height-1)) / 2) var(--size-m) calc((var(--size-m) - var(--line-height-1)) / 2) var(--space-100);position:relative;text-overflow:ellipsis;white-space:pre;min-height:var(--line-height-1)}copilot-copy{position:absolute;right:0;top:0}div.message.error code.codeblock copilot-copy svg{color:#ffffffb3}", Gc = ":host{--gray-h: 220;--gray-s: 30%;--gray-l: 30%;--gray-hsl: var(--gray-h) var(--gray-s) var(--gray-l);--gray: hsl(var(--gray-hsl));--gray-50: hsl(var(--gray-hsl) / .05);--gray-100: hsl(var(--gray-hsl) / .1);--gray-150: hsl(var(--gray-hsl) / .16);--gray-200: hsl(var(--gray-hsl) / .24);--gray-250: hsl(var(--gray-hsl) / .34);--gray-300: hsl(var(--gray-hsl) / .46);--gray-350: hsl(var(--gray-hsl) / .6);--gray-400: hsl(var(--gray-hsl) / .7);--gray-450: hsl(var(--gray-hsl) / .8);--gray-500: hsl(var(--gray-hsl) / .9);--gray-550: hsl(var(--gray-hsl));--gray-600: hsl(var(--gray-h) var(--gray-s) calc(var(--gray-l) - 2%));--gray-650: hsl(var(--gray-h) var(--gray-s) calc(var(--gray-l) - 4%));--gray-700: hsl(var(--gray-h) var(--gray-s) calc(var(--gray-l) - 8%));--gray-750: hsl(var(--gray-h) var(--gray-s) calc(var(--gray-l) - 12%));--gray-800: hsl(var(--gray-h) var(--gray-s) calc(var(--gray-l) - 20%));--gray-850: hsl(var(--gray-h) var(--gray-s) calc(var(--gray-l) - 23%));--gray-900: hsl(var(--gray-h) var(--gray-s) calc(var(--gray-l) - 30%));--blue-h: 220;--blue-s: 90%;--blue-l: 53%;--blue-hsl: var(--blue-h) var(--blue-s) var(--blue-l);--blue: hsl(var(--blue-hsl));--blue-50: hsl(var(--blue-hsl) / .05);--blue-100: hsl(var(--blue-hsl) / .1);--blue-150: hsl(var(--blue-hsl) / .2);--blue-200: hsl(var(--blue-hsl) / .3);--blue-250: hsl(var(--blue-hsl) / .4);--blue-300: hsl(var(--blue-hsl) / .5);--blue-350: hsl(var(--blue-hsl) / .6);--blue-400: hsl(var(--blue-hsl) / .7);--blue-450: hsl(var(--blue-hsl) / .8);--blue-500: hsl(var(--blue-hsl) / .9);--blue-550: hsl(var(--blue-hsl));--blue-600: hsl(var(--blue-h) var(--blue-s) calc(var(--blue-l) - 4%));--blue-650: hsl(var(--blue-h) var(--blue-s) calc(var(--blue-l) - 8%));--blue-700: hsl(var(--blue-h) var(--blue-s) calc(var(--blue-l) - 12%));--blue-750: hsl(var(--blue-h) var(--blue-s) calc(var(--blue-l) - 15%));--blue-800: hsl(var(--blue-h) var(--blue-s) calc(var(--blue-l) - 18%));--blue-850: hsl(var(--blue-h) var(--blue-s) calc(var(--blue-l) - 24%));--blue-900: hsl(var(--blue-h) var(--blue-s) calc(var(--blue-l) - 27%));--purple-h: 246;--purple-s: 90%;--purple-l: 60%;--purple-hsl: var(--purple-h) var(--purple-s) var(--purple-l);--purple: hsl(var(--purple-hsl));--purple-50: hsl(var(--purple-hsl) / .05);--purple-100: hsl(var(--purple-hsl) / .1);--purple-150: hsl(var(--purple-hsl) / .2);--purple-200: hsl(var(--purple-hsl) / .3);--purple-250: hsl(var(--purple-hsl) / .4);--purple-300: hsl(var(--purple-hsl) / .5);--purple-350: hsl(var(--purple-hsl) / .6);--purple-400: hsl(var(--purple-hsl) / .7);--purple-450: hsl(var(--purple-hsl) / .8);--purple-500: hsl(var(--purple-hsl) / .9);--purple-550: hsl(var(--purple-hsl));--purple-600: hsl(var(--purple-h) calc(var(--purple-s) - 4%) calc(var(--purple-l) - 2%));--purple-650: hsl(var(--purple-h) calc(var(--purple-s) - 8%) calc(var(--purple-l) - 4%));--purple-700: hsl(var(--purple-h) calc(var(--purple-s) - 15%) calc(var(--purple-l) - 7%));--purple-750: hsl(var(--purple-h) calc(var(--purple-s) - 23%) calc(var(--purple-l) - 11%));--purple-800: hsl(var(--purple-h) calc(var(--purple-s) - 24%) calc(var(--purple-l) - 15%));--purple-850: hsl(var(--purple-h) calc(var(--purple-s) - 24%) calc(var(--purple-l) - 19%));--purple-900: hsl(var(--purple-h) calc(var(--purple-s) - 27%) calc(var(--purple-l) - 23%));--green-h: 150;--green-s: 80%;--green-l: 42%;--green-hsl: var(--green-h) var(--green-s) var(--green-l);--green: hsl(var(--green-hsl));--green-50: hsl(var(--green-hsl) / .05);--green-100: hsl(var(--green-hsl) / .1);--green-150: hsl(var(--green-hsl) / .2);--green-200: hsl(var(--green-hsl) / .3);--green-250: hsl(var(--green-hsl) / .4);--green-300: hsl(var(--green-hsl) / .5);--green-350: hsl(var(--green-hsl) / .6);--green-400: hsl(var(--green-hsl) / .7);--green-450: hsl(var(--green-hsl) / .8);--green-500: hsl(var(--green-hsl) / .9);--green-550: hsl(var(--green-hsl));--green-600: hsl(var(--green-h) var(--green-s) calc(var(--green-l) - 2%));--green-650: hsl(var(--green-h) var(--green-s) calc(var(--green-l) - 4%));--green-700: hsl(var(--green-h) var(--green-s) calc(var(--green-l) - 8%));--green-750: hsl(var(--green-h) var(--green-s) calc(var(--green-l) - 12%));--green-800: hsl(var(--green-h) var(--green-s) calc(var(--green-l) - 15%));--green-850: hsl(var(--green-h) var(--green-s) calc(var(--green-l) - 19%));--green-900: hsl(var(--green-h) var(--green-s) calc(var(--green-l) - 23%));--yellow-h: 38;--yellow-s: 98%;--yellow-l: 64%;--yellow-hsl: var(--yellow-h) var(--yellow-s) var(--yellow-l);--yellow: hsl(var(--yellow-hsl));--yellow-50: hsl(var(--yellow-hsl) / .07);--yellow-100: hsl(var(--yellow-hsl) / .12);--yellow-150: hsl(var(--yellow-hsl) / .2);--yellow-200: hsl(var(--yellow-hsl) / .3);--yellow-250: hsl(var(--yellow-hsl) / .4);--yellow-300: hsl(var(--yellow-hsl) / .5);--yellow-350: hsl(var(--yellow-hsl) / .6);--yellow-400: hsl(var(--yellow-hsl) / .7);--yellow-450: hsl(var(--yellow-hsl) / .8);--yellow-500: hsl(var(--yellow-hsl) / .9);--yellow-550: hsl(var(--yellow-hsl));--yellow-600: hsl(var(--yellow-h) var(--yellow-s) calc(var(--yellow-l) - 5%));--yellow-650: hsl(var(--yellow-h) var(--yellow-s) calc(var(--yellow-l) - 10%));--yellow-700: hsl(var(--yellow-h) var(--yellow-s) calc(var(--yellow-l) - 15%));--yellow-750: hsl(var(--yellow-h) var(--yellow-s) calc(var(--yellow-l) - 20%));--yellow-800: hsl(var(--yellow-h) var(--yellow-s) calc(var(--yellow-l) - 25%));--yellow-850: hsl(var(--yellow-h) var(--yellow-s) calc(var(--yellow-l) - 30%));--yellow-900: hsl(var(--yellow-h) var(--yellow-s) calc(var(--yellow-l) - 35%));--red-h: 355;--red-s: 75%;--red-l: 55%;--red-hsl: var(--red-h) var(--red-s) var(--red-l);--red: hsl(var(--red-hsl));--red-50: hsl(var(--red-hsl) / .05);--red-100: hsl(var(--red-hsl) / .1);--red-150: hsl(var(--red-hsl) / .2);--red-200: hsl(var(--red-hsl) / .3);--red-250: hsl(var(--red-hsl) / .4);--red-300: hsl(var(--red-hsl) / .5);--red-350: hsl(var(--red-hsl) / .6);--red-400: hsl(var(--red-hsl) / .7);--red-450: hsl(var(--red-hsl) / .8);--red-500: hsl(var(--red-hsl) / .9);--red-550: hsl(var(--red-hsl));--red-600: hsl(var(--red-h) calc(var(--red-s) - 5%) calc(var(--red-l) - 2%));--red-650: hsl(var(--red-h) calc(var(--red-s) - 10%) calc(var(--red-l) - 4%));--red-700: hsl(var(--red-h) calc(var(--red-s) - 15%) calc(var(--red-l) - 8%));--red-750: hsl(var(--red-h) calc(var(--red-s) - 20%) calc(var(--red-l) - 12%));--red-800: hsl(var(--red-h) calc(var(--red-s) - 25%) calc(var(--red-l) - 15%));--red-850: hsl(var(--red-h) calc(var(--red-s) - 30%) calc(var(--red-l) - 19%));--red-900: hsl(var(--red-h) calc(var(--red-s) - 35%) calc(var(--red-l) - 23%));--codeblock-bg: #f4f4f4;--background-color: rgba(255, 255, 255, .87);--primary-color: #0368de;--input-border-color: rgba(0, 0, 0, .42);--divider-primary-color: rgba(0, 0, 0, .1);--divider-secondary-color: rgba(0, 0, 0, .05);--switch-active-color: #0d875b;--switch-inactive-color: #757575;--body-text-color: rgba(0, 0, 0, .87);--secondary-text-color: rgba(0, 0, 0, .6);--primary-contrast-text-color: white;--active-color: rgba(3, 104, 222, .1);--focus-color: #0377ff;--hover-color: rgba(0, 0, 0, .05);--info-color: var(--blue-400);--success-color: var(--success-color-80);--error-color: var(--error-color-70);--warning-color: #fec941;--success-color-5: #f0fffa;--success-color-10: #eafaf4;--success-color-20: #d2f0e5;--success-color-30: #8ce4c5;--success-color-40: #39c693;--success-color-50: #1ba875;--success-color-60: #0e9c69;--success-color-70: #0d8b5e;--success-color-80: #066845;--success-color-90: #004d31;--error-color-5: #fff5f6;--error-color-10: #ffedee;--error-color-20: #ffd0d4;--error-color-30: #f8a8ae;--error-color-40: #ff707a;--error-color-50: #ff3a49;--error-color-60: #ff0013;--error-color-70: #ce0010;--error-color-80: #97000b;--error-color-90: #680008;--contrast-color-5: rgba(0, 0, 0, .05);--contrast-color-10: rgba(0, 0, 0, .1);--contrast-color-20: rgba(0, 0, 0, .2);--contrast-color-30: rgba(0, 0, 0, .3);--contrast-color-40: rgba(0, 0, 0, .4);--contrast-color-50: rgba(0, 0, 0, .5);--contrast-color-60: rgba(0, 0, 0, .6);--contrast-color-70: rgba(0, 0, 0, .7);--contrast-color-80: rgba(0, 0, 0, .8);--contrast-color-90: rgba(0, 0, 0, .9);--contrast-color-100: black;--blue-color: #0368de;--violet-color: #7b2bff;--blue-1: #fcfdff;--blue-2: #f5f9ff;--blue-3: #eaf3ff;--blue-4: #dbebff;--blue-5: #c9e2ff;--blue-6: #b5d4ff;--blue-7: #9bc2fc;--blue-8: #76aaf7;--blue-9: #0368de;--blue-10: #0059ce;--blue-11: #0368de;--blue-12: #0c3164}:host(.dark){--gray-s: 15%;--gray-l: 70%;--gray-600: hsl(var(--gray-h) calc(var(--gray-s) - 2%) calc(var(--gray-l) + 6%));--gray-650: hsl(var(--gray-h) calc(var(--gray-s) - 5%) calc(var(--gray-l) + 14%));--gray-700: hsl(var(--gray-h) calc(var(--gray-s) - 2%) calc(var(--gray-l) + 26%));--gray-750: hsl(var(--gray-h) calc(var(--gray-s) - 2%) calc(var(--gray-l) + 36%));--gray-800: hsl(var(--gray-h) calc(var(--gray-s) - 2%) calc(var(--gray-l) + 48%));--gray-850: hsl(var(--gray-h) calc(var(--gray-s) - 2%) calc(var(--gray-l) + 62%));--gray-900: hsl(var(--gray-h) calc(var(--gray-s) - 2%) calc(var(--gray-l) + 70%));--blue-s: 90%;--blue-l: 58%;--blue-600: hsl(var(--blue-h) var(--blue-s) calc(var(--blue-l) + 6%));--blue-650: hsl(var(--blue-h) var(--blue-s) calc(var(--blue-l) + 12%));--blue-700: hsl(var(--blue-h) var(--blue-s) calc(var(--blue-l) + 17%));--blue-750: hsl(var(--blue-h) var(--blue-s) calc(var(--blue-l) + 22%));--blue-800: hsl(var(--blue-h) var(--blue-s) calc(var(--blue-l) + 28%));--blue-850: hsl(var(--blue-h) var(--blue-s) calc(var(--blue-l) + 35%));--blue-900: hsl(var(--blue-h) var(--blue-s) calc(var(--blue-l) + 43%));--purple-600: hsl(var(--purple-h) var(--purple-s) calc(var(--purple-l) + 4%));--purple-650: hsl(var(--purple-h) var(--purple-s) calc(var(--purple-l) + 9%));--purple-700: hsl(var(--purple-h) var(--purple-s) calc(var(--purple-l) + 12%));--purple-750: hsl(var(--purple-h) var(--purple-s) calc(var(--purple-l) + 18%));--purple-800: hsl(var(--purple-h) var(--purple-s) calc(var(--purple-l) + 24%));--purple-850: hsl(var(--purple-h) var(--purple-s) calc(var(--purple-l) + 29%));--purple-900: hsl(var(--purple-h) var(--purple-s) calc(var(--purple-l) + 33%));--green-600: hsl(calc(var(--green-h) - 1) calc(var(--green-s) - 5%) calc(var(--green-l) + 5%));--green-650: hsl(calc(var(--green-h) - 2) calc(var(--green-s) - 10%) calc(var(--green-l) + 12%));--green-700: hsl(calc(var(--green-h) - 4) calc(var(--green-s) - 15%) calc(var(--green-l) + 20%));--green-750: hsl(calc(var(--green-h) - 6) calc(var(--green-s) - 20%) calc(var(--green-l) + 29%));--green-800: hsl(calc(var(--green-h) - 8) calc(var(--green-s) - 25%) calc(var(--green-l) + 37%));--green-850: hsl(calc(var(--green-h) - 10) calc(var(--green-s) - 30%) calc(var(--green-l) + 42%));--green-900: hsl(calc(var(--green-h) - 12) calc(var(--green-s) - 35%) calc(var(--green-l) + 48%));--yellow-600: hsl(calc(var(--yellow-h) + 1) var(--yellow-s) calc(var(--yellow-l) + 4%));--yellow-650: hsl(calc(var(--yellow-h) + 2) var(--yellow-s) calc(var(--yellow-l) + 7%));--yellow-700: hsl(calc(var(--yellow-h) + 4) var(--yellow-s) calc(var(--yellow-l) + 11%));--yellow-750: hsl(calc(var(--yellow-h) + 6) var(--yellow-s) calc(var(--yellow-l) + 16%));--yellow-800: hsl(calc(var(--yellow-h) + 8) var(--yellow-s) calc(var(--yellow-l) + 20%));--yellow-850: hsl(calc(var(--yellow-h) + 10) var(--yellow-s) calc(var(--yellow-l) + 24%));--yellow-900: hsl(calc(var(--yellow-h) + 12) var(--yellow-s) calc(var(--yellow-l) + 29%));--red-600: hsl(calc(var(--red-h) - 1) calc(var(--red-s) - 5%) calc(var(--red-l) + 3%));--red-650: hsl(calc(var(--red-h) - 2) calc(var(--red-s) - 10%) calc(var(--red-l) + 7%));--red-700: hsl(calc(var(--red-h) - 4) calc(var(--red-s) - 15%) calc(var(--red-l) + 14%));--red-750: hsl(calc(var(--red-h) - 6) calc(var(--red-s) - 20%) calc(var(--red-l) + 19%));--red-800: hsl(calc(var(--red-h) - 8) calc(var(--red-s) - 25%) calc(var(--red-l) + 24%));--red-850: hsl(calc(var(--red-h) - 10) calc(var(--red-s) - 30%) calc(var(--red-l) + 30%));--red-900: hsl(calc(var(--red-h) - 12) calc(var(--red-s) - 35%) calc(var(--red-l) + 36%));--codeblock-bg: var(--gray-100);--background-color: rgba(0, 0, 0, .87);--primary-color: white;--input-border-color: rgba(255, 255, 255, .42);--divider-primary-color: rgba(255, 255, 255, .2);--divider-secondary-color: rgba(255, 255, 255, .1);--body-text-color: white;--secondary-text-color: rgba(255, 255, 255, .7);--primary-contrast-text-color: rgba(0, 0, 0, .87);--active-color: rgba(255, 255, 255, .15);--focus-color: rgba(255, 255, 255, .5);--hover-color: rgba(255, 255, 255, .1);--success-color: var(--success-color-50);--error-color: var(--error-color-50);--warning-color: #fec941;--success-color-5: #004d31;--success-color-10: #066845;--success-color-20: #0d8b5e;--success-color-30: #0e9c69;--success-color-40: #1ba875;--success-color-50: #39c693;--success-color-60: #8ce4c5;--success-color-70: #d2f0e5;--success-color-80: #eafaf4;--success-color-90: #f0fffa;--error-color-5: #680008;--error-color-10: #97000b;--error-color-20: #ce0010;--error-color-30: #ff0013;--error-color-40: #ff3a49;--error-color-50: #ff707a;--error-color-60: #f8a8ae;--error-color-70: #ffd0d4;--error-color-80: #ffedee;--error-color-90: #fff5f6;--contrast-color-5: rgba(255, 255, 255, .05);--contrast-color-10: rgba(255, 255, 255, .1);--contrast-color-20: rgba(255, 255, 255, .2);--contrast-color-30: rgba(255, 255, 255, .3);--contrast-color-40: rgba(255, 255, 255, .4);--contrast-color-50: rgba(255, 255, 255, .5);--contrast-color-60: rgba(255, 255, 255, .6);--contrast-color-70: rgba(255, 255, 255, .7);--contrast-color-80: rgba(255, 255, 255, .8);--contrast-color-90: rgba(255, 255, 255, .9);--contrast-color-100: white;--blue-color: #95c6ff;--violet-color: #cbb4ff;--blue-1: #0a111c;--blue-2: #0f1826;--blue-3: #0e2649;--blue-4: #0d3162;--blue-5: #133c75;--blue-6: #1c4885;--blue-7: #25559a;--blue-8: #2b63b5;--blue-9: #0368de;--blue-10: #265fb0;--blue-11: #82b8ff;--blue-12: #d0e3ff}.bg-blue{background-color:var(--blue-color)}.bg-error{background-color:var(--error-color)}.bg-success{background-color:var(--success-color)}.bg-violet{background-color:var(--violet-color)}.bg-warning{background-color:var(--warning-color)}.blue-text{color:var(--blue-color)}.error-text{color:var(--error-color)}.success-text{color:var(--success-color)}.violet-text{color:var(--violet-color)}.warning-text{color:var(--warning-color)}", Yc = ":host{--vaadin-select-label-font-size: var(--font-size-1);--vaadin-checkbox-label-font-size: var(--font-size-1);--vaadin-input-field-value-font-size: var(--font-xsmall);--vaadin-button-border-radius: var(--radius-1);--vaadin-button-font-size: var(--font-size-1);--vaadin-button-font-weight: var(--font-weight-semibold);--vaadin-button-margin: 0;--vaadin-button-padding: 0 var(--space-100);--vaadin-button-primary-font-weight: var(--font-weight-semibold);--vaadin-button-primary-text-color: var(--primary-contrast-text-color);--vaadin-button-tertiary-font-weight: var(--font-weight-semibold);--vaadin-button-tertiary-padding: 0 var(--space-100);--vaadin-input-field-background: transparent;--vaadin-input-field-border-color: var(--input-border-color);--vaadin-input-field-border-radius: var(--radius-1);--vaadin-input-field-border-width: 1px;--vaadin-input-field-height: var(--size-m);--vaadin-input-field-label-font-size: var(--font-size-1);--vaadin-input-field-label-font-weight: var(--font-weight-medium);--vaadin-input-field-helper-font-size: var(--font-size-1);--vaadin-input-field-helper-font-weight: var(--font-weight-normal);--vaadin-input-field-helper-spacing: var(--space-50);--vaadin-input-field-hover-highlight-opacity: 0;--vaadin-input-field-hovered-label-color: var(--body-text-color)}", Xc = "vaadin-dialog-overlay::part(overlay){background:var(--background-color);-webkit-backdrop-filter:var(--surface-backdrop-filter);backdrop-filter:var(--surface-backdrop-filter);border:1px solid var(--contrast-color-5);border-radius:var(--radius-2);box-shadow:var(--surface-box-shadow-1)}vaadin-dialog-overlay::part(header){background:none;border-bottom:1px solid var(--divider-primary-color);box-sizing:border-box;font:var(--font-xsmall-semibold);min-height:var(--size-xl);padding:var(--space-50) var(--space-50) var(--space-50) var(--space-150)}vaadin-dialog-overlay h2{font:var(--font-xsmall-bold);margin:0;padding:0}vaadin-dialog-overlay::part(content){font:var(--font-xsmall);padding:var(--space-150)}vaadin-dialog-overlay::part(footer){background:none;padding:var(--space-100)}vaadin-dialog-overlay.ai-dialog::part(overlay){max-width:20rem}vaadin-dialog-overlay.ai-dialog::part(header){border:none}vaadin-dialog-overlay.ai-dialog [slot=header-content] svg{color:var(--blue-color)}vaadin-dialog-overlay.ai-dialog::part(content){display:flex;flex-direction:column;gap:var(--space-200)}vaadin-dialog-overlay.ai-dialog p{margin:0}vaadin-dialog-overlay.ai-dialog label:has(input[type=checkbox]){align-items:center;display:flex}vaadin-dialog-overlay.ai-dialog input[type=checkbox]{height:.875rem;margin:calc((var(--size-m) - .875rem) / 2);width:.875rem}vaadin-dialog-overlay.ai-dialog button.primary{min-width:calc(var(--size-m) * 2)}vaadin-dialog-overlay.drop-api-dialog-overlay::part(overlay){width:35em}vaadin-dialog-overlay.drop-api-dialog-overlay::part(header-content){width:unset;justify-content:unset;flex:unset}vaadin-dialog-overlay.drop-api-dialog-overlay::part(title){font-size:var(--font-size-2)}vaadin-dialog-overlay.drop-api-dialog-overlay::part(header){border-bottom:unset;justify-content:space-between}vaadin-dialog-overlay.drop-api-dialog-overlay::part(content){padding:var(--space-100);max-height:250px;overflow:auto}vaadin-dialog-overlay.drop-api-dialog-overlay div.item-content{display:flex;justify-content:center;align-items:start;flex-direction:column}vaadin-dialog-overlay.drop-api-dialog-overlay div.method-row-container{display:flex;justify-content:space-between;width:100%;align-items:center}vaadin-dialog-overlay.drop-api-dialog-overlay div.method-row-container div.class-method-name{padding-left:var(--space-150)}vaadin-dialog-overlay.drop-api-dialog-overlay div.method-row-container div.action-btn-container{width:150px}vaadin-dialog-overlay.drop-api-dialog-overlay div.method-row-container div.action-btn-container button.action-btn.selected{color:var(--selection-color)}vaadin-dialog-overlay.edit-component-dialog-overlay{width:25em}vaadin-dialog-overlay.edit-component-dialog-overlay #component-icon{width:75px}vaadin-dialog-overlay.report-exception-dialog{z-index:calc(var(--copilot-notifications-container-z-index) + 1)}vaadin-dialog-overlay.report-exception-dialog::part(overlay){height:600px}vaadin-dialog-overlay.report-exception-dialog vaadin-text-area{width:100%;min-height:120px}vaadin-dialog-overlay.report-exception-dialog .list-preview-container{display:flex;flex-direction:row;gap:var(--space-100);margin-top:var(--space-50)}vaadin-dialog-overlay.report-exception-dialog .left-menu{display:flex;flex-direction:column;min-width:200px;width:200px}vaadin-dialog-overlay.report-exception-dialog .right-menu{display:flex;flex-direction:column;white-space:break-spaces;overflow:auto;border-radius:var(--radius-2);align-items:start;height:300px;width:800px}vaadin-dialog-overlay.report-exception-dialog .right-menu pre{margin:0}vaadin-dialog-overlay.report-exception-dialog vaadin-item div.item-content{display:inline-block}vaadin-dialog-overlay.report-exception-dialog vaadin-item div.item-content span{max-width:150px;white-space:nowrap;text-overflow:ellipsis;overflow:hidden;display:block}vaadin-dialog-overlay.report-exception-dialog vaadin-item div.item-content span.item-description{color:var(--secondary-text-color)}vaadin-dialog-overlay.report-exception-dialog vaadin-item[selected]{background-color:var(--active-color);border-left:2px solid var(--primary-color)}vaadin-dialog-overlay.report-exception-dialog vaadin-item::part(content){display:flex;align-items:center;gap:var(--space-100)}vaadin-dialog-overlay.report-exception-dialog vaadin-item::part(checkmark){display:none}vaadin-dialog-overlay.report-exception-dialog div.section-title{color:var(--secondary-text-color);padding-top:var(--space-50);padding-bottom:var(--space-50)}vaadin-dialog-overlay.report-exception-dialog code.codeblock{width:100%;box-sizing:border-box;overflow:auto;text-overflow:unset}", Jc = ':is(vaadin-context-menu-overlay,vaadin-menu-bar-overlay,vaadin-select-overlay){z-index:var(--z-index-popover)}:is(vaadin-context-menu-overlay,vaadin-menu-bar-overlay,vaadin-select-overlay):first-of-type{padding-top:0}:is(vaadin-combo-box-overlay,vaadin-context-menu-overlay,vaadin-menu-bar-overlay,vaadin-popover-overlay,vaadin-select-overlay,vaadin-tooltip-overlay,vaadin-multi-select-combo-box-overlay)::part(overlay){background:var(--background-color);-webkit-backdrop-filter:var(--surface-backdrop-filter);backdrop-filter:var(--surface-backdrop-filter);border-radius:var(--radius-1);box-shadow:var(--surface-box-shadow-1);margin-top:0}:is(vaadin-context-menu-overlay,vaadin-menu-bar-overlay,vaadin-select-overlay)::part(content){padding:var(--space-50)}:is(vaadin-combo-box-item,vaadin-context-menu-item,vaadin-menu-bar-item,vaadin-select-item){--_lumo-item-selected-icon-display: none;align-items:center;border-radius:var(--radius-1);color:var(--body-text-color);cursor:default;display:flex;font:var(--font-xsmall-medium);min-height:0;padding:calc((var(--size-m) - var(--line-height-1)) / 2) var(--space-100)}:is(vaadin-combo-box-item,vaadin-context-menu-item,vaadin-menu-bar-item,vaadin-select-item,vaadin-multi-select-combo-box-item)[disabled],:is(vaadin-combo-box-item,vaadin-context-menu-item,vaadin-menu-bar-item,vaadin-select-item,vaadin-multi-select-combo-box-item)[disabled] .hint,:is(vaadin-combo-box-item,vaadin-context-menu-item,vaadin-menu-bar-item,vaadin-select-item,vaadin-multi-select-combo-box-item)[disabled] vaadin-icon{color:var(--lumo-disabled-text-color)}:is(vaadin-context-menu-item,vaadin-menu-bar-item):hover:not([disabled]),:is(vaadin-context-menu-item,vaadin-menu-bar-item)[expanded]:not([disabled]){background:var(--hover-color)}:is(vaadin-context-menu-item,vaadin-menu-bar-item):hover:is(.no-hover-effect){background:#0000}:is(vaadin-combo-box-item,vaadin-context-menu-item,vaadin-menu-bar-item,vaadin-select-item,vaadin-multi-select-combo-box-item)[focus-ring]{outline:2px solid var(--selection-color);outline-offset:-2px}:is(vaadin-combo-box-item,vaadin-context-menu-item,vaadin-menu-bar-item,vaadin-select-item,vaadin-multi-select-combo-box-item):is([aria-haspopup=true]):after{align-items:center;display:flex;height:var(--icon-size-m);justify-content:center;margin:0;padding:0;width:var(--icon-size-m)}:is(vaadin-combo-box-item,vaadin-context-menu-item,vaadin-menu-bar-item,vaadin-select-item,vaadin-multi-select-combo-box-item).danger{color:var(--error-color);--color: currentColor}:is(vaadin-combo-box-item,vaadin-context-menu-item,vaadin-menu-bar-item,vaadin-select-item,vaadin-multi-select-combo-box-item)::part(content){display:flex;align-items:center;gap:var(--space-100)}:is(vaadin-combo-box-item,vaadin-context-menu-item,vaadin-menu-bar-item,vaadin-select-item,vaadin-multi-select-combo-box-item) vaadin-icon{width:1em;height:1em;padding:0;color:var(--color)}:is(vaadin-context-menu-overlay,vaadin-menu-bar-overlay,vaadin-select-overlay) hr{margin:var(--space-50)}:is(vaadin-context-menu-item,vaadin-menu-bar-item,vaadin-select-item)>svg:first-child{color:var(--secondary-text-color)}:is(vaadin-context-menu-item,vaadin-menu-bar-item,vaadin-select-item) .label{margin-inline-end:auto;padding-inline-end:var(--space-300)}:is(vaadin-context-menu-item,vaadin-menu-bar-item,vaadin-select-item) .hint{color:var(--secondary-text-color)}:is(vaadin-context-menu-item,vaadin-menu-bar-item,vaadin-select-item) kbd{align-items:center;display:inline-flex;border-radius:var(--radius-1);font:var(--font-xsmall);outline:1px solid var(--divider-primary-color);outline-offset:-1px;padding:0 var(--space-50)}:is(vaadin-context-menu-item,vaadin-menu-bar-item,vaadin-select-item) .switch{align-items:center;border-radius:9999px;box-sizing:border-box;display:flex;height:.75rem;padding:var(--space-25);width:1.25rem}:is(vaadin-context-menu-item,vaadin-menu-bar-item,vaadin-select-item) .switch.on{background:var(--switch-active-color);justify-content:end}:is(vaadin-context-menu-item,vaadin-menu-bar-item,vaadin-select-item) .switch.off{background:var(--switch-inactive-color);justify-content:start}:is(vaadin-context-menu-item,vaadin-menu-bar-item,vaadin-select-item) .switch:before{background:#fff;border-radius:9999px;box-shadow:var(--shadow-m);content:"";display:flex;height:.5rem;width:.5rem}copilot-activation-button-user-info,copilot-activation-button-development-workflow,copilot-activation-button-feedback{display:contents}:is(copilot-activation-button-user-info,copilot-activation-button-development-workflow,copilot-activation-button-feedback) .prefix,:is(copilot-activation-button-user-info,copilot-activation-button-development-workflow,copilot-activation-button-feedback) .suffix{align-items:center;display:flex;height:var(--icon-size-m);justify-content:center;width:var(--icon-size-m)}:is(copilot-activation-button-user-info,copilot-activation-button-development-workflow,copilot-activation-button-feedback) .content{display:flex;flex-direction:column;margin-inline-end:auto}:is(copilot-activation-button-user-info,copilot-activation-button-development-workflow,copilot-activation-button-feedback) .info{color:var(--info-color)}:is(copilot-activation-button-user-info,copilot-activation-button-development-workflow,copilot-activation-button-feedback) .error{color:var(--error-color)}:is(copilot-activation-button-user-info,copilot-activation-button-development-workflow,copilot-activation-button-feedback) .warning{color:var(--warning-color)}:is(copilot-activation-button-user-info,copilot-activation-button-development-workflow,copilot-activation-button-feedback) .portrait{background-size:cover;border-radius:9999px;height:var(--icon-size-m);width:var(--icon-size-m)}:is(copilot-activation-button-user-info,copilot-activation-button-development-workflow,copilot-activation-button-feedback) .dot{background-color:currentColor;border-radius:9999px;height:var(--space-75);width:var(--space-75)}vaadin-menu-bar-item[aria-selected=true]>svg:first-child{color:var(--blue-color)}:is(copilot-alignment-overlay)::part(content){padding:0}vaadin-item.no-checkmark::part(checkmark){display:none}copilot-wrap-with-other-menu vaadin-item{padding:unset}copilot-wrap-with-other-menu vaadin-item:hover{background:var(--hover-color)}', Zc = "vaadin-popover-overlay::part(overlay){background:var(--surface);font:var(--font-xsmall)}vaadin-popover-overlay{--vaadin-button-font-size: var(--font-size-1);--vaadin-button-height: var(--line-height-4)}", Qc = "vaadin-select::part(input-field){padding-inline-start:0}vaadin-select-value-button{padding:0}", eu = ':host{--font-family: "Manrope", sans-serif;--monospace-font-family: Inconsolata, Monaco, Consolas, Courier New, Courier, monospace;--font-size-0: .6875rem;--font-size-1: .75rem;--font-size-2: .875rem;--font-size-3: 1rem;--font-size-4: 1.125rem;--font-size-5: 1.25rem;--font-size-6: 1.375rem;--font-size-7: 1.5rem;--line-height-0: 1rem;--line-height-1: 1.125rem;--line-height-2: 1.25rem;--line-height-3: 1.5rem;--line-height-4: 1.75rem;--line-height-5: 2rem;--line-height-6: 2.25rem;--line-height-7: 2.5rem;--font-weight-normal: 440;--font-weight-medium: 540;--font-weight-semibold: 640;--font-weight-bold: 740;--font: normal var(--font-weight-normal) var(--font-size-3) / var(--line-height-3) var(--font-family);--font-medium: normal var(--font-weight-medium) var(--font-size-3) / var(--line-height-3) var(--font-family);--font-semibold: normal var(--font-weight-semibold) var(--font-size-3) / var(--line-height-3) var(--font-family);--font-bold: normal var(--font-weight-bold) var(--font-size-3) / var(--line-height-3) var(--font-family);--font-small: normal var(--font-weight-normal) var(--font-size-2) / var(--line-height-2) var(--font-family);--font-small-medium: normal var(--font-weight-medium) var(--font-size-2) / var(--line-height-2) var(--font-family);--font-small-semibold: normal var(--font-weight-semibold) var(--font-size-2) / var(--line-height-2) var(--font-family);--font-small-bold: normal var(--font-weight-bold) var(--font-size-2) / var(--line-height-2) var(--font-family);--font-xsmall: normal var(--font-weight-normal) var(--font-size-1) / var(--line-height-1) var(--font-family);--font-xsmall-medium: normal var(--font-weight-medium) var(--font-size-1) / var(--line-height-1) var(--font-family);--font-xsmall-semibold: normal var(--font-weight-semibold) var(--font-size-1) / var(--line-height-1) var(--font-family);--font-xsmall-bold: normal var(--font-weight-bold) var(--font-size-1) / var(--line-height-1) var(--font-family);--font-xxsmall: normal var(--font-weight-normal) var(--font-size-0) / var(--line-height-0) var(--font-family);--font-xxsmall-medium: normal var(--font-weight-medium) var(--font-size-0) / var(--line-height-0) var(--font-family);--font-xxsmall-semibold: normal var(--font-weight-semibold) var(--font-size-0) / var(--line-height-0) var(--font-family);--font-xxsmall-bold: normal var(--font-weight-bold) var(--font-size-0) / var(--line-height-0) var(--font-family);--font-button: normal var(--font-weight-semibold) var(--font-size-1) / var(--line-height-1) var(--font-family);--font-tooltip: normal var(--font-weight-medium) var(--font-size-1) / var(--line-height-2) var(--font-family);--z-index-component-selector: 100;--z-index-floating-panel: 101;--z-index-drawer: 150;--z-index-opened-drawer: 151;--z-index-spotlight: 200;--z-index-popover: 300;--z-index-activation-button: 1000;--copilot-notifications-container-z-index: 10000;--duration-1: .1s;--duration-2: .2s;--duration-3: .3s;--duration-4: .4s;--button-background: var(--gray-100);--button-background-hover: var(--gray-150);--focus-size: 2px;--icon-size-xs: .75rem;--icon-size-s: 1rem;--icon-size-m: 1.125rem;--shadow-xs: 0 1px 2px 0 rgb(0 0 0 / .05);--shadow-s: 0 1px 3px 0 rgb(0 0 0 / .1), 0 1px 2px -1px rgb(0 0 0 / .1);--shadow-m: 0 4px 6px -1px rgb(0 0 0 / .1), 0 2px 4px -2px rgb(0 0 0 / .1);--shadow-l: 0 10px 15px -3px rgb(0 0 0 / .1), 0 4px 6px -4px rgb(0 0 0 / .1);--shadow-xl: 0 20px 25px -5px rgb(0 0 0 / .1), 0 8px 10px -6px rgb(0 0 0 / .1);--shadow-2xl: 0 25px 50px -12px rgb(0 0 0 / .25);--size-xs: 1.25rem;--size-s: 1.5rem;--size-m: 1.75rem;--size-l: 2rem;--size-xl: 2.25rem;--space-25: 2px;--space-50: 4px;--space-75: 6px;--space-100: 8px;--space-150: 12px;--space-200: 16px;--space-300: 24px;--space-400: 32px;--space-450: 36px;--space-500: 40px;--space-600: 48px;--space-700: 56px;--space-800: 64px;--space-900: 72px;--radius-1: .1875rem;--radius-2: .375rem;--radius-3: .75rem}:host{--lumo-font-family: var(--font-family);--lumo-font-size-xs: var(--font-size-1);--lumo-font-size-s: var(--font-size-2);--lumo-font-size-l: var(--font-size-4);--lumo-font-size-xl: var(--font-size-5);--lumo-font-size-xxl: var(--font-size-6);--lumo-font-size-xxxl: var(--font-size-7);--lumo-line-height-s: var(--line-height-2);--lumo-line-height-m: var(--line-height-3);--lumo-line-height-l: var(--line-height-4);--lumo-border-radius-s: var(--radius-1);--lumo-border-radius-m: var(--radius-2);--lumo-border-radius-l: var(--radius-3);--lumo-base-color: var(--surface-0);--lumo-header-text-color: var(--color-high-contrast);--lumo-tertiary-text-color: var(--color);--lumo-primary-text-color: var(--color-high-contrast);--lumo-primary-color: var(--color-high-contrast);--lumo-primary-color-50pct: var(--color-accent);--lumo-primary-contrast-color: var(--lumo-secondary-text-color);--lumo-space-xs: var(--space-50);--lumo-space-s: var(--space-100);--lumo-space-m: var(--space-200);--lumo-space-l: var(--space-300);--lumo-space-xl: var(--space-500);--lumo-icon-size-xs: var(--font-size-1);--lumo-icon-size-s: var(--font-size-2);--lumo-icon-size-m: var(--font-size-3);--lumo-icon-size-l: var(--font-size-4);--lumo-icon-size-xl: var(--font-size-5);--vaadin-focus-ring-color: var(--focus-color);--vaadin-focus-ring-width: var(--focus-size);--lumo-font-size-m: var(--font-size-1);--lumo-body-text-color: var(--body-text-color);--lumo-secondary-text-color: var(--secondary-text-color);--lumo-error-text-color: var(--error-color);--lumo-size-m: var(--size-m);--source-file-link-color: var(--blue-600);--source-file-link-decoration-color: currentColor;--source-file-link-text-decoration: none;--source-file-link-font-weight: normal;--source-file-link-button-color: currentColor}:host{color-scheme:light;--surface-0: hsl(var(--gray-h) var(--gray-s) 90% / .8);--surface-1: hsl(var(--gray-h) var(--gray-s) 95% / .8);--surface-2: hsl(var(--gray-h) var(--gray-s) 100% / .8);--surface-background: linear-gradient( hsl(var(--gray-h) var(--gray-s) 95% / .7), hsl(var(--gray-h) var(--gray-s) 95% / .65) );--surface-glow: radial-gradient(circle at 30% 0%, hsl(var(--gray-h) var(--gray-s) 98% / .7), transparent 50%);--surface-border-glow: radial-gradient(at 50% 50%, hsl(var(--purple-h) 90% 90% / .8) 0, transparent 50%);--surface: var(--surface-glow) no-repeat border-box, var(--surface-background) no-repeat padding-box, hsl(var(--gray-h) var(--gray-s) 98% / .2);--surface-with-border-glow: var(--surface-glow) no-repeat border-box, linear-gradient(var(--background-color), var(--background-color)) no-repeat padding-box, var(--surface-border-glow) no-repeat border-box 0 0 / var(--glow-size, 600px) var(--glow-size, 600px);--surface-border-color: hsl(var(--gray-h) var(--gray-s) 100% / .7);--surface-backdrop-filter: blur(10px);--surface-box-shadow-1: 0 0 0 .5px hsl(var(--gray-h) var(--gray-s) 5% / .15), 0 6px 12px -1px hsl(var(--shadow-hsl) / .3);--surface-box-shadow-2: 0 0 0 .5px hsl(var(--gray-h) var(--gray-s) 5% / .15), 0 24px 40px -4px hsl(var(--shadow-hsl) / .4);--background-button: linear-gradient( hsl(var(--gray-h) var(--gray-s) 98% / .4), hsl(var(--gray-h) var(--gray-s) 90% / .2) );--background-button-active: hsl(var(--gray-h) var(--gray-s) 80% / .2);--color: var(--gray-500);--color-high-contrast: var(--gray-900);--color-accent: var(--purple-700);--color-danger: var(--red-700);--border-color: var(--gray-150);--border-color-high-contrast: var(--gray-300);--border-color-button: var(--gray-350);--border-color-popover: hsl(var(--gray-hsl) / .08);--border-color-dialog: hsl(var(--gray-hsl) / .08);--accent-color: var(--purple-600);--selection-color: hsl(var(--blue-hsl));--shadow-hsl: var(--gray-h) var(--gray-s) 20%;--lumo-contrast-5pct: var(--gray-100);--lumo-contrast-10pct: var(--gray-200);--lumo-contrast-60pct: var(--gray-400);--lumo-contrast-80pct: var(--gray-600);--lumo-contrast-90pct: var(--gray-800);--card-bg: rgba(255, 255, 255, .5);--card-hover-bg: rgba(255, 255, 255, .65);--card-open-bg: rgba(255, 255, 255, .8);--card-border: 1px solid rgba(0, 50, 100, .15);--card-open-shadow: 0px 1px 4px -1px rgba(28, 52, 84, .26);--card-section-border: var(--card-border);--card-field-bg: var(--lumo-contrast-5pct);--indicator-border: white}:host(.dark){color-scheme:dark;--surface-0: hsl(var(--gray-h) var(--gray-s) 10% / .85);--surface-1: hsl(var(--gray-h) var(--gray-s) 14% / .85);--surface-2: hsl(var(--gray-h) var(--gray-s) 18% / .85);--surface-background: linear-gradient( hsl(var(--gray-h) var(--gray-s) 8% / .65), hsl(var(--gray-h) var(--gray-s) 8% / .7) );--surface-glow: radial-gradient( circle at 30% 0%, hsl(var(--gray-h) calc(var(--gray-s) * 2) 90% / .12), transparent 50% );--surface: var(--surface-glow) no-repeat border-box, var(--surface-background) no-repeat padding-box, hsl(var(--gray-h) var(--gray-s) 20% / .4);--surface-border-glow: hsl(var(--gray-h) var(--gray-s) 20% / .4) radial-gradient(at 50% 50%, hsl(250 40% 80% / .4) 0, transparent 50%);--surface-border-color: hsl(var(--gray-h) var(--gray-s) 50% / .2);--surface-box-shadow-1: 0 0 0 .5px hsl(var(--purple-h) 40% 5% / .4), 0 6px 12px -1px hsl(var(--shadow-hsl) / .4);--surface-box-shadow-2: 0 0 0 .5px hsl(var(--purple-h) 40% 5% / .4), 0 24px 40px -4px hsl(var(--shadow-hsl) / .5);--color: var(--gray-650);--background-button: linear-gradient( hsl(var(--gray-h) calc(var(--gray-s) * 2) 80% / .1), hsl(var(--gray-h) calc(var(--gray-s) * 2) 80% / 0) );--background-button-active: hsl(var(--gray-h) var(--gray-s) 10% / .1);--border-color-popover: hsl(var(--gray-h) var(--gray-s) 90% / .1);--border-color-dialog: hsl(var(--gray-h) var(--gray-s) 90% / .1);--shadow-hsl: 0 0% 0%;--lumo-disabled-text-color: var(--lumo-contrast-60pct);--card-bg: rgba(255, 255, 255, .05);--card-hover-bg: rgba(255, 255, 255, .065);--card-open-bg: rgba(255, 255, 255, .1);--card-border: 1px solid rgba(255, 255, 255, .11);--card-open-shadow: 0px 1px 4px -1px rgba(0, 0, 0, .26);--card-section-border: var(--card-border);--card-field-bg: var(--lumo-contrast-10pct);--indicator-border: var(--lumo-base-color)}', tu = ".items-baseline{align-items:baseline}.items-center{align-items:center}.items-end{align-items:end}.items-start{align-items:start}.border-b{border-bottom:1px var(--border-style, solid) var(--border-color, inherit)}.border-e-0{border-inline-end:none}.border-s-0{border-inline-start:none}.border-t-0{border-top:none}.border-white\\/10{--border-color: rgba(255, 255, 255, .1)}.rounded-full{border-radius:9999px}.text-blue{color:var(--blue-color)}.text-blue-violet{background-clip:text;background-image:linear-gradient(90deg,var(--blue-color),var(--violet-color));color:transparent}.text-inherit{color:inherit}.text-white,.hover\\:text-white:hover{color:#fff}.contents{display:contents}.flex{display:flex}.inline-flex{display:inline-flex}.flex-1{flex:1}.flex-col{flex-direction:column}.text-1{font-size:var(--font-size-1);line-height:var(--line-height-1)}.font-normal{font-weight:var(--font-weight-normal)}.font-medium{font-weight:var(--font-weight-medium)}.font-semibold{font-weight:var(--font-weight-semibold)}.font-bold{font-weight:var(--font-weight-bold)}.gap-25{gap:var(--space-25)}.gap-50{gap:var(--space-50)}.gap-75{gap:var(--space-75)}.gap-100{gap:var(--space-100)}.gap-150{gap:var(--space-150)}.gap-200{gap:var(--space-200)}.gap-300{gap:var(--space-300)}.gap-400{gap:var(--space-400)}.icon-s svg{height:var(--icon-size-s);width:var(--icon-size-s)}.justify-center{justify-content:center}.justify-end{justify-content:end}.list-none{list-style-type:none}.m-0{margin:0}.m-25{margin:var(--space-25)}.m-50{margin:var(--space-50)}.m-75{margin:var(--space-75)}.m-100{margin:var(--space-100)}.m-150{margin:var(--space-150)}.m-200{margin:var(--space-200)}.m-300{margin:var(--space-300)}.m-400{margin:var(--space-400)}.mb-0{margin-bottom:0}.mb-25{margin-bottom:var(--space-25)}.mb-50{margin-bottom:var(--space-50)}.mb-75{margin-bottom:var(--space-75)}.mb-100{margin-bottom:var(--space-100)}.mb-150{margin-bottom:var(--space-150)}.mb-200{margin-bottom:var(--space-200)}.mb-300{margin-bottom:var(--space-300)}.mb-400{margin-bottom:var(--space-400)}.me-25{margin-inline-end:var(--space-25)}.me-50{margin-inline-end:var(--space-50)}.me-75{margin-inline-end:var(--space-75)}.me-100{margin-inline-end:var(--space-100)}.me-150{margin-inline-end:var(--space-150)}.me-200{margin-inline-end:var(--space-200)}.me-300{margin-inline-end:var(--space-300)}.me-400{margin-inline-end:var(--space-400)}.-me-25{margin-inline-end:calc(var(--space-25) * -1)}.-me-50{margin-inline-end:calc(var(--space-50) * -1)}.-me-75{margin-inline-end:calc(var(--space-75) * -1)}.-me-100{margin-inline-end:calc(var(--space-100) * -1)}.-me-150{margin-inline-end:calc(var(--space-150) * -1)}.-me-200{margin-inline-end:calc(var(--space-200) * -1)}.-me-300{margin-inline-end:calc(var(--space-300) * -1)}.-me-400{margin-inline-end:calc(var(--space-400) * -1)}.ms-25{margin-inline-start:var(--space-25)}.ms-50{margin-inline-start:var(--space-50)}.ms-75{margin-inline-start:var(--space-75)}.ms-100{margin-inline-start:var(--space-100)}.ms-150{margin-inline-start:var(--space-150)}.ms-200{margin-inline-start:var(--space-200)}.ms-300{margin-inline-start:var(--space-300)}.ms-400{margin-inline-start:var(--space-400)}.-ms-25{margin-inline-start:calc(var(--space-25) / -1)}.-ms-50{margin-inline-start:calc(var(--space-50) / -1)}.-ms-75{margin-inline-start:calc(var(--space-75) / -1)}.-ms-100{margin-inline-start:calc(var(--space-100) / -1)}.-ms-150{margin-inline-start:calc(var(--space-150) / -1)}.-ms-200{margin-inline-start:calc(var(--space-200) / -1)}.-ms-300{margin-inline-start:var(--space-300)}.-ms-400{margin-inline-start:var(--space-400)}.mt-25{margin-top:var(--space-25)}.mt-50{margin-top:var(--space-50)}.mt-75{margin-top:var(--space-75)}.mt-100{margin-top:var(--space-100)}.mt-150{margin-top:var(--space-150)}.mt-200{margin-top:var(--space-200)}.mt-300{margin-top:var(--space-300)}.mt-400{margin-top:var(--space-400)}.-mt-25{margin-top:calc(var(--space-25) * -1)}.-mt-50{margin-top:calc(var(--space-50) * -1)}.-mt-75{margin-top:calc(var(--space-75) * -1)}.-mt-100{margin-top:calc(var(--space-100) * -1)}.-mt-150{margin-top:calc(var(--space-150) * -1)}.-mt-200{margin-top:calc(var(--space-200) * -1)}.-mt-300{margin-top:calc(var(--space-300) * -1)}.-mt-400{margin-top:calc(var(--space-400) * -1)}.mx-25{margin-inline:var(--space-25)}.mx-50{margin-inline:var(--space-50)}.mx-75{margin-inline:var(--space-75)}.mx-100{margin-inline:var(--space-100)}.mx-150{margin-inline:var(--space-150)}.mx-200{margin-inline:var(--space-200)}.mx-300{margin-inline:var(--space-300)}.mx-400{margin-inline:var(--space-400)}.my-25{margin-block:var(--space-25)}.my-50{margin-block:var(--space-50)}.my-75{margin-block:var(--space-75)}.my-100{margin-block:var(--space-100)}.my-150{margin-block:var(--space-150)}.my-200{margin-block:var(--space-200)}.my-300{margin-block:var(--space-300)}.my-400{margin-block:var(--space-400)}.-my-25{margin-block:calc(var(--space-25) * -1)}.-my-50{margin-block:calc(var(--space-50) * -1)}.-my-75{margin-block:calc(var(--space-75) * -1)}.-my-100{margin-block:calc(var(--space-100) * -1)}.-my-150{margin-block:calc(var(--space-150) * -1)}.-my-200{margin-block:calc(var(--space-200) * -1)}.-my-300{margin-block:calc(var(--space-300) * -1)}.-my-400{margin-block:calc(var(--space-400) * -1)}.truncate{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.p-0{padding:0}.p-25{padding:var(--space-25)}.p-50{padding:var(--space-50)}.p-75{padding:var(--space-75)}.p-100{padding:var(--space-100)}.p-150{padding:var(--space-150)}.p-200{padding:var(--space-200)}.p-300{padding:var(--space-300)}.p-400{padding:var(--space-400)}.pb-25{padding-bottom:var(--space-25)}.pb-50{padding-bottom:var(--space-50)}.pb-75{padding-bottom:var(--space-75)}.pb-100{padding-bottom:var(--space-100)}.pb-150{padding-bottom:var(--space-150)}.pb-200{padding-bottom:var(--space-200)}.pb-300{padding-bottom:var(--space-300)}.pb-400{padding-bottom:var(--space-400)}.pe-25{padding-inline-end:var(--space-25)}.pe-50{padding-inline-end:var(--space-50)}.pe-75{padding-inline-end:var(--space-75)}.pe-100{padding-inline-end:var(--space-100)}.pe-150{padding-inline-end:var(--space-150)}.pe-200{padding-inline-end:var(--space-200)}.pe-300{padding-inline-end:var(--space-300)}.pe-400{padding-inline-end:var(--space-400)}.ps-25{padding-inline-start:var(--space-25)}.ps-50{padding-inline-start:var(--space-50)}.ps-75{padding-inline-start:var(--space-75)}.ps-100{padding-inline-start:var(--space-100)}.ps-150{padding-inline-start:var(--space-150)}.ps-200{padding-inline-start:var(--space-200)}.ps-300{padding-inline-start:var(--space-300)}.ps-400{padding-inline-start:var(--space-400)}.pt-25{padding-top:var(--space-25)}.pt-50{padding-top:var(--space-50)}.pt-75{padding-top:var(--space-75)}.pt-100{padding-top:var(--space-100)}.pt-150{padding-top:var(--space-150)}.pt-200{padding-top:var(--space-200)}.pt-300{padding-top:var(--space-300)}.pt-400{padding-top:var(--space-400)}.px-25{padding-inline:var(--space-25)}.px-50{padding-inline:var(--space-50)}.px-75{padding-inline:var(--space-75)}.px-100{padding-inline:var(--space-100)}.px-150{padding-inline:var(--space-150)}.px-200{padding-inline:var(--space-200)}.px-300{padding-inline:var(--space-300)}.px-400{padding-inline:var(--space-400)}.py-25{padding-block:var(--space-25)}.py-50{padding-block:var(--space-50)}.py-75{padding-block:var(--space-75)}.py-100{padding-block:var(--space-100)}.py-150{padding-block:var(--space-150)}.py-200{padding-block:var(--space-200)}.py-300{padding-block:var(--space-300)}.py-400{padding-block:var(--space-400)}.absolute{position:absolute}.relative{position:relative}.end-0{inset-inline-end:0}.start-0{inset-inline-start:0}.top-0{top:0}.h-m{height:var(--size-m)}.h-75{height:var(--space-75)}.h-900{height:var(--space-900)}.size-m{height:var(--size-m);width:var(--size-m)}.w-75{width:var(--space-75)}.rotate-90{transform:rotate(90deg)}";
 var nd = typeof globalThis < "u" ? globalThis : typeof window < "u" ? window : typeof global < "u" ? global : typeof self < "u" ? self : {};
 function nu(e) {
   return e && e.__esModule && Object.prototype.hasOwnProperty.call(e, "default") ? e.default : e;
@@ -5328,10 +5346,10 @@ function rd(e) {
     });
   }), n;
 }
-var Rt = { exports: {} }, li;
+var jt = { exports: {} }, si;
 function ru() {
-  if (li) return Rt.exports;
-  li = 1;
+  if (si) return jt.exports;
+  si = 1;
   function e(t, n = 100, r = {}) {
     if (typeof t != "function")
       throw new TypeError(`Expected the first parameter to be a function, got \`${typeof t}\`.`);
@@ -5366,7 +5384,7 @@ function ru() {
       c = u(), v.clear();
     }, v;
   }
-  return Rt.exports.debounce = e, Rt.exports = e, Rt.exports;
+  return jt.exports.debounce = e, jt.exports = e, jt.exports;
 }
 var iu = /* @__PURE__ */ ru();
 const ou = /* @__PURE__ */ nu(iu);
@@ -5396,7 +5414,7 @@ class au {
     this.removeListeners();
   }
 }
-const ci = new au(), su = "copilot-development-setup-user-guide";
+const li = new au(), su = "copilot-development-setup-user-guide";
 function id() {
   wt("use-dev-workflow-guide"), le.updatePanel(su, { floating: !0 });
 }
@@ -5418,7 +5436,7 @@ function ad() {
   return e === "warning" ? t === "warning" ? { status: "warning", message: "IDE Plugin, Hotswap" } : { status: "warning", message: "Hotswap is not enabled" } : t === "warning" ? { status: "warning", message: "IDE Plugin is not active" } : e === "error" ? { status: "error", message: "Hotswap is partially enabled" } : { status: "success" };
 }
 function cu() {
-  ne(`${Re}get-dev-setup-info`, {}), window.Vaadin.copilot.eventbus.on("copilot-get-dev-setup-info-response", (e) => {
+  ne(`${Ve}get-dev-setup-info`, {}), window.Vaadin.copilot.eventbus.on("copilot-get-dev-setup-info-response", (e) => {
     if (e.detail.content) {
       const t = JSON.parse(e.detail.content);
       m.setIdePluginState(t.ideInfo);
@@ -5454,15 +5472,15 @@ class uu {
    * @param parentNode Parent of the given {@link node}
    */
   async handleRouteContainers(t, n) {
-    const r = Vr(t);
+    const r = Ir(t);
     if (!r && ul(t)) {
-      const i = tn(t);
+      const i = nn(t);
       if (i && i.nextElementSibling)
         return await this.addToTree(i.nextElementSibling, n), !0;
     }
     if (r && t.localName === "react-router-outlet") {
       for (const i of Array.from(t.children)) {
-        const o = en(i);
+        const o = tn(i);
         o && await this.addToTree(o, n);
       }
       return !0;
@@ -5470,7 +5488,7 @@ class uu {
     return !1;
   }
   includeReactNode(t) {
-    return dt(t) === "PreconfiguredAuthProvider" || dt(t) === "RouterProvider" ? !1 : Tr(t) || al(t);
+    return dt(t) === "PreconfiguredAuthProvider" || dt(t) === "RouterProvider" ? !1 : kr(t) || al(t);
   }
   async includeFlowNode(t) {
     return dl(t) || Sn(t)?.hiddenByServer ? !1 : this.isInitializedInProjectSources(t);
@@ -5481,7 +5499,7 @@ class uu {
       return !1;
     const { nodeId: r, uiId: i } = n;
     if (!this.flowNodesInSource[i]) {
-      const o = await gn("copilot-get-component-source-info", { uiId: i }, (a) => a.data);
+      const o = await mn("copilot-get-component-source-info", { uiId: i }, (a) => a.data);
       o.error && ce("Failed to get component source info", o.error), this.flowCustomComponentData[i] = o.customComponentResponse, this.flowNodesInSource[i] = new Set(o.nodeIdsInProject), this.componentDragDropApiInfosMap[i] = o.dragDropApiInfos;
     }
     return this.flowNodesInSource[i].has(r);
@@ -5500,7 +5518,7 @@ class uu {
     const r = await this.handleRouteContainers(t, n);
     if (r)
       return r;
-    const i = Vr(t);
+    const i = Ir(t);
     let o;
     if (!i)
       this.includeReactNode(t) && (o = this.generateNodeFromFiber(t, n));
@@ -5516,7 +5534,7 @@ class uu {
       if (!o) {
         if (!(t instanceof Element) && co(t))
           return Do({
-            type: Ve.WARNING,
+            type: be.WARNING,
             message: "Copilot is partly usable",
             details: `${dt(t)} should be a function component to make Copilot work properly`,
             dismissId: "react_route_component_is_class"
@@ -5534,7 +5552,7 @@ class uu {
     return o !== void 0;
   }
   generateNodeFromFiber(t, n) {
-    const r = Tr(t) ? tn(t) : void 0, i = n?.children.length ?? 0;
+    const r = kr(t) ? nn(t) : void 0, i = n?.children.length ?? 0;
     return {
       node: t,
       parent: n,
@@ -5545,7 +5563,7 @@ class uu {
       isFlowComponent: !1,
       isReactComponent: !0,
       isLitTemplate: !1,
-      zeroSize: r ? Mr(r) : void 0,
+      zeroSize: r ? jr(r) : void 0,
       get uuid() {
         if (ct.has(t))
           return ct.get(t);
@@ -5558,10 +5576,10 @@ class uu {
         return Rr(dt(t));
       },
       get identifier() {
-        return jr(r);
+        return Vr(r);
       },
       get nameAndIdentifier() {
-        return di(this.name, this.identifier);
+        return ui(this.name, this.identifier);
       },
       get previousSibling() {
         if (i !== 0)
@@ -5572,7 +5590,7 @@ class uu {
           return n.children[i + 1];
       },
       get path() {
-        return ui(this);
+        return ci(this);
       }
     };
   }
@@ -5596,15 +5614,15 @@ class uu {
       get isLitTemplate() {
         return !!this.customComponentData?.litTemplate;
       },
-      zeroSize: t ? Mr(t) : void 0,
+      zeroSize: t ? jr(t) : void 0,
       get name() {
         return cl(r) ?? Rr(r.element.localName);
       },
       get identifier() {
-        return jr(t);
+        return Vr(t);
       },
       get nameAndIdentifier() {
-        return di(this.name, this.identifier);
+        return ui(this.name, this.identifier);
       },
       get previousSibling() {
         if (i !== 0)
@@ -5615,7 +5633,7 @@ class uu {
           return n.children[i + 1];
       },
       get path() {
-        return ui(this);
+        return ci(this);
       },
       get customComponentData() {
         if (o[r.uiId])
@@ -5639,7 +5657,7 @@ class uu {
       return;
     let i = !0;
     if (!this.getNodeOfElement(r)) {
-      const o = $e(en(r));
+      const o = De(tn(r));
       i = await this.addToTree(o ?? r, this.root);
     }
     if (i)
@@ -5670,7 +5688,7 @@ class uu {
     return Object.keys(this.flowCustomComponentData).length !== 0;
   }
 }
-function ui(e) {
+function ci(e) {
   if (!e.parent)
     return e.name;
   let t = 0;
@@ -5678,7 +5696,7 @@ function ui(e) {
     e.parent.children[n].name === e.name && t++;
   return `${e.parent.path} > ${e.name}[${t}]`;
 }
-function di(e, t) {
+function ui(e, t) {
   return t ? `${e} "${t}"` : e;
 }
 let Fe = null;
@@ -5699,19 +5717,19 @@ function pu() {
 function vu() {
   return pu() ? "⌘" : "Ctrl";
 }
-let kn = !1, ut = 0;
-const Wn = (e) => {
+let di = !1, ut = 0;
+const Kn = (e) => {
   if (tt.isActivationShortcut())
     if (e.key === "Shift" && !e.ctrlKey && !e.altKey && !e.metaKey)
-      kn = !0;
-    else if (kn && e.shiftKey && (e.key === "Control" || e.key === "Meta")) {
+      di = !0;
+    else if (di && e.shiftKey && (e.key === "Control" || e.key === "Meta")) {
       if (ut++, ut === 2)
         return m.toggleActive("shortcut"), ut = 0, !0;
       setTimeout(() => {
         ut = 0;
       }, 500);
     } else
-      kn = !1, ut = 0;
+      ut = 0;
   return !1;
 };
 function fi(e) {
@@ -5727,11 +5745,11 @@ function fi(e) {
   return !1;
 }
 function hu(e) {
-  const t = Bn(e, "vaadin-context-menu-overlay");
+  const t = Fn(e, "vaadin-context-menu-overlay");
   if (!t)
     return !1;
   const n = t.owner;
-  return n ? !!Bn(n, "copilot-component-overlay") : !1;
+  return n ? !!Fn(n, "copilot-component-overlay") : !1;
 }
 function gu() {
   return m.idePluginState?.supportedActions?.find((e) => e === "undo");
@@ -5739,7 +5757,7 @@ function gu() {
 const pi = (e) => {
   if (!m.active)
     return;
-  if (Wn(e)) {
+  if (Kn(e)) {
     e.stopPropagation();
     return;
   }
@@ -5759,18 +5777,20 @@ const pi = (e) => {
       e.stopPropagation();
       return;
     }
-    if (_u(t))
+    if (_u(t)) {
+      t.localName.includes("copilot-main") && y.emit("escape-key-pressed", { event: e });
       return;
+    }
   } else mu(e) ? (y.emit("delete-selected", {}), o = !0) : (e.ctrlKey || e.metaKey) && e.key === "d" ? (y.emit("duplicate-selected", {}), o = !0) : (e.ctrlKey || e.metaKey) && e.key === "b" ? (y.emit("show-selected-in-ide", { attach: e.shiftKey }), o = !0) : (e.ctrlKey || e.metaKey) && e.key === "z" && gu() ? (y.emit("undoRedo", { undo: !e.shiftKey }), o = !0) : fi(e) || y.emit("keyboard-event", { event: e });
   i && e.stopPropagation(), o && e.preventDefault();
 }, mu = (e) => (e.key === "Backspace" || e.key === "Delete") && !e.shiftKey && !e.ctrlKey && !e.altKey && !e.metaKey;
 function bu(e) {
   const t = e;
-  if (Lr(e))
+  if (Mr(e))
     return !0;
-  const n = or(t);
+  const n = ir(t);
   for (const r of n)
-    if (Lr(r))
+    if (Mr(r))
       return !0;
   return !1;
 }
@@ -5778,20 +5798,20 @@ function _u(e) {
   const t = e;
   if (e.localName.includes("copilot-main") || e.localName.includes("overlay") || e.localName.includes("section-panel-wrapper"))
     return !0;
-  const n = or(t);
+  const n = ir(t);
   for (const r of n)
     if (r.localName.includes("overlay") || r.localName.includes("section-panel-wrapper"))
       return !0;
   return !1;
 }
-const re = vu(), jt = "⇧", ld = {
-  toggleCopilot: `<kbd>${jt}</kbd> + <kbd>${re}</kbd> <kbd>${re}</kbd>`,
-  toggleCommandWindow: `<kbd>${jt}</kbd> + <kbd>Space</kbd>`,
+const re = vu(), Mt = "⇧", ld = {
+  toggleCopilot: `<kbd>${Mt}</kbd> + <kbd>${re}</kbd> <kbd>${re}</kbd>`,
+  toggleCommandWindow: `<kbd>${Mt}</kbd> + <kbd>Space</kbd>`,
   undo: `<kbd>${re}</kbd> + <kbd>Z</kbd>`,
-  redo: `<kbd>${re}</kbd> + <kbd>${jt}</kbd> + <kbd>Z</kbd>`,
+  redo: `<kbd>${re}</kbd> + <kbd>${Mt}</kbd> + <kbd>Z</kbd>`,
   duplicate: `<kbd>${re}</kbd> + <kbd>D</kbd>`,
   goToSource: `<kbd>${re}</kbd> + <kbd>B</kbd>`,
-  goToAttachSource: `<kbd>${re}</kbd>  + <kbd>${jt}</kbd>  + <kbd>B</kbd>`,
+  goToAttachSource: `<kbd>${re}</kbd>  + <kbd>${Mt}</kbd>  + <kbd>B</kbd>`,
   selectParent: "<kbd>←</kbd>",
   selectPreviousSibling: "<kbd>↑</kbd>",
   selectNextSibling: "<kbd>↓</kbd>",
@@ -5816,17 +5836,17 @@ let vi = class extends lc {
   }
   static get styles() {
     return [
-      R(qc),
-      R(Kc),
-      R(Wc),
-      R(Gc),
-      R(Yc),
-      R(Xc),
-      R(Zc),
-      R(Jc),
-      R(Qc),
-      R(eu),
-      R(tu),
+      V(qc),
+      V(Kc),
+      V(Wc),
+      V(Gc),
+      V(Yc),
+      V(Xc),
+      V(Zc),
+      V(Jc),
+      V(Qc),
+      V(eu),
+      V(tu),
       jl`
         :host {
           color: var(--body-text-color);
@@ -5941,7 +5961,7 @@ let vi = class extends lc {
   async init() {
     if (this.initialized)
       return;
-    await window.Vaadin.copilot._machineState.initializer.promise, await import("./copilot-global-vars-later-CS_MzsnP.js"), await import("./copilot-init-step2-_e2wi2Ne.js"), ml(), cc(), this.tabIndex = 0, Vt.hostConnectedCallback(), window.addEventListener("keydown", Wn), this.addEventListener("keydown", pi), y.onSend(this.handleSendEvent), this.removers.push(y.on("close-drawers", this.closeDrawers.bind(this))), this.removers.push(
+    await window.Vaadin.copilot._machineState.initializer.promise, await import("./copilot-global-vars-later-BY0fz_V4.js"), await import("./copilot-init-step2-Bx0IH-re.js"), ml(), cc(), this.tabIndex = 0, Vt.hostConnectedCallback(), window.addEventListener("keydown", Kn), this.addEventListener("keydown", pi), y.onSend(this.handleSendEvent), this.removers.push(y.on("close-drawers", this.closeDrawers.bind(this))), this.removers.push(
       y.on("open-attention-required-drawer", this.openDrawerIfPanelRequiresAttention.bind(this))
     ), this.removers.push(
       y.on("set-pointer-events", (n) => {
@@ -5966,7 +5986,7 @@ let vi = class extends lc {
     ), this.reaction(
       () => m.activatedAtLeastOnce,
       () => {
-        Ro(), uc();
+        Vo(), uc();
       }
     ), this.reaction(
       () => m.sectionPanelDragging,
@@ -6009,7 +6029,7 @@ let vi = class extends lc {
    * Called when Copilot is activated. Good place to start attach listeners etc.
    */
   async activate() {
-    Vt.activate(), ci.copilotActivated(), dc(), this.openDrawerIfPanelRequiresAttention(), document.documentElement.addEventListener("mouseleave", this.mouseLeaveListener), st.onCopilotActivation(), await du(), ko.loadPreviewConfiguration(), this.active = !0, tt.isActivationAnimation() && m.activatedFrom !== "restore" && this.getAllDrawers().forEach((e) => {
+    Vt.activate(), li.copilotActivated(), dc(), this.openDrawerIfPanelRequiresAttention(), document.documentElement.addEventListener("mouseleave", this.mouseLeaveListener), st.onCopilotActivation(), await du(), ko.loadPreviewConfiguration(), this.active = !0, tt.isActivationAnimation() && m.activatedFrom !== "restore" && this.getAllDrawers().forEach((e) => {
       e.setAttribute("bounce", "");
     });
   }
@@ -6019,13 +6039,13 @@ let vi = class extends lc {
   deactivate() {
     this.getAllDrawers().forEach((e) => {
       e.removeAttribute("bounce");
-    }), this.closeDrawers(), Vt.deactivate(), ci.copilotDeactivated(), document.documentElement.removeEventListener("mouseleave", this.mouseLeaveListener), st.onCopilotDeactivation(), this.active = !1;
+    }), this.closeDrawers(), Vt.deactivate(), li.copilotDeactivated(), document.documentElement.removeEventListener("mouseleave", this.mouseLeaveListener), st.onCopilotDeactivation(), this.active = !1;
   }
   getAllDrawers() {
     return Array.from(this.shadowRoot.querySelectorAll("copilot-drawer-panel"));
   }
   disconnectedCallback() {
-    super.disconnectedCallback(), Vt.hostDisconnectedCallback(), window.removeEventListener("keydown", Wn), this.removeEventListener("keydown", pi), y.offSend(this.handleSendEvent), this.removers.forEach((e) => e()), this.removeEventListener("mousemove", this.mouseMoveListener), this.removeEventListener("dragover", this.dragOverListener), this.removeEventListener("dragleave", this.dragLeaveListener), this.removeEventListener("drop", this.dropListener), st.removeOverlayOutsideClickEvent(), document.documentElement.removeEventListener("vaadin-overlay-outside-click", this.overlayOutsideClickListener);
+    super.disconnectedCallback(), Vt.hostDisconnectedCallback(), window.removeEventListener("keydown", Kn), this.removeEventListener("keydown", pi), y.offSend(this.handleSendEvent), this.removers.forEach((e) => e()), this.removeEventListener("mousemove", this.mouseMoveListener), this.removeEventListener("dragover", this.dragOverListener), this.removeEventListener("dragleave", this.dragLeaveListener), this.removeEventListener("drop", this.dropListener), st.removeOverlayOutsideClickEvent(), document.documentElement.removeEventListener("vaadin-overlay-outside-click", this.overlayOutsideClickListener);
   }
   handleSendEvent(e) {
     const t = e.detail.command, n = e.detail.data;
@@ -6090,7 +6110,7 @@ let vi = class extends lc {
       });
       return;
     }
-    const i = Bn(r, "copilot-drawer-panel");
+    const i = Fn(r, "copilot-drawer-panel");
     if (!i) {
       e.forEach((o) => {
         o.opened = !1;
@@ -6109,7 +6129,7 @@ let vi = class extends lc {
     e.length > 1 && e[0].remove();
   }
   mouseMoveListener(e) {
-    e.composedPath().find((t) => t.localName === `${Re}drawer-panel`) || this.closeDrawers();
+    e.composedPath().find((t) => t.localName === `${Ve}drawer-panel`) || this.closeDrawers();
   }
   dragOverListener(e) {
     this.mouseMoveListener(e), e.dataTransfer && (e.dataTransfer.dropEffect = "none"), e.preventDefault(), y.emit("drag-and-drop-in-progress", {});
@@ -6122,7 +6142,7 @@ let vi = class extends lc {
   }
 };
 vi = wu([
-  Rl("copilot-main")
+  Vl("copilot-main")
 ], vi);
 const Eu = window.Vaadin, Au = {
   init(e) {
@@ -6145,10 +6165,12 @@ function Ou(e, t, n = {}) {
   Object.keys(i).length > 0 && (r.style = i);
   for (const o of Su()) {
     const a = o(e, t);
-    if (a)
-      return a.props = { ...a.props, ...r }, Object.entries(a.props).forEach(([s, l]) => {
+    if (a) {
+      r.className && a.props.className && (a.props.className = `${String(a.props.className)} ${String(r.className)}`, delete r.className), a.props = { ...a.props, ...r };
+      for (const [s, l] of Object.entries(a.props))
         l === void 0 && delete a.props[s];
-      }), a;
+      return a;
+    }
   }
   console.warn(`No importer found for node: ${e.htmlTag} ${e.reactTag} (${e.type})`);
 }
@@ -6201,7 +6223,7 @@ export {
   lc as M,
   od as N,
   Ju as O,
-  Re as P,
+  Ve as P,
   Du as Q,
   ad as R,
   ko as S,
@@ -6209,7 +6231,7 @@ export {
   Uu as U,
   ku as V,
   Do as W,
-  Ve as X,
+  be as X,
   id as Y,
   ld as Z,
   gl as _,
@@ -6218,7 +6240,7 @@ export {
   ed as a1,
   pc as a2,
   Bu as a3,
-  Vu as a4,
+  Ru as a4,
   wt as a5,
   Pu as a6,
   Wc as a7,
@@ -6232,45 +6254,45 @@ export {
   So as af,
   oc as ag,
   No as ah,
-  nn as ai,
+  rn as ai,
   ju as aj,
-  Vo as ak,
-  zt as al,
+  Ro as ak,
+  Ut as al,
   pl as am,
   lu as an,
   mc as ao,
-  Ro as ap,
-  fr as aq,
+  Vo as ap,
+  dr as aq,
   yc as ar,
   yo as as,
-  qn as at,
-  Lr as au,
+  Hn as at,
+  Mr as au,
   Wu as av,
   cd as aw,
   ud as ax,
   y as b,
   nd as c,
-  Qt as d,
+  en as d,
   Zs as e,
-  Ru as f,
+  Vu as f,
   rd as g,
   Lu as h,
   Iu as i,
   m as j,
-  gn as k,
+  mn as k,
   ce as l,
   Je as m,
   Fu as n,
   x as o,
   td as p,
   uu as q,
-  Rl as r,
+  Vl as r,
   ne as s,
   zu as t,
-  ou as u,
-  le as v,
-  _l as w,
-  R as x,
+  _l as u,
+  ou as v,
+  le as w,
+  V as x,
   qc as y,
   jl as z
 };

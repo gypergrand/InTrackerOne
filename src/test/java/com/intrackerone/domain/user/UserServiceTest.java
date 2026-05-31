@@ -1,5 +1,6 @@
 package com.intrackerone.domain.user;
 
+import com.intrackerone.domain.status.PipelineStatusService;
 import com.intrackerone.infrastructure.exception.ResourceNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -30,6 +31,9 @@ class UserServiceTest {
 
     @Mock
     private PasswordEncoder passwordEncoder;
+
+    @Mock
+    private PipelineStatusService pipelineStatusService;
 
     @InjectMocks
     private UserService userService;

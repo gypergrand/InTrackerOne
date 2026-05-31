@@ -1,5 +1,6 @@
 package com.intrackerone.domain.user;
 
+import com.intrackerone.domain.status.PipelineStatusService;
 import com.intrackerone.infrastructure.exception.ResourceNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,6 +18,7 @@ public class UserService {
     private final UserRepository userRepository;
     private final UserMapper userMapper;
     private final PasswordEncoder passwordEncoder;
+    private final PipelineStatusService pipelineStatusService;
 
     @Transactional(readOnly = true)
     public List<UserDto> findAll() {
@@ -37,6 +39,7 @@ public class UserService {
         User user = userMapper.toEntity(form);
         user.setPassword(passwordEncoder.encode(form.getPassword()));
         user = userRepository.save(user);
+        pipelineStatusService.seedDefaultsForUser(user.getId());
         log.info("Created user: {}", user.getUsername());
         return userMapper.toDto(user);
     }
