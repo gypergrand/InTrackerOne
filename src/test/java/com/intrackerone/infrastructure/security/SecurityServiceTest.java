@@ -88,7 +88,7 @@ class SecurityServiceTest {
 
         // When & Then
         ResourceNotFoundException exception = assertThrows(ResourceNotFoundException.class, () -> securityService.getCurrentUser());
-        assertEquals("User not found with id: 0", exception.getMessage());
+        assertEquals("User not found for authenticated principal: testUser", exception.getMessage());
         verify(securityContext, times(1)).getAuthentication();
         verify(authentication, times(1)).isAuthenticated();
         verify(authentication, times(1)).getName();

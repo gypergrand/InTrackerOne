@@ -26,6 +26,8 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
 
     private static final String BEARER_PREFIX = "Bearer ";
     private static final String API_ACCESS = "API_ACCESS";
+    private static final String TOKEN_PREFIX = "itr_";
+    private static final int MIN_TOKEN_LENGTH = TOKEN_PREFIX.length() + 16; // prefix + at least 16 chars of identifier payload
 
     private final ApiTokenRepository apiTokenRepository;
 
@@ -45,12 +47,13 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
     }
 
     private void authenticate(String rawToken) {
-        if (rawToken == null || rawToken.length() < 20) {
+        if (rawToken == null || rawToken.length() < MIN_TOKEN_LENGTH || !rawToken.startsWith(TOKEN_PREFIX)) {
             return;
         }
         // Extract the token identifier (prefix) used for DB lookup — matches how
         // ApiTokenService.create() stores identifier = rawToken.substring(4, 20)
-        String identifier = rawToken.substring(4, 20);
+        int identifierEnd = Math.min(rawToken.length(), TOKEN_PREFIX.length() + 16);
+        String identifier = rawToken.substring(TOKEN_PREFIX.length(), identifierEnd);
         ApiToken token = apiTokenRepository.findByTokenIdentifier(identifier).orElse(null);
         if (token == null || Boolean.FALSE.equals(token.getEnabled())) {
             return;
@@ -62,6 +65,9 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
 
     private void setAuthentication(ApiToken token) {
         User user = token.getUser();
+        if (user.getEnabled() != null && !user.getEnabled()) {
+            return;
+        }
         token.setLastUsedAt(LocalDateTime.now());
         apiTokenRepository.save(token);
 

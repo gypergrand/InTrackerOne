@@ -160,14 +160,24 @@ public class JobListView extends VerticalLayout {
             sourceMetaField.setValue(existing.sourceMeta() != null ? existing.sourceMeta() : "");
             typeField.setValue(existing.jobType());
             sourceField.setValue(existing.source());
-            companyField.setValue(companies.stream()
-                .filter(c -> c.id().equals(existing.companyId())).findFirst().orElse(null));
+
             if (existing.companyId() != null) {
+                CompanyDto selectedCompany = companies.stream()
+                    .filter(c -> c.id().equals(existing.companyId())).findFirst().orElse(null);
+                companyField.setValue(selectedCompany);
+
+                // Populate project and recruiter dropdowns for the pre-selected company
+                // (setValue on companyField does not trigger the ValueChangeListener programmatically)
                 var projects = projectService.findByCompanyId(existing.companyId(), current.getId(), current.getRole());
+                projectField.setItems(projects);
+                projectField.setItemLabelGenerator(ProjectDto::name);
+                projectField.setEnabled(true);
+                projectField.setPlaceholder(null);
                 projectField.setValue(projects.stream()
                     .filter(p -> p.id().equals(existing.projectId())).findFirst().orElse(null));
 
                 var recruiters = recruiterService.findByCompanyId(existing.companyId(), current.getId(), current.getRole());
+                recruiterField.setItems(recruiters);
                 recruiterField.setValue(recruiters.stream()
                     .filter(r -> r.id().equals(existing.recruiterId())).findFirst().orElse(null));
             }

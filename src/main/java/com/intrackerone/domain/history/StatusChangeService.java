@@ -10,6 +10,7 @@ import com.intrackerone.infrastructure.security.AccessControl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
@@ -42,10 +43,11 @@ public class StatusChangeService {
                 .toList();
     }
 
-    @Transactional
+    @Transactional(isolation = Isolation.SERIALIZABLE)
     public StatusChangeDto recordChange(Long jobId, Long toStatusId, String decidedBy, String notes,
                                         Long currentUserId, Role role) {
-        JobApplication job = findJob(jobId);
+        JobApplication job = jobRepository.findByIdWithLock(jobId)
+                .orElseThrow(() -> new ResourceNotFoundException("JobApplication", jobId));
         AccessControl.requireOwnerOrGlobal(job.getOwner(), currentUserId, role, "JobApplication");
         PipelineStatus toStatus = findStatus(toStatusId);
         AccessControl.requireSameOwner(job.getOwner(), toStatus.getOwner(), "PipelineStatus");

@@ -130,14 +130,14 @@ class JobServiceTest {
         when(pipelineStatusRepository.findById(1L)).thenReturn(Optional.of(status));
         when(recruiterRepository.findById(1L)).thenReturn(Optional.of(recruiter));
         when(userRepository.findById(1L)).thenReturn(Optional.of(admin));
-        when(jobMapper.toEntity(createForm)).thenReturn(JobApplication.builder().position("New Job").build());
-        when(jobRepository.save(any())).thenReturn(job);
+        when(jobMapper.toEntity(any(JobForm.class))).thenReturn(JobApplication.builder().position("New Job").build());
+        when(jobRepository.saveAndFlush(any(JobApplication.class))).thenReturn(job);
         when(jobMapper.toDto(job)).thenReturn(jobDto);
 
         JobDto result = jobService.create(createForm, 1L, Role.ADMIN);
 
         assertThat(result).isNotNull();
-        verify(jobRepository).save(jobCaptor.capture());
+        verify(jobRepository).saveAndFlush(jobCaptor.capture());
         assertThat(jobCaptor.getValue().getProject()).isEqualTo(project);
         assertThat(jobCaptor.getValue().getCurrentStatus()).isEqualTo(status);
         assertThat(jobCaptor.getValue().getRecruiter()).isEqualTo(recruiter);

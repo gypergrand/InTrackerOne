@@ -92,19 +92,20 @@ class StatusChangeServiceTest {
 
     @Test
     void recordChange_updatesJobStatusAndCreatesHistory() {
-        when(jobRepository.findById(1L)).thenReturn(Optional.of(job));
+        when(jobRepository.findByIdWithLock(1L)).thenReturn(Optional.of(job));
         when(pipelineStatusRepository.findById(2L)).thenReturn(Optional.of(toStatus));
-        when(statusChangeRepository.save(any())).thenReturn(change);
+        when(jobRepository.saveAndFlush(any())).thenReturn(job);
+        when(statusChangeRepository.saveAndFlush(any())).thenReturn(change);
         when(statusChangeMapper.toDto(change)).thenReturn(changeDto);
 
         StatusChangeDto result = statusChangeService.recordChange(1L, 2L, "COMPANY", "Moving forward", 1L, Role.ADMIN);
 
         assertThat(result.toStatusName()).isEqualTo("Phone Screen");
 
-        verify(jobRepository).save(any());
+        verify(jobRepository).saveAndFlush(any());
         assertThat(job.getCurrentStatus()).isEqualTo(toStatus);
 
-        verify(statusChangeRepository).save(changeCaptor.capture());
+        verify(statusChangeRepository).saveAndFlush(changeCaptor.capture());
         StatusChange saved = changeCaptor.getValue();
         assertThat(saved.getFromStatus()).isEqualTo(fromStatus);
         assertThat(saved.getToStatus()).isEqualTo(toStatus);
@@ -113,7 +114,7 @@ class StatusChangeServiceTest {
 
     @Test
     void recordChange_whenJobNotFound_throwsException() {
-        when(jobRepository.findById(99L)).thenReturn(Optional.empty());
+        when(jobRepository.findByIdWithLock(99L)).thenReturn(Optional.empty());
 
         assertThatThrownBy(() -> statusChangeService.recordChange(99L, 1L, null, null, 1L, Role.ADMIN))
             .isInstanceOf(ResourceNotFoundException.class);

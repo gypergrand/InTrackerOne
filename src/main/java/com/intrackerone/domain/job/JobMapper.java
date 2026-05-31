@@ -6,15 +6,15 @@ import org.mapstruct.Mapping;
 @Mapper(componentModel = "spring")
 public interface JobMapper {
 
-    @Mapping(target = "projectId", source = "project.id")
-    @Mapping(target = "projectName", source = "project.name")
-    @Mapping(target = "companyId", source = "project.company.id")
-    @Mapping(target = "companyName", source = "project.company.name")
-    @Mapping(target = "recruiterId", source = "recruiter.id")
-    @Mapping(target = "recruiterName", source = "recruiter.name")
-    @Mapping(target = "currentStatusId", source = "currentStatus.id")
-    @Mapping(target = "currentStatusName", source = "currentStatus.name")
-    @Mapping(target = "currentStatusColor", source = "currentStatus.color")
+    @Mapping(target = "projectId", expression = "java(job.getProject() != null ? job.getProject().getId() : null)")
+    @Mapping(target = "projectName", expression = "java(job.getProject() != null ? job.getProject().getName() : null)")
+    @Mapping(target = "companyId", expression = "java(job.getProject() != null && job.getProject().getCompany() != null ? job.getProject().getCompany().getId() : null)")
+    @Mapping(target = "companyName", expression = "java(job.getProject() != null && job.getProject().getCompany() != null ? job.getProject().getCompany().getName() : null)")
+    @Mapping(target = "recruiterId", expression = "java(job.getRecruiter() != null ? job.getRecruiter().getId() : null)")
+    @Mapping(target = "recruiterName", expression = "java(job.getRecruiter() != null ? job.getRecruiter().getName() : null)")
+    @Mapping(target = "currentStatusId", expression = "java(job.getCurrentStatus() != null ? job.getCurrentStatus().getId() : null)")
+    @Mapping(target = "currentStatusName", expression = "java(job.getCurrentStatus() != null ? job.getCurrentStatus().getName() : null)")
+    @Mapping(target = "currentStatusColor", expression = "java(job.getCurrentStatus() != null ? job.getCurrentStatus().getColor() : null)")
     JobDto toDto(JobApplication job);
 
     @Mapping(target = "id", ignore = true)

@@ -5,6 +5,8 @@ import com.intrackerone.domain.history.StatusChangeService;
 import com.intrackerone.domain.job.JobDto;
 import com.intrackerone.domain.job.JobForm;
 import com.intrackerone.domain.job.JobService;
+import com.intrackerone.domain.job.JobType;
+import com.intrackerone.domain.job.Source;
 import com.intrackerone.domain.user.Role;
 import com.intrackerone.domain.user.User;
 import com.intrackerone.infrastructure.security.SecurityService;
@@ -58,7 +60,10 @@ class JobControllerTest {
 
         form = new JobForm();
         form.setPosition("Java Developer");
+        form.setJobType(JobType.FULL_TIME);
+        form.setSource(Source.LINKEDIN);
         form.setProjectId(1L);
+        form.setCurrentStatusId(1L);
     }
 
     @Test

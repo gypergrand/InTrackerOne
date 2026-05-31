@@ -271,11 +271,14 @@ class JobApplicationLifecycleE2ETest {
         form2.setCurrentStatusId(statuses.get(3).getId());
         jobService.update(job2.id(), form2, testUser.getId(), userRole);
 
-        // Filter by status
-        List<JobDto> appliedJobs = jobService.findAll(testUser.getId(), userRole, statuses.get(1).getId(), null, null);
+        // Filter by status AND the project created in setUp() to avoid counting
+        // jobs from other test methods (since the whole class is @Transactional)
+        List<JobDto> appliedJobs = jobService.findAll(testUser.getId(), userRole,
+                statuses.get(1).getId(), null, project.getId());
         assertEquals(1, appliedJobs.size());
 
-        List<JobDto> technicalJobs = jobService.findAll(testUser.getId(), userRole, statuses.get(3).getId(), null, null);
+        List<JobDto> technicalJobs = jobService.findAll(testUser.getId(), userRole,
+                statuses.get(3).getId(), null, project.getId());
         assertEquals(1, technicalJobs.size());
 
         log.info("Jobs filtered correctly by status");
