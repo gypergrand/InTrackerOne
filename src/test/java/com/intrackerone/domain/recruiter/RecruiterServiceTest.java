@@ -95,7 +95,7 @@ class RecruiterServiceTest {
 
     @Test
     void findByCompanyId_forUser_filtersOwn() {
-        when(recruiterRepository.findByCompanyId(1L)).thenReturn(List.of(recruiter));
+        when(recruiterRepository.findByCompanyIdAndOwnerId(1L, 2L)).thenReturn(List.of());
 
         List<RecruiterDto> result = recruiterService.findByCompanyId(1L, 2L, Role.USER);
 

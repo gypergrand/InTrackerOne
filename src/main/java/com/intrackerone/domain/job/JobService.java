@@ -43,12 +43,12 @@ public class JobService {
             jobs = jobRepository.findByOwnerId(currentUserId);
         }
         return jobs.stream()
-            .filter(j -> j.getProject() != null && j.getCurrentStatus() != null)
-            .filter(j -> statusId == null || j.getCurrentStatus().getId().equals(statusId))
-            .filter(j -> companyId == null || j.getProject().getCompany().getId().equals(companyId))
-            .filter(j -> projectId == null || j.getProject().getId().equals(projectId))
-            .map(jobMapper::toDto)
-            .toList();
+                .filter(j -> statusId == null || (j.getCurrentStatus() != null && j.getCurrentStatus().getId().equals(statusId)))
+                .filter(j -> companyId == null || (j.getProject() != null && j.getProject().getCompany() != null
+                        && j.getProject().getCompany().getId().equals(companyId)))
+                .filter(j -> projectId == null || (j.getProject() != null && j.getProject().getId().equals(projectId)))
+                .map(jobMapper::toDto)
+                .toList();
     }
 
     @Transactional(readOnly = true)
@@ -71,15 +71,15 @@ public class JobService {
         job.setCurrentStatus(status);
         job.setOwner(currentUser);
         updateRecruiter(job, form.getRecruiterId(), project, currentUser);
-        job = jobRepository.save(job);
+        job = jobRepository.saveAndFlush(job);
 
         StatusChange change = StatusChange.builder()
-            .jobApplication(job)
-            .fromStatus(null)
-            .toStatus(status)
-            .changedAt(LocalDateTime.now())
-            .build();
-        statusChangeRepository.save(change);
+                .jobApplication(job)
+                .fromStatus(null)
+                .toStatus(status)
+                .changedAt(LocalDateTime.now())
+                .build();
+        statusChangeRepository.saveAndFlush(change);
 
         log.info("Created job application: {} ({})", job.getPosition(), project.getName());
         return jobMapper.toDto(job);
@@ -93,7 +93,7 @@ public class JobService {
         Project project = updateProject(job, form.getProjectId());
         updateStatus(job, form.getCurrentStatusId());
         updateRecruiter(job, form.getRecruiterId(), project, job.getOwner());
-        job = jobRepository.save(job);
+        job = jobRepository.saveAndFlush(job);
         return jobMapper.toDto(job);
     }
 
@@ -140,9 +140,26 @@ public class JobService {
         if (statusId == null) {
             return;
         }
-        PipelineStatus status = findStatus(statusId);
-        requireSameOwner(job.getOwner(), status.getOwner(), "PipelineStatus");
-        job.setCurrentStatus(status);
+        PipelineStatus newStatus = findStatus(statusId);
+        requireSameOwner(job.getOwner(), newStatus.getOwner(), "PipelineStatus");
+        PipelineStatus oldStatus = job.getCurrentStatus();
+
+        // Record status change in history when the status actually changes
+        boolean statusChanged = oldStatus == null || !oldStatus.getId().equals(newStatus.getId());
+        job.setCurrentStatus(newStatus);
+        if (statusChanged) {
+            StatusChange change = StatusChange.builder()
+                    .jobApplication(job)
+                    .fromStatus(oldStatus)
+                    .toStatus(newStatus)
+                    .changedAt(LocalDateTime.now())
+                    .build();
+            statusChangeRepository.saveAndFlush(change);
+            log.info("Status changed for job {}: {} -> {}",
+                    job.getId(),
+                    oldStatus != null ? oldStatus.getName() : "NONE",
+                    newStatus.getName());
+        }
     }
 
     private void updateRecruiter(JobApplication job, Long recruiterId, Project project, User owner) {
@@ -169,26 +186,26 @@ public class JobService {
 
     private JobApplication findJob(Long id) {
         return jobRepository.findById(id)
-            .orElseThrow(() -> new ResourceNotFoundException("JobApplication", id));
+                .orElseThrow(() -> new ResourceNotFoundException("JobApplication", id));
     }
 
     private Project findProject(Long id) {
         return projectRepository.findById(id)
-            .orElseThrow(() -> new ResourceNotFoundException("Project", id));
+                .orElseThrow(() -> new ResourceNotFoundException("Project", id));
     }
 
     private PipelineStatus findStatus(Long id) {
         return pipelineStatusRepository.findById(id)
-            .orElseThrow(() -> new ResourceNotFoundException("PipelineStatus", id));
+                .orElseThrow(() -> new ResourceNotFoundException("PipelineStatus", id));
     }
 
     private Recruiter findRecruiter(Long id) {
         return recruiterRepository.findById(id)
-            .orElseThrow(() -> new ResourceNotFoundException("Recruiter", id));
+                .orElseThrow(() -> new ResourceNotFoundException("Recruiter", id));
     }
 
     private User getUser(Long userId) {
         return userRepository.findById(userId)
-            .orElseThrow(() -> new ResourceNotFoundException("User", userId));
+                .orElseThrow(() -> new ResourceNotFoundException("User", userId));
     }
 }

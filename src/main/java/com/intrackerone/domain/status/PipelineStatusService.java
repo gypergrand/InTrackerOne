@@ -23,16 +23,9 @@ public class PipelineStatusService {
 
     @Transactional(readOnly = true)
     public List<PipelineStatusDto> findByOwnerId(Long ownerId) {
-        List<PipelineStatusDto> statuses = pipelineStatusRepository.findByOwnerIdOrderBySortOrderAsc(ownerId).stream()
-            .map(pipelineStatusMapper::toDto)
-            .toList();
-        if (statuses.isEmpty()) {
-            seedDefaultsForUser(ownerId);
-            statuses = pipelineStatusRepository.findByOwnerIdOrderBySortOrderAsc(ownerId).stream()
+        return pipelineStatusRepository.findByOwnerIdOrderBySortOrderAsc(ownerId).stream()
                 .map(pipelineStatusMapper::toDto)
                 .toList();
-        }
-        return statuses;
     }
 
     @Transactional(readOnly = true)
@@ -48,7 +41,7 @@ public class PipelineStatusService {
             return;
         }
         User user = userRepository.findById(userId)
-            .orElseThrow(() -> new ResourceNotFoundException("User", userId));
+                .orElseThrow(() -> new ResourceNotFoundException("User", userId));
         List<PipelineStatus> defaults = defaultStatuses(user);
         pipelineStatusRepository.saveAll(defaults);
         log.info("Seeded {} default statuses for user {}", defaults.size(), userId);
@@ -57,12 +50,12 @@ public class PipelineStatusService {
     @Transactional
     public PipelineStatusDto create(PipelineStatusForm form, Long userId) {
         User user = userRepository.findById(userId)
-            .orElseThrow(() -> new ResourceNotFoundException("User", userId));
+                .orElseThrow(() -> new ResourceNotFoundException("User", userId));
 
         int maxOrder = pipelineStatusRepository.findByOwnerIdOrderBySortOrderAsc(userId).stream()
-            .mapToInt(PipelineStatus::getSortOrder)
-            .max()
-            .orElse(0);
+                .mapToInt(PipelineStatus::getSortOrder)
+                .max()
+                .orElse(0);
 
         PipelineStatus status = pipelineStatusMapper.toEntity(form);
         status.setSortOrder(maxOrder + 1);
@@ -93,10 +86,37 @@ public class PipelineStatusService {
     public void move(Long id, int newOrder, Long currentUserId, Role role) {
         PipelineStatus status = findStatus(id);
         AccessControl.requireOwnerOrGlobal(status.getOwner(), currentUserId, role, "PipelineStatus");
+        Long ownerId = status.getOwner().getId();
+        int oldOrder = status.getSortOrder();
+
+        if (newOrder == oldOrder) {
+            return;
+        }
+
+        // Shift other statuses to make room, avoiding duplicate sort orders
+        List<PipelineStatus> all = pipelineStatusRepository.findByOwnerIdOrderBySortOrderAsc(ownerId);
+        for (PipelineStatus s : all) {
+            if (s.getId().equals(id)) {
+                continue;
+            }
+            if (newOrder > oldOrder) {
+                // Moving down: shift items between (oldOrder, newOrder] up by 1
+                if (s.getSortOrder() > oldOrder && s.getSortOrder() <= newOrder) {
+                    s.setSortOrder(s.getSortOrder() - 1);
+                    pipelineStatusRepository.save(s);
+                }
+            } else {
+                // Moving up: shift items between [newOrder, oldOrder) down by 1
+                if (s.getSortOrder() >= newOrder && s.getSortOrder() < oldOrder) {
+                    s.setSortOrder(s.getSortOrder() + 1);
+                    pipelineStatusRepository.save(s);
+                }
+            }
+        }
+
         status.setSortOrder(newOrder);
         pipelineStatusRepository.save(status);
     }
-
 
     private List<PipelineStatus> defaultStatuses(User user) {
         return List.of(
@@ -116,16 +136,16 @@ public class PipelineStatusService {
 
     private PipelineStatus createStatus(String name, int order, String color, StatusType type, User user) {
         return PipelineStatus.builder()
-            .name(name)
-            .sortOrder(order)
-            .color(color)
-            .type(type)
-            .owner(user)
-            .build();
+                .name(name)
+                .sortOrder(order)
+                .color(color)
+                .type(type)
+                .owner(user)
+                .build();
     }
 
     private PipelineStatus findStatus(Long id) {
         return pipelineStatusRepository.findById(id)
-            .orElseThrow(() -> new ResourceNotFoundException("PipelineStatus", id));
+                .orElseThrow(() -> new ResourceNotFoundException("PipelineStatus", id));
     }
 }

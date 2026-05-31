@@ -1,6 +1,7 @@
 package com.intrackerone.domain.user;
 
 import com.intrackerone.infrastructure.exception.ResourceNotFoundException;
+import com.intrackerone.infrastructure.exception.UnauthorizedException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -24,14 +25,14 @@ public class ApiTokenService {
     @Transactional(readOnly = true)
     public List<ApiTokenDto> findByUserId(Long userId) {
         return apiTokenRepository.findByUserId(userId).stream()
-            .map(apiTokenMapper::toDto)
-            .toList();
+                .map(apiTokenMapper::toDto)
+                .toList();
     }
 
     @Transactional
     public CreatedToken create(Long userId, String name) {
         User user = userRepository.findById(userId)
-            .orElseThrow(() -> new ResourceNotFoundException("User", userId));
+                .orElseThrow(() -> new ResourceNotFoundException("User", userId));
 
         byte[] tokenBytes = new byte[TOKEN_BYTES];
         new SecureRandom().nextBytes(tokenBytes);
@@ -39,12 +40,12 @@ public class ApiTokenService {
         String tokenHash = hashToken(rawToken);
 
         ApiToken token = ApiToken.builder()
-            .name(name)
-            .tokenHash(tokenHash)
-            .tokenIdentifier(rawToken.substring(4, 20))
-            .user(user)
-            .enabled(true)
-            .build();
+                .name(name)
+                .tokenHash(tokenHash)
+                .tokenIdentifier(rawToken.substring(4, 20))
+                .user(user)
+                .enabled(true)
+                .build();
         token = apiTokenRepository.save(token);
 
         log.info("Created API token '{}' for user {}", name, userId);
@@ -54,9 +55,9 @@ public class ApiTokenService {
     @Transactional
     public void revoke(Long tokenId, Long userId) {
         ApiToken token = apiTokenRepository.findById(tokenId)
-            .orElseThrow(() -> new ResourceNotFoundException("ApiToken", tokenId));
+                .orElseThrow(() -> new ResourceNotFoundException("ApiToken", tokenId));
         if (!token.getUser().getId().equals(userId)) {
-            throw new SecurityException("Token does not belong to user");
+            throw new UnauthorizedException("Token does not belong to user");
         }
         token.setEnabled(false);
         apiTokenRepository.save(token);

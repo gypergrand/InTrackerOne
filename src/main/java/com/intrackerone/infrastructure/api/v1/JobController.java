@@ -5,8 +5,10 @@ import com.intrackerone.domain.job.JobDto;
 import com.intrackerone.domain.job.JobForm;
 import com.intrackerone.domain.job.JobService;
 import com.intrackerone.domain.user.User;
+import com.intrackerone.infrastructure.exception.ResourceNotFoundException;
 import com.intrackerone.infrastructure.security.SecurityService;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,7 +24,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/api/v1/jobs")
@@ -32,6 +33,12 @@ public class JobController {
     private final JobService jobService;
     private final StatusChangeService statusChangeService;
     private final SecurityService securityService;
+
+    public record StatusChangeRequest(
+            @NotNull Long statusId,
+            String notes,
+            String decidedBy
+    ) {}
 
     @GetMapping
     public List<JobDto> findAll(@RequestParam(required = false) Long status,
@@ -68,12 +75,11 @@ public class JobController {
     }
 
     @PatchMapping("/{id}/status")
-    public ResponseEntity<Void> changeStatus(@PathVariable Long id, @RequestBody Map<String, Object> body) {
+    public ResponseEntity<Void> changeStatus(@PathVariable Long id,
+                                             @Valid @RequestBody StatusChangeRequest request) {
         User current = securityService.getCurrentUser();
-        Long statusId = Long.valueOf(body.get("statusId").toString());
-        String notes = (String) body.getOrDefault("notes", null);
-        String decidedBy = (String) body.getOrDefault("decidedBy", null);
-        statusChangeService.recordChange(id, statusId, decidedBy, notes, current.getId(), current.getRole());
+        statusChangeService.recordChange(id, request.statusId(), request.decidedBy(),
+                request.notes(), current.getId(), current.getRole());
         return ResponseEntity.ok().build();
     }
 }

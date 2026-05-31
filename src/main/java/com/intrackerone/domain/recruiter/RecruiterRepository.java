@@ -9,4 +9,6 @@ public interface RecruiterRepository extends JpaRepository<Recruiter, Long> {
     List<Recruiter> findByCompanyId(Long companyId);
 
     List<Recruiter> findByOwnerId(Long ownerId);
+
+    List<Recruiter> findByCompanyIdAndOwnerId(Long companyId, Long ownerId);
 }

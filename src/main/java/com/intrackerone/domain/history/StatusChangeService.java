@@ -30,16 +30,16 @@ public class StatusChangeService {
         JobApplication job = findJob(jobId);
         AccessControl.requireOwnerOrGlobal(job.getOwner(), currentUserId, role, "JobApplication");
         return statusChangeRepository.findByJobApplicationIdOrderByChangedAtDesc(jobId).stream()
-            .map(statusChangeMapper::toDto)
-            .toList();
+                .map(statusChangeMapper::toDto)
+                .toList();
     }
 
     @Transactional(readOnly = true)
     public List<StatusChangeDto> findRecentByOwnerId(Long ownerId, int limit) {
         return statusChangeRepository.findByJobApplicationOwnerIdOrderByChangedAtDesc(ownerId).stream()
-            .limit(limit)
-            .map(statusChangeMapper::toDto)
-            .toList();
+                .limit(limit)
+                .map(statusChangeMapper::toDto)
+                .toList();
     }
 
     @Transactional
@@ -52,34 +52,34 @@ public class StatusChangeService {
 
         PipelineStatus fromStatus = job.getCurrentStatus();
         job.setCurrentStatus(toStatus);
-        jobRepository.save(job);
+        jobRepository.saveAndFlush(job);
 
-        StatusChange change = statusChangeRepository.save(
-            buildChange(job, fromStatus, toStatus, decidedBy, notes));
+        StatusChange change = statusChangeRepository.saveAndFlush(
+                buildChange(job, fromStatus, toStatus, decidedBy, notes));
         log.info("Status changed for job {}: {} -> {}", jobId,
-            fromStatus != null ? fromStatus.getName() : "NONE", toStatus.getName());
+                fromStatus != null ? fromStatus.getName() : "NONE", toStatus.getName());
         return statusChangeMapper.toDto(change);
     }
 
     private StatusChange buildChange(JobApplication job, PipelineStatus fromStatus, PipelineStatus toStatus,
-                                     String decidedBy, String notes) {
+                                      String decidedBy, String notes) {
         return StatusChange.builder()
-            .jobApplication(job)
-            .fromStatus(fromStatus)
-            .toStatus(toStatus)
-            .changedAt(LocalDateTime.now())
-            .decidedBy(decidedBy)
-            .notes(notes)
-            .build();
+                .jobApplication(job)
+                .fromStatus(fromStatus)
+                .toStatus(toStatus)
+                .changedAt(LocalDateTime.now())
+                .decidedBy(decidedBy)
+                .notes(notes)
+                .build();
     }
 
     private JobApplication findJob(Long jobId) {
         return jobRepository.findById(jobId)
-            .orElseThrow(() -> new ResourceNotFoundException("JobApplication", jobId));
+                .orElseThrow(() -> new ResourceNotFoundException("JobApplication", jobId));
     }
 
     private PipelineStatus findStatus(Long statusId) {
         return pipelineStatusRepository.findById(statusId)
-            .orElseThrow(() -> new ResourceNotFoundException("PipelineStatus", statusId));
+                .orElseThrow(() -> new ResourceNotFoundException("PipelineStatus", statusId));
     }
 }

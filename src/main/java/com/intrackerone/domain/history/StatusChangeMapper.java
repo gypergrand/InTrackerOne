@@ -11,8 +11,8 @@ public interface StatusChangeMapper {
     @Mapping(target = "jobApplicationId", source = "jobApplication.id")
     @Mapping(target = "fromStatusId", source = "fromStatus", qualifiedByName = "extractId")
     @Mapping(target = "fromStatusName", source = "fromStatus", qualifiedByName = "extractName")
-    @Mapping(target = "toStatusId", source = "toStatus.id")
-    @Mapping(target = "toStatusName", source = "toStatus.name")
+    @Mapping(target = "toStatusId", source = "toStatus", qualifiedByName = "extractId")
+    @Mapping(target = "toStatusName", source = "toStatus", qualifiedByName = "extractName")
     StatusChangeDto toDto(StatusChange change);
 
     @Named("extractId")

@@ -1,6 +1,7 @@
 package com.intrackerone.domain.user;
 
 import com.intrackerone.infrastructure.exception.ResourceNotFoundException;
+import com.intrackerone.infrastructure.exception.UnauthorizedException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -98,7 +99,7 @@ class ApiTokenServiceTest {
         when(apiTokenRepository.findById(1L)).thenReturn(Optional.of(token));
 
         assertThatThrownBy(() -> apiTokenService.revoke(1L, 99L))
-            .isInstanceOf(SecurityException.class);
+            .isInstanceOf(UnauthorizedException.class);
     }
 
     @Test

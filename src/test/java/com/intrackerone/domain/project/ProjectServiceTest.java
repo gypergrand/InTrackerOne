@@ -81,7 +81,7 @@ class ProjectServiceTest {
 
     @Test
     void findByCompanyId_forUser_filtersOwn() {
-        when(projectRepository.findByCompanyId(1L)).thenReturn(List.of(project));
+        when(projectRepository.findByCompanyIdAndOwnerId(1L, 2L)).thenReturn(List.of());
 
         List<ProjectDto> result = projectService.findByCompanyId(1L, 2L, Role.USER);
 

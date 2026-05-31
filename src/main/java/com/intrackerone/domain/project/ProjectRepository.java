@@ -9,4 +9,6 @@ public interface ProjectRepository extends JpaRepository<Project, Long> {
     List<Project> findByCompanyId(Long companyId);
 
     List<Project> findByOwnerId(Long ownerId);
+
+    List<Project> findByCompanyIdAndOwnerId(Long companyId, Long ownerId);
 }

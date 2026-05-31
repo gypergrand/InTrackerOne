@@ -32,25 +32,24 @@ public class RecruiterService {
     public List<RecruiterDto> findByCompanyId(Long companyId, Long currentUserId, Role role) {
         if (role == Role.ADMIN || role == Role.MODERATOR) {
             return recruiterRepository.findByCompanyId(companyId).stream()
+                    .map(recruiterMapper::toDto)
+                    .toList();
+        }
+        return recruiterRepository.findByCompanyIdAndOwnerId(companyId, currentUserId).stream()
                 .map(recruiterMapper::toDto)
                 .toList();
-        }
-        return recruiterRepository.findByCompanyId(companyId).stream()
-            .filter(r -> r.getOwner().getId().equals(currentUserId))
-            .map(recruiterMapper::toDto)
-            .toList();
     }
 
     @Transactional(readOnly = true)
     public List<RecruiterDto> findAllAccessible(Long currentUserId, Role role) {
         if (role == Role.ADMIN || role == Role.MODERATOR) {
             return recruiterRepository.findAll().stream()
-                .map(recruiterMapper::toDto)
-                .toList();
+                    .map(recruiterMapper::toDto)
+                    .toList();
         }
         return recruiterRepository.findByOwnerId(currentUserId).stream()
-            .map(recruiterMapper::toDto)
-            .toList();
+                .map(recruiterMapper::toDto)
+                .toList();
     }
 
     @Transactional(readOnly = true)
@@ -115,13 +114,13 @@ public class RecruiterService {
             return Set.of();
         }
         return projectIds.stream()
-            .map(pid -> resolveProject(pid, owner, companyId))
-            .collect(Collectors.toSet());
+                .map(pid -> resolveProject(pid, owner, companyId))
+                .collect(Collectors.toSet());
     }
 
     private Project resolveProject(Long projectId, User owner, Long companyId) {
         Project project = projectRepository.findById(projectId)
-            .orElseThrow(() -> new ResourceNotFoundException("Project", projectId));
+                .orElseThrow(() -> new ResourceNotFoundException("Project", projectId));
         AccessControl.requireSameOwner(owner, project.getOwner(), "Project");
         requireProjectCompany(project, companyId);
         return project;
@@ -136,11 +135,11 @@ public class RecruiterService {
 
     private Recruiter findRecruiter(Long id) {
         return recruiterRepository.findById(id)
-            .orElseThrow(() -> new ResourceNotFoundException("Recruiter", id));
+                .orElseThrow(() -> new ResourceNotFoundException("Recruiter", id));
     }
 
     private Company findCompany(Long id) {
         return companyRepository.findById(id)
-            .orElseThrow(() -> new ResourceNotFoundException("Company", id));
+                .orElseThrow(() -> new ResourceNotFoundException("Company", id));
     }
 }

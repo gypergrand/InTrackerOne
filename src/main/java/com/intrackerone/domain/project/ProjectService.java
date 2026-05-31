@@ -28,25 +28,24 @@ public class ProjectService {
         }
         if (role == Role.ADMIN || role == Role.MODERATOR) {
             return projectRepository.findByCompanyId(companyId).stream()
+                    .map(projectMapper::toDto)
+                    .toList();
+        }
+        return projectRepository.findByCompanyIdAndOwnerId(companyId, currentUserId).stream()
                 .map(projectMapper::toDto)
                 .toList();
-        }
-        return projectRepository.findByCompanyId(companyId).stream()
-            .filter(p -> p.getOwner().getId().equals(currentUserId))
-            .map(projectMapper::toDto)
-            .toList();
     }
 
     @Transactional(readOnly = true)
     public List<ProjectDto> findAllAccessible(Long currentUserId, Role role) {
         if (role == Role.ADMIN || role == Role.MODERATOR) {
             return projectRepository.findAll().stream()
-                .map(projectMapper::toDto)
-                .toList();
+                    .map(projectMapper::toDto)
+                    .toList();
         }
         return projectRepository.findByOwnerId(currentUserId).stream()
-            .map(projectMapper::toDto)
-            .toList();
+                .map(projectMapper::toDto)
+                .toList();
     }
 
     @Transactional(readOnly = true)
@@ -97,11 +96,11 @@ public class ProjectService {
 
     private Project findProject(Long id) {
         return projectRepository.findById(id)
-            .orElseThrow(() -> new ResourceNotFoundException("Project", id));
+                .orElseThrow(() -> new ResourceNotFoundException("Project", id));
     }
 
     private Company findCompany(Long id) {
         return companyRepository.findById(id)
-            .orElseThrow(() -> new ResourceNotFoundException("Company", id));
+                .orElseThrow(() -> new ResourceNotFoundException("Company", id));
     }
 }

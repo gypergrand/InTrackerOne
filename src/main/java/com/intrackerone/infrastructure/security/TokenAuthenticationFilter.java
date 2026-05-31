@@ -18,7 +18,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Collection;
 
 @Component
 @RequiredArgsConstructor
@@ -45,14 +45,18 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
     }
 
     private void authenticate(String rawToken) {
-        for (ApiToken token : apiTokenRepository.findAll()) {
-            if (Boolean.FALSE.equals(token.getEnabled())) {
-                continue;
-            }
-            if (BCrypt.checkpw(rawToken, token.getTokenHash())) {
-                setAuthentication(token);
-                break;
-            }
+        if (rawToken == null || rawToken.length() < 20) {
+            return;
+        }
+        // Extract the token identifier (prefix) used for DB lookup — matches how
+        // ApiTokenService.create() stores identifier = rawToken.substring(4, 20)
+        String identifier = rawToken.substring(4, 20);
+        ApiToken token = apiTokenRepository.findByTokenIdentifier(identifier).orElse(null);
+        if (token == null || Boolean.FALSE.equals(token.getEnabled())) {
+            return;
+        }
+        if (BCrypt.checkpw(rawToken, token.getTokenHash())) {
+            setAuthentication(token);
         }
     }
 
@@ -67,8 +71,8 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
         SecurityContextHolder.getContext().setAuthentication(auth);
     }
 
-    private List<SimpleGrantedAuthority> authoritiesFor(User user) {
-        var authorities = new ArrayList<SimpleGrantedAuthority>();
+    private Collection<? extends SimpleGrantedAuthority> authoritiesFor(User user) {
+        Collection<SimpleGrantedAuthority> authorities = new ArrayList<SimpleGrantedAuthority>();
         authorities.add(new SimpleGrantedAuthority("ROLE_" + user.getRole().name()));
         if (AccessControl.hasGlobalDataAccess(user.getRole())) {
             authorities.add(new SimpleGrantedAuthority(API_ACCESS));

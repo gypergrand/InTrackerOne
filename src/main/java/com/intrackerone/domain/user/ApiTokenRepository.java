@@ -10,4 +10,6 @@ public interface ApiTokenRepository extends JpaRepository<ApiToken, Long> {
     List<ApiToken> findByUserId(Long userId);
 
     Optional<ApiToken> findByTokenHash(String tokenHash);
+
+    Optional<ApiToken> findByTokenIdentifier(String tokenIdentifier);
 }

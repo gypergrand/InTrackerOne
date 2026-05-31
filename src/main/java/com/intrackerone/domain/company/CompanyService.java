@@ -1,6 +1,5 @@
 package com.intrackerone.domain.company;
 
-import com.intrackerone.domain.status.PipelineStatusService;
 import com.intrackerone.domain.user.Role;
 import com.intrackerone.domain.user.User;
 import com.intrackerone.domain.user.UserRepository;
@@ -21,18 +20,17 @@ public class CompanyService {
     private final CompanyRepository companyRepository;
     private final CompanyMapper companyMapper;
     private final UserRepository userRepository;
-    private final PipelineStatusService pipelineStatusService;
 
     @Transactional(readOnly = true)
     public List<CompanyDto> findAll(Long currentUserId, Role role) {
         if (role == Role.ADMIN || role == Role.MODERATOR) {
             return companyRepository.findAllByOrderByNameAsc().stream()
-                .map(companyMapper::toDto)
-                .toList();
+                    .map(companyMapper::toDto)
+                    .toList();
         }
         return companyRepository.findByOwnerId(currentUserId).stream()
-            .map(companyMapper::toDto)
-            .toList();
+                .map(companyMapper::toDto)
+                .toList();
     }
 
     @Transactional(readOnly = true)
@@ -45,8 +43,7 @@ public class CompanyService {
     @Transactional
     public CompanyDto create(CompanyForm form, Long ownerId) {
         User owner = userRepository.findById(ownerId)
-            .orElseThrow(() -> new ResourceNotFoundException("User", ownerId));
-        pipelineStatusService.seedDefaultsForUser(ownerId);
+                .orElseThrow(() -> new ResourceNotFoundException("User", ownerId));
         Company company = companyMapper.toEntity(form);
         company.setOwner(owner);
         company = companyRepository.save(company);
@@ -74,6 +71,6 @@ public class CompanyService {
 
     private Company findCompany(Long id) {
         return companyRepository.findById(id)
-            .orElseThrow(() -> new ResourceNotFoundException("Company", id));
+                .orElseThrow(() -> new ResourceNotFoundException("Company", id));
     }
 }
