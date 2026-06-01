@@ -58,6 +58,10 @@ public class JobApplication {
     private JobType jobType;
 
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false, length = 20)
+    private WorkType workType;
+
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 30)
     private Source source;
 

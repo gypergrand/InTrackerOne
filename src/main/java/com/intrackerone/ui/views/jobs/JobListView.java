@@ -7,6 +7,7 @@ import com.intrackerone.domain.job.JobForm;
 import com.intrackerone.domain.job.JobService;
 import com.intrackerone.domain.job.JobType;
 import com.intrackerone.domain.job.Source;
+import com.intrackerone.domain.job.WorkType;
 import com.intrackerone.domain.project.ProjectDto;
 import com.intrackerone.domain.project.ProjectService;
 import com.intrackerone.domain.recruiter.RecruiterDto;
@@ -73,7 +74,8 @@ public class JobListView extends VerticalLayout {
             badge.getStyle().set("border-radius", "4px");
             return badge;
         })).setHeader("Status");
-        grid.addColumn(JobDto::jobType).setHeader("Type");
+        grid.addColumn(JobDto::jobType).setHeader("Employment Type");
+        grid.addColumn(JobDto::workType).setHeader("Work Type");
         grid.addColumn(JobDto::updatedAt).setHeader("Updated");
         grid.asSingleSelect().addValueChangeListener(e -> {
             if (e.getValue() != null) openEditDialog(e.getValue());
@@ -102,9 +104,14 @@ public class JobListView extends VerticalLayout {
         TextField sourceMetaField = new TextField("Source Meta");
 
         Select<JobType> typeField = new Select<>();
-        typeField.setLabel("Job Type");
+        typeField.setLabel("Employment Type");
         typeField.setItems(JobType.values());
         typeField.setRequiredIndicatorVisible(true);
+
+        Select<WorkType> workTypeField = new Select<>();
+        workTypeField.setLabel("Work Type");
+        workTypeField.setItems(WorkType.values());
+        workTypeField.setRequiredIndicatorVisible(true);
 
         Select<Source> sourceField = new Select<>();
         sourceField.setLabel("Source");
@@ -159,6 +166,7 @@ public class JobListView extends VerticalLayout {
             notesField.setValue(existing.notes() != null ? existing.notes() : "");
             sourceMetaField.setValue(existing.sourceMeta() != null ? existing.sourceMeta() : "");
             typeField.setValue(existing.jobType());
+            workTypeField.setValue(existing.workType());
             sourceField.setValue(existing.source());
 
             if (existing.companyId() != null) {
@@ -193,7 +201,11 @@ public class JobListView extends VerticalLayout {
                     return;
                 }
                 if (typeField.isEmpty()) {
-                    Notification.show("Job Type is required", 3000, Notification.Position.MIDDLE);
+                    Notification.show("Employment Type is required", 3000, Notification.Position.MIDDLE);
+                    return;
+                }
+                if (workTypeField.isEmpty()) {
+                    Notification.show("Work Type is required", 3000, Notification.Position.MIDDLE);
                     return;
                 }
                 if (sourceField.isEmpty()) {
@@ -221,6 +233,7 @@ public class JobListView extends VerticalLayout {
                 form.setNotes(notesField.getValue());
                 form.setSourceMeta(sourceMetaField.getValue());
                 form.setJobType(typeField.getValue());
+                form.setWorkType(workTypeField.getValue());
                 form.setSource(sourceField.getValue());
 
                 form.setCurrentStatusId(statusField.getValue().id());
@@ -245,7 +258,7 @@ public class JobListView extends VerticalLayout {
         Button cancel = new Button("Cancel", e -> dialog.close());
 
         dialog.add(new FormLayout(positionField, descField, urlField, locationField, salaryField,
-            typeField, sourceField, sourceMetaField, notesField,
+            typeField, workTypeField, sourceField, sourceMetaField, notesField,
             companyField, projectField, recruiterField, statusField),
             new HorizontalLayout(save, cancel));
         dialog.open();

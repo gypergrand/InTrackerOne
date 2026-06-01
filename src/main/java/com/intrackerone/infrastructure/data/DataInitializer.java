@@ -21,22 +21,35 @@ public class DataInitializer implements CommandLineRunner {
 
     @Override
     public void run(String... args) {
-        if (userRepository.existsByUsername("admin")) {
-            log.info("Admin user already exists, skipping data initialization");
-            return;
+        User admin = null;
+        if (!userRepository.existsByUsername("admin")) {
+            admin = User.builder()
+                .username("admin")
+                .password(passwordEncoder.encode("admin"))
+                .email("admin@intrackerone.local")
+                .enabled(true)
+                .role(Role.ADMIN)
+                .build();
+            admin = userRepository.save(admin);
+            log.info("Created admin user (default password: admin)");
         }
 
-        User admin = User.builder()
-            .username("admin")
-            .password(passwordEncoder.encode("admin"))
-            .email("admin@intrackerone.local")
-            .enabled(true)
-            .role(Role.ADMIN)
-            .build();
-        admin = userRepository.save(admin);
-        log.info("Created admin user (default password: admin)");
+        if (!userRepository.existsByUsername("user")) {
+            User regularUser = User.builder()
+                .username("user")
+                .password(passwordEncoder.encode("user"))
+                .email("user@intrackerone.local")
+                .enabled(true)
+                .role(Role.USER)
+                .build();
+            regularUser = userRepository.save(regularUser);
+            pipelineStatusService.seedDefaultsForUser(regularUser.getId());
+            log.info("Created regular user (default password: user)");
+        }
 
-        pipelineStatusService.seedDefaultsForUser(admin.getId());
+        if (admin != null) {
+            pipelineStatusService.seedDefaultsForUser(admin.getId());
+        }
         log.info("Data initialization complete");
     }
 }

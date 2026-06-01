@@ -10,6 +10,7 @@ public record JobDto(
     String location,
     String salaryRange,
     JobType jobType,
+    WorkType workType,
     Source source,
     String sourceMeta,
     String notes,

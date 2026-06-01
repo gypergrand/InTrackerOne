@@ -80,9 +80,7 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
     private Collection<? extends SimpleGrantedAuthority> authoritiesFor(User user) {
         Collection<SimpleGrantedAuthority> authorities = new ArrayList<SimpleGrantedAuthority>();
         authorities.add(new SimpleGrantedAuthority("ROLE_" + user.getRole().name()));
-        if (AccessControl.hasGlobalDataAccess(user.getRole())) {
-            authorities.add(new SimpleGrantedAuthority(API_ACCESS));
-        }
+        authorities.add(new SimpleGrantedAuthority(API_ACCESS));
         return authorities;
     }
 }

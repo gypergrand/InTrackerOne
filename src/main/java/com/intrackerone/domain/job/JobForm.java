@@ -14,6 +14,8 @@ public class JobForm {
     private String salaryRange;
     @NotNull(message = "Job type is required")
     private JobType jobType;
+    @NotNull(message = "Work type is required")
+    private WorkType workType;
     @NotNull(message = "Source is required")
     private Source source;
     private String sourceMeta;

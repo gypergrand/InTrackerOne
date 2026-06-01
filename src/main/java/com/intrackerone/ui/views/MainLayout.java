@@ -8,6 +8,7 @@ import com.intrackerone.ui.views.jobs.JobListView;
 import com.intrackerone.ui.views.pipeline.PipelineView;
 import com.intrackerone.ui.views.projects.ProjectListView;
 import com.intrackerone.ui.views.recruiters.RecruiterListView;
+import com.intrackerone.ui.views.tokens.ApiTokenListView;
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.applayout.DrawerToggle;
 import com.vaadin.flow.component.button.Button;
@@ -65,6 +66,9 @@ public class MainLayout extends AppLayout implements RouterLayout {
         nav.addItem(new SideNavItem("Pipeline", PipelineView.class, VaadinIcon.CONNECT.create()));
 
         User currentUser = securityService.getCurrentUser();
+        if (currentUser.getRole() == Role.ADMIN || currentUser.getRole() == Role.MODERATOR) {
+            nav.addItem(new SideNavItem("API Tokens", ApiTokenListView.class, VaadinIcon.KEY.create()));
+        }
         if (currentUser.getRole() == Role.ADMIN) {
             nav.addItem(new SideNavItem("Users", UserAdminView.class, VaadinIcon.USER_CARD.create()));
         }

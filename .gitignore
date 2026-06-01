@@ -7,3 +7,7 @@ target/
 .vscode/
 *.mv.db
 *.trace.db
+/cookies.txt
+/headers.txt
+/response.html
+/.ckb/

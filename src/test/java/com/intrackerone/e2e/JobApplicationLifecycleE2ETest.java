@@ -11,6 +11,7 @@ import com.intrackerone.domain.job.JobForm;
 import com.intrackerone.domain.job.JobService;
 import com.intrackerone.domain.job.JobType;
 import com.intrackerone.domain.job.Source;
+import com.intrackerone.domain.job.WorkType;
 import com.intrackerone.domain.project.Project;
 import com.intrackerone.domain.project.ProjectDto;
 import com.intrackerone.domain.project.ProjectForm;
@@ -107,6 +108,7 @@ class JobApplicationLifecycleE2ETest {
         jobForm.setLocation("Remote, US");
         jobForm.setSalaryRange("150k - 180k");
         jobForm.setJobType(JobType.FULL_TIME);
+        jobForm.setWorkType(WorkType.REMOTE);
         jobForm.setSource(Source.LINKEDIN);
         jobForm.setSourceMeta("https://linkedin.com/jobs/123");
         jobForm.setNotes("Great company, interesting tech stack");
@@ -162,6 +164,7 @@ class JobApplicationLifecycleE2ETest {
         jobForm.setProjectId(project.getId());
         jobForm.setPosition("Junior Developer");
         jobForm.setJobType(JobType.FULL_TIME);
+        jobForm.setWorkType(WorkType.ON_SITE);
         jobForm.setSource(Source.LINKEDIN);
         jobForm.setCurrentStatusId(statuses.get(1).getId());
         JobDto job = jobService.create(jobForm, testUser.getId(), userRole);
@@ -293,6 +296,7 @@ class JobApplicationLifecycleE2ETest {
         form.setLocation("Remote");
         form.setSalaryRange("80k - 120k");
         form.setJobType(JobType.FULL_TIME);
+        form.setWorkType(WorkType.HYBRID);
         form.setSource(Source.LINKEDIN);
         form.setSourceMeta("https://linkedin.com");
         form.setNotes("Notes");

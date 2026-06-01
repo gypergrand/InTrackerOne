@@ -121,6 +121,7 @@ public class JobService {
         job.setLocation(form.getLocation());
         job.setSalaryRange(form.getSalaryRange());
         job.setJobType(form.getJobType());
+        job.setWorkType(form.getWorkType());
         job.setSource(form.getSource());
         job.setSourceMeta(form.getSourceMeta());
         job.setNotes(form.getNotes());

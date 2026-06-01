@@ -7,6 +7,7 @@ import com.intrackerone.domain.job.JobForm;
 import com.intrackerone.domain.job.JobService;
 import com.intrackerone.domain.job.JobType;
 import com.intrackerone.domain.job.Source;
+import com.intrackerone.domain.job.WorkType;
 import com.intrackerone.domain.user.Role;
 import com.intrackerone.domain.user.User;
 import com.intrackerone.infrastructure.security.SecurityService;
@@ -55,12 +56,13 @@ class JobControllerTest {
         mockMvc = MockMvcBuilders.standaloneSetup(jobController).build();
         user = User.builder().id(1L).username("admin").role(Role.ADMIN).build();
         jobDto = new JobDto(1L, "Java Developer", null, null, null, null,
-            null, null, null, null, 1L, "ProjectX", null, null,
+            null, null, null, null, null, 1L, "ProjectX", null, null,
             1L, "Jane Doe", 1L, "Applied", "#2196F3", null, null);
 
         form = new JobForm();
         form.setPosition("Java Developer");
         form.setJobType(JobType.FULL_TIME);
+        form.setWorkType(WorkType.HYBRID);
         form.setSource(Source.LINKEDIN);
         form.setProjectId(1L);
         form.setCurrentStatusId(1L);
