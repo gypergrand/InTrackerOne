@@ -306,7 +306,9 @@ class TokenResourceManagementE2ETest {
             post("/api/v1/jobs")
                 .header("Authorization", "Bearer " + apiToken)
                 .contentType("application/json")
-                .content("{\"position\":\"Senior Java Developer\",\"jobType\":\"FULL_TIME\",\"workType\":\"HYBRID\",\"source\":\"LINKEDIN\","
+                .content("{\"position\":\"Senior Java Developer\",\"jobType\":\"FULL_TIME\",\"workType\":\"HYBRID\","
+                    + "\"onCallSchedule\":\"MONTHLY_ON_CALL\",\"onCallDetails\":\"week in a month\","
+                    + "\"timezone\":\"CET\",\"source\":\"LINKEDIN\","
                     + "\"projectId\":" + projectId + ",\"currentStatusId\":" + statusId + ",\"location\":\"Remote\"}")
         )
         .andExpect(status().isCreated())
@@ -341,7 +343,8 @@ class TokenResourceManagementE2ETest {
             post("/api/v1/jobs")
                 .header("Authorization", "Bearer " + apiToken)
                 .contentType("application/json")
-                .content("{\"position\":\"DevOps Engineer\",\"jobType\":\"CONTRACT\",\"workType\":\"REMOTE\",\"source\":\"TELEGRAM_GROUP\","
+                .content("{\"position\":\"DevOps Engineer\",\"jobType\":\"CONTRACT\",\"workType\":\"REMOTE\","
+                    + "\"onCallSchedule\":\"NONE\",\"timezone\":\"PST\",\"source\":\"TELEGRAM_GROUP\","
                     + "\"projectId\":" + projectId + ",\"currentStatusId\":" + statusId + "}")
         ).andExpect(status().isCreated());
 

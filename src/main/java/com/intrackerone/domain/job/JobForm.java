@@ -4,6 +4,8 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
+import java.time.LocalDate;
+
 @Data
 public class JobForm {
     @NotBlank(message = "Position is required")
@@ -16,6 +18,12 @@ public class JobForm {
     private JobType jobType;
     @NotNull(message = "Work type is required")
     private WorkType workType;
+    private OnCallSchedule onCallSchedule;
+    private String onCallDetails;
+    private JobTimezone timezone;
+    private String timezoneOther;
+    private LocalDate firstAppeared;
+    private LocalDate repostedAt;
     @NotNull(message = "Source is required")
     private Source source;
     private String sourceMeta;

@@ -6,6 +6,8 @@ import com.intrackerone.domain.job.JobDto;
 import com.intrackerone.domain.job.JobForm;
 import com.intrackerone.domain.job.JobService;
 import com.intrackerone.domain.job.JobType;
+import com.intrackerone.domain.job.JobTimezone;
+import com.intrackerone.domain.job.OnCallSchedule;
 import com.intrackerone.domain.job.Source;
 import com.intrackerone.domain.job.WorkType;
 import com.intrackerone.domain.user.Role;
@@ -55,14 +57,22 @@ class JobControllerTest {
     void setUp() {
         mockMvc = MockMvcBuilders.standaloneSetup(jobController).build();
         user = User.builder().id(1L).username("admin").role(Role.ADMIN).build();
-        jobDto = new JobDto(1L, "Java Developer", null, null, null, null,
-            null, null, null, null, null, 1L, "ProjectX", null, null,
-            1L, "Jane Doe", 1L, "Applied", "#2196F3", null, null);
+        jobDto = new JobDto(
+            1L, "Java Developer", null, null, null, null,   // id..salaryRange
+            null, null, null, null, null, null, null, null,  // jobType..repostedAt
+            null, null, null,                                // source, sourceMeta, notes
+            1L, "ProjectX", null, null,                      // projectId..companyName
+            1L, "Jane Doe",                                  // recruiterId, recruiterName
+            1L, "Applied", "#2196F3",                        // status id/name/color
+            null, null                                       // createdAt, updatedAt
+        );
 
         form = new JobForm();
         form.setPosition("Java Developer");
         form.setJobType(JobType.FULL_TIME);
         form.setWorkType(WorkType.HYBRID);
+        form.setOnCallSchedule(OnCallSchedule.NONE);
+        form.setTimezone(JobTimezone.CET);
         form.setSource(Source.LINKEDIN);
         form.setProjectId(1L);
         form.setCurrentStatusId(1L);

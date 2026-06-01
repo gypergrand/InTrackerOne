@@ -23,6 +23,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
@@ -60,6 +61,24 @@ public class JobApplication {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 20)
     private WorkType workType;
+
+    @Enumerated(EnumType.STRING)
+    @Column(length = 30)
+    private OnCallSchedule onCallSchedule;
+
+    @Column(length = 200)
+    private String onCallDetails;
+
+    @Enumerated(EnumType.STRING)
+    @Column(length = 20)
+    private JobTimezone timezone;
+
+    @Column(length = 50)
+    private String timezoneOther;
+
+    private LocalDate firstAppeared;
+
+    private LocalDate repostedAt;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 30)

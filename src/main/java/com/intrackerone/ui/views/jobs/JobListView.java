@@ -6,6 +6,8 @@ import com.intrackerone.domain.job.JobDto;
 import com.intrackerone.domain.job.JobForm;
 import com.intrackerone.domain.job.JobService;
 import com.intrackerone.domain.job.JobType;
+import com.intrackerone.domain.job.JobTimezone;
+import com.intrackerone.domain.job.OnCallSchedule;
 import com.intrackerone.domain.job.Source;
 import com.intrackerone.domain.job.WorkType;
 import com.intrackerone.domain.project.ProjectDto;
@@ -26,6 +28,8 @@ import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.component.checkbox.Checkbox;
+import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.select.Select;
 import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.textfield.TextField;
@@ -76,6 +80,8 @@ public class JobListView extends VerticalLayout {
         })).setHeader("Status");
         grid.addColumn(JobDto::jobType).setHeader("Employment Type");
         grid.addColumn(JobDto::workType).setHeader("Work Type");
+        grid.addColumn(job -> job.timezone() != null ? job.timezone().getDisplayLabel() : "").setHeader("Timezone");
+        grid.addColumn(job -> job.onCallSchedule() != null && job.onCallSchedule() != OnCallSchedule.NONE ? job.onCallSchedule().name() : "").setHeader("On-Call");
         grid.addColumn(JobDto::updatedAt).setHeader("Updated");
         grid.asSingleSelect().addValueChangeListener(e -> {
             if (e.getValue() != null) openEditDialog(e.getValue());
@@ -117,6 +123,43 @@ public class JobListView extends VerticalLayout {
         sourceField.setLabel("Source");
         sourceField.setItems(Source.values());
         sourceField.setRequiredIndicatorVisible(true);
+
+        // On-call schedule
+        Select<OnCallSchedule> onCallField = new Select<>();
+        onCallField.setLabel("On-Call Schedule");
+        onCallField.setItems(OnCallSchedule.values());
+        onCallField.setPlaceholder("No on-call");
+
+        TextField onCallDetailsField = new TextField("On-Call Details");
+        onCallDetailsField.setPlaceholder("e.g. week in a month, every second sprint");
+        onCallDetailsField.setVisible(false);
+        onCallField.addValueChangeListener(e -> {
+            boolean showDetails = e.getValue() == OnCallSchedule.OTHER;
+            onCallDetailsField.setVisible(showDetails);
+            if (!showDetails) onCallDetailsField.clear();
+        });
+
+        // Timezone
+        Select<JobTimezone> timezoneField = new Select<>();
+        timezoneField.setLabel("Timezone");
+        timezoneField.setItems(JobTimezone.values());
+        timezoneField.setItemLabelGenerator(tz -> tz.getUtcOffset() != null
+                ? tz.getDisplayLabel() + " (" + tz.getUtcOffset() + ")"
+                : tz.getDisplayLabel());
+        timezoneField.setPlaceholder("Select timezone");
+
+        Checkbox timezoneIsOther = new Checkbox("Custom timezone");
+        TextField timezoneOtherField = new TextField("Custom Timezone");
+        timezoneOtherField.setPlaceholder("e.g. UTC+5:45, Gulf Standard Time");
+        timezoneOtherField.setVisible(false);
+        timezoneIsOther.addValueChangeListener(e -> {
+            timezoneOtherField.setVisible(e.getValue());
+            if (!e.getValue()) timezoneOtherField.clear();
+        });
+
+        // Dates
+        DatePicker firstAppearedField = new DatePicker("First Appeared");
+        DatePicker repostedField = new DatePicker("Reposted");
 
         var companies = companyService.findAll(current.getId(), current.getRole());
         ComboBox<CompanyDto> companyField = new ComboBox<>("Company");
@@ -168,6 +211,16 @@ public class JobListView extends VerticalLayout {
             typeField.setValue(existing.jobType());
             workTypeField.setValue(existing.workType());
             sourceField.setValue(existing.source());
+            onCallField.setValue(existing.onCallSchedule());
+            onCallDetailsField.setValue(existing.onCallDetails() != null ? existing.onCallDetails() : "");
+            onCallDetailsField.setVisible(existing.onCallSchedule() == OnCallSchedule.OTHER);
+            timezoneField.setValue(existing.timezone());
+            if (existing.timezone() == JobTimezone.OTHER) {
+                timezoneIsOther.setValue(true);
+                timezoneOtherField.setValue(existing.timezoneOther() != null ? existing.timezoneOther() : "");
+            }
+            firstAppearedField.setValue(existing.firstAppeared());
+            repostedField.setValue(existing.repostedAt());
 
             if (existing.companyId() != null) {
                 CompanyDto selectedCompany = companies.stream()
@@ -234,6 +287,12 @@ public class JobListView extends VerticalLayout {
                 form.setSourceMeta(sourceMetaField.getValue());
                 form.setJobType(typeField.getValue());
                 form.setWorkType(workTypeField.getValue());
+                form.setOnCallSchedule(onCallField.getValue());
+                form.setOnCallDetails(onCallDetailsField.getValue().isBlank() ? null : onCallDetailsField.getValue());
+                form.setTimezone(timezoneField.getValue());
+                form.setTimezoneOther(timezoneIsOther.getValue() ? timezoneOtherField.getValue() : null);
+                form.setFirstAppeared(firstAppearedField.getValue());
+                form.setRepostedAt(repostedField.getValue());
                 form.setSource(sourceField.getValue());
 
                 form.setCurrentStatusId(statusField.getValue().id());
@@ -260,6 +319,8 @@ public class JobListView extends VerticalLayout {
         dialog.add(new FormLayout(positionField, descField, urlField, locationField, salaryField,
             typeField, workTypeField, sourceField, sourceMetaField, notesField,
             companyField, projectField, recruiterField, statusField),
+            new FormLayout(onCallField, onCallDetailsField, timezoneField, timezoneIsOther, timezoneOtherField,
+                firstAppearedField, repostedField),
             new HorizontalLayout(save, cancel));
         dialog.open();
     }

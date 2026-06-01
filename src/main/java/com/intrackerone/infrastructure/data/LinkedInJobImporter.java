@@ -5,6 +5,8 @@ import com.intrackerone.domain.company.CompanyService;
 import com.intrackerone.domain.job.JobForm;
 import com.intrackerone.domain.job.JobService;
 import com.intrackerone.domain.job.JobType;
+import com.intrackerone.domain.job.JobTimezone;
+import com.intrackerone.domain.job.OnCallSchedule;
 import com.intrackerone.domain.job.Source;
 import com.intrackerone.domain.job.WorkType;
 import com.intrackerone.domain.project.ProjectForm;
@@ -98,6 +100,8 @@ public class LinkedInJobImporter implements CommandLineRunner {
         jobForm.setLocation("Spain (Valencia)");
         jobForm.setJobType(JobType.FULL_TIME);
         jobForm.setWorkType(WorkType.HYBRID);
+        jobForm.setOnCallSchedule(OnCallSchedule.NONE);
+        jobForm.setTimezone(JobTimezone.CET);
         jobForm.setSource(Source.LINKEDIN);
         jobForm.setNotes("Senior/Staff Product Engineer at Fever. Tech: Python, Django/Flask/FastAPI, PostgreSQL, Snowflake, Redis, Kafka, AWS, Docker, Kubernetes. 37 applicants.");
         jobForm.setProjectId(project.id());

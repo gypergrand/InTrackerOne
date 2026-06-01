@@ -122,6 +122,12 @@ public class JobService {
         job.setSalaryRange(form.getSalaryRange());
         job.setJobType(form.getJobType());
         job.setWorkType(form.getWorkType());
+        job.setOnCallSchedule(form.getOnCallSchedule());
+        job.setOnCallDetails(form.getOnCallDetails());
+        job.setTimezone(form.getTimezone());
+        job.setTimezoneOther(form.getTimezoneOther());
+        job.setFirstAppeared(form.getFirstAppeared());
+        job.setRepostedAt(form.getRepostedAt());
         job.setSource(form.getSource());
         job.setSourceMeta(form.getSourceMeta());
         job.setNotes(form.getNotes());

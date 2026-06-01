@@ -81,12 +81,16 @@ class JobServiceTest {
         job = JobApplication.builder()
             .id(1L).position("Java Developer").jobType(JobType.FULL_TIME)
             .workType(WorkType.HYBRID)
+            .onCallSchedule(OnCallSchedule.NONE)
+            .timezone(JobTimezone.CET)
             .source(Source.LINKEDIN).project(project).recruiter(recruiter)
             .currentStatus(status).owner(admin)
             .build();
 
         jobDto = new JobDto(1L, "Java Developer", null, null, null, null,
-            JobType.FULL_TIME, WorkType.HYBRID, Source.LINKEDIN, null, null,
+            JobType.FULL_TIME, WorkType.HYBRID, OnCallSchedule.NONE, null,
+            JobTimezone.CET, null, null, null,
+            Source.LINKEDIN, null, null,
             1L, "ProjectX", null, null, 1L, "Jane Doe",
             1L, "Applied", "#2196F3", null, null);
 
@@ -94,6 +98,8 @@ class JobServiceTest {
         form.setPosition("Java Developer");
         form.setJobType(JobType.FULL_TIME);
         form.setWorkType(WorkType.HYBRID);
+        form.setOnCallSchedule(OnCallSchedule.NONE);
+        form.setTimezone(JobTimezone.CET);
         form.setSource(Source.LINKEDIN);
         form.setProjectId(1L);
         form.setCurrentStatusId(1L);
@@ -124,6 +130,10 @@ class JobServiceTest {
         createForm.setPosition("New Job");
         createForm.setJobType(JobType.CONTRACT);
         createForm.setWorkType(WorkType.REMOTE);
+        createForm.setOnCallSchedule(OnCallSchedule.MONTHLY_ON_CALL);
+        createForm.setOnCallDetails("week in a month");
+        createForm.setTimezone(JobTimezone.OTHER);
+        createForm.setTimezoneOther("UTC+5:30");
         createForm.setSource(Source.COMPANY_PORTAL);
         createForm.setProjectId(1L);
         createForm.setCurrentStatusId(1L);

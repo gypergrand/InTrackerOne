@@ -18,7 +18,7 @@
     <description>Personal job interview tracking and management application</description>
 
     <properties>
-        <java.version>17</java.version>
+        <java.version>25</java.version>
         <vaadin.version>24.10.6</vaadin.version>
         <mapstruct.version>1.6.3</mapstruct.version>
     </properties>
