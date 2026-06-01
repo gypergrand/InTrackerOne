@@ -1,0 +1,26 @@
+CREATE TABLE industries (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(100) NOT NULL UNIQUE
+);
+
+CREATE TABLE project_industries (
+    project_id BIGINT NOT NULL,
+    industry_id BIGINT NOT NULL,
+    PRIMARY KEY (project_id, industry_id),
+    CONSTRAINT fk_pi_project FOREIGN KEY (project_id) REFERENCES projects(id) ON DELETE CASCADE,
+    CONSTRAINT fk_pi_industry FOREIGN KEY (industry_id) REFERENCES industries(id) ON DELETE CASCADE
+);
+
+CREATE INDEX pi_industry_id ON project_industries(industry_id);
+
+-- Seed common industries
+INSERT INTO industries (name) VALUES
+    ('Software Development'), ('Healthcare'), ('Fintech'), ('Logistics'),
+    ('SaaS'), ('Retail'), ('Engineering'), ('Gambling'), ('Adult'),
+    ('Dating'), ('Blockchain'), ('AI-native'), ('Cybersecurity'),
+    ('Education'), ('Telecommunications'), ('Robotics'), ('Consulting'),
+    ('Energy'), ('Gaming'), ('Sales'), ('Marketing'), ('HR Services'),
+    ('R&D'), ('Hardware'), ('Platforms'), ('Infrastructure'),
+    ('Systems Integrations'), ('Media'), ('Simulation'), ('Ecommerce'),
+    ('Space'), ('Smart Cities'), ('Business Services'), ('Biotechnology'),
+    ('Cloud');

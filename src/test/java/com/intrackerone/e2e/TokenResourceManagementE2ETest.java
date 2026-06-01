@@ -189,7 +189,7 @@ class TokenResourceManagementE2ETest {
             post("/api/v1/projects")
                 .header("Authorization", "Bearer " + apiToken)
                 .contentType("application/json")
-                .content("{\"name\":\"API Project\",\"description\":\"Test project\",\"companyId\":" + companyId + "}")
+                .content("{\"name\":\"API Project\",\"description\":\"Test project\",\"companyId\":" + companyId + ",\"industries\":[\"Software Development\"]}")
         )
         .andExpect(status().isCreated())
         .andExpect(jsonPath("$.name").value("API Project"));
@@ -209,14 +209,14 @@ class TokenResourceManagementE2ETest {
             post("/api/v1/projects")
                 .header("Authorization", "Bearer " + apiToken)
                 .contentType("application/json")
-                .content("{\"name\":\"Project A\",\"description\":\"First\",\"companyId\":" + companyId + "}")
+                .content("{\"name\":\"Project A\",\"description\":\"First\",\"companyId\":" + companyId + ",\"industries\":[\"SaaS\"]}")
         ).andExpect(status().isCreated());
 
         mockMvc.perform(
             post("/api/v1/projects")
                 .header("Authorization", "Bearer " + apiToken)
                 .contentType("application/json")
-                .content("{\"name\":\"Project B\",\"description\":\"Second\",\"companyId\":" + companyId + "}")
+                .content("{\"name\":\"Project B\",\"description\":\"Second\",\"companyId\":" + companyId + ",\"industries\":[\"Cloud\"]}")
         ).andExpect(status().isCreated());
 
         mockMvc.perform(
@@ -292,7 +292,7 @@ class TokenResourceManagementE2ETest {
             post("/api/v1/projects")
                 .header("Authorization", "Bearer " + apiToken)
                 .contentType("application/json")
-                .content("{\"name\":\"Job Project\",\"description\":\"Test\",\"companyId\":" + companyId + "}")
+                .content("{\"name\":\"Job Project\",\"description\":\"Test\",\"companyId\":" + companyId + ",\"industries\":[\"Engineering\"]}")
         ).andExpect(status().isCreated()).andReturn().getResponse().getContentAsString();
         long projectId = extractId(projectResp);
 
@@ -327,7 +327,7 @@ class TokenResourceManagementE2ETest {
             post("/api/v1/projects")
                 .header("Authorization", "Bearer " + apiToken)
                 .contentType("application/json")
-                .content("{\"name\":\"List Project\",\"description\":\"Test\",\"companyId\":" + companyId + "}")
+                .content("{\"name\":\"List Project\",\"description\":\"Test\",\"companyId\":" + companyId + ",\"industries\":[\"Software Development\"]}")
         ).andExpect(status().isCreated()).andReturn().getResponse().getContentAsString();
         long projectId = extractId(projectResp);
 

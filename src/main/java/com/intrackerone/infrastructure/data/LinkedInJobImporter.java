@@ -80,6 +80,7 @@ public class LinkedInJobImporter implements CommandLineRunner {
         projectForm.setName(JOB_TITLE);
         projectForm.setDescription("Imported from LinkedIn: " + JOB_URL);
         projectForm.setCompanyId(company.id());
+        projectForm.setIndustries(java.util.Set.of("Software Development", "SaaS", "Cloud"));
         var project = projectService.create(projectForm, currentUser.getId(), currentUser.getRole());
         log.info("LinkedInJobImporter: created project '{}'", JOB_TITLE);
 

@@ -38,6 +38,9 @@ class ProjectServiceTest {
     @Mock
     private UserRepository userRepository;
 
+    @Mock
+    private IndustryRepository industryRepository;
+
     @InjectMocks
     private ProjectService projectService;
 
@@ -61,7 +64,7 @@ class ProjectServiceTest {
             .id(1L).name("Platform").description("Backend").company(company).owner(admin)
             .build();
 
-        projectDto = new ProjectDto(1L, "Platform", "Backend", 1L, "TestCorp");
+        projectDto = new ProjectDto(1L, "Platform", "Backend", 1L, "TestCorp", java.util.Set.of("Software Development", "SaaS"));
 
         form = new ProjectForm();
         form.setName("Platform");
@@ -108,8 +111,15 @@ class ProjectServiceTest {
 
     @Test
     void create_savesWithCompanyAndOwner() {
+        form.setIndustries(java.util.Set.of("Software Development", "SaaS"));
+        Industry dev = Industry.builder().id(1L).name("Software Development").build();
+        Industry saas = Industry.builder().id(2L).name("SaaS").build();
+        when(industryRepository.findByNameIgnoreCase("Software Development")).thenReturn(Optional.of(dev));
+        when(industryRepository.findByNameIgnoreCase("SaaS")).thenReturn(Optional.of(saas));
+
         when(companyRepository.findById(1L)).thenReturn(Optional.of(company));
-        when(projectMapper.toEntity(form)).thenReturn(project);
+        Project emptyProject = Project.builder().build();
+        when(projectMapper.toEntity(form)).thenReturn(emptyProject);
         when(projectRepository.save(any())).thenReturn(project);
         when(projectMapper.toDto(project)).thenReturn(projectDto);
 
@@ -120,6 +130,7 @@ class ProjectServiceTest {
         Project saved = projectCaptor.getValue();
         assertThat(saved.getCompany()).isEqualTo(company);
         assertThat(saved.getOwner()).isEqualTo(admin);
+        assertThat(saved.getIndustries()).hasSize(2);
     }
 
     @Test

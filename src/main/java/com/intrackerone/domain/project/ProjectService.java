@@ -20,6 +20,7 @@ public class ProjectService {
     private final ProjectRepository projectRepository;
     private final ProjectMapper projectMapper;
     private final CompanyRepository companyRepository;
+    private final IndustryRepository industryRepository;
 
     @Transactional(readOnly = true)
     public List<ProjectDto> findByCompanyId(Long companyId, Long currentUserId, Role role) {
@@ -62,6 +63,7 @@ public class ProjectService {
         Project project = projectMapper.toEntity(form);
         project.setCompany(company);
         project.setOwner(company.getOwner());
+        project.setIndustries(resolveIndustries(form.getIndustries()));
         project = projectRepository.save(project);
         log.info("Created project: {} for company {}", project.getName(), company.getName());
         return projectMapper.toDto(project);
@@ -74,6 +76,7 @@ public class ProjectService {
         project.setName(form.getName());
         project.setDescription(form.getDescription());
         updateCompany(project, form.getCompanyId());
+        project.setIndustries(resolveIndustries(form.getIndustries()));
         project = projectRepository.save(project);
         return projectMapper.toDto(project);
     }
@@ -102,5 +105,20 @@ public class ProjectService {
     private Company findCompany(Long id) {
         return companyRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Company", id));
+    }
+
+    /**
+     * Resolves industry names to Industry entities.
+     * Finds existing ones by name (case-insensitive) or creates new ones.
+     */
+    private java.util.Set<Industry> resolveIndustries(java.util.Set<String> industryNames) {
+        if (industryNames == null || industryNames.isEmpty()) {
+            return new java.util.HashSet<>();
+        }
+        return industryNames.stream()
+                .filter(name -> name != null && !name.isBlank())
+                .map(name -> industryRepository.findByNameIgnoreCase(name.trim())
+                        .orElseGet(() -> industryRepository.save(Industry.builder().name(name.trim()).build())))
+                .collect(java.util.stream.Collectors.toSet());
     }
 }

@@ -9,21 +9,27 @@ import com.intrackerone.domain.user.User;
 import com.intrackerone.infrastructure.security.SecurityService;
 import com.intrackerone.ui.views.MainLayout;
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.checkbox.CheckboxGroup;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
+import com.vaadin.flow.data.renderer.ComponentRenderer;
 import com.vaadin.flow.router.Route;
 import jakarta.annotation.security.PermitAll;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Route(value = "projects", layout = MainLayout.class)
 @PermitAll
@@ -35,6 +41,16 @@ public class ProjectListView extends VerticalLayout {
     private final Grid<ProjectDto> grid = new Grid<>(ProjectDto.class);
     private ComboBox<CompanyDto> companyFilter;
     private final List<CompanyDto> companies = new ArrayList<>();
+
+    private static final Set<String> INDUSTRY_SUGGESTIONS = new HashSet<>(Arrays.asList(
+        "Software Development", "Healthcare", "Fintech", "Logistics",
+        "SaaS", "Retail", "Engineering", "AI-native", "Cybersecurity",
+        "Education", "Telecommunications", "Robotics", "Consulting",
+        "Energy", "Gaming", "Sales", "Marketing", "HR Services",
+        "R&D", "Hardware", "Platforms", "Infrastructure",
+        "Systems Integrations", "Media", "Simulation", "Ecommerce",
+        "Space", "Smart Cities", "Business Services", "Biotechnology", "Cloud"
+    ));
 
     public ProjectListView(ProjectService projectService, CompanyService companyService,
                             SecurityService securityService) {
@@ -55,6 +71,21 @@ public class ProjectListView extends VerticalLayout {
         grid.addColumn(ProjectDto::companyName).setHeader("Company");
         grid.addColumn(p -> p.description() != null && p.description().length() > 100
             ? p.description().substring(0, 100) + "..." : p.description()).setHeader("Description");
+        grid.addComponentColumn(project -> {
+            HorizontalLayout badges = new HorizontalLayout();
+            badges.setSpacing(true);
+            if (project.industries() != null) {
+                project.industries().forEach(ind -> {
+                    Span badge = new Span(ind);
+                    badge.getStyle().set("background", "#e0e0e0")
+                                  .set("padding", "2px 6px")
+                                  .set("border-radius", "4px")
+                                  .set("font-size", "0.8em");
+                    badges.add(badge);
+                });
+            }
+            return badges;
+        }).setHeader("Industries");
         grid.asSingleSelect().addValueChangeListener(e -> {
             if (e.getValue() != null) openEditDialog(e.getValue());
         });
@@ -91,8 +122,32 @@ public class ProjectListView extends VerticalLayout {
         companyField.setItems(companies);
         companyField.setItemLabelGenerator(CompanyDto::name);
 
+        // Industries: checkbox group for existing + text field for new ones
+        CheckboxGroup<String> industriesPicker = new CheckboxGroup<>();
+        industriesPicker.setLabel("Industries");
+        industriesPicker.setItemLabelGenerator(item -> item);
+        industriesPicker.setItems(INDUSTRY_SUGGESTIONS);
+
+        TextField newIndustryField = new TextField("Add new industry");
+        newIndustryField.setPlaceholder("Type and press Enter to add");
+        newIndustryField.addKeyDownListener(com.vaadin.flow.component.Key.ENTER, e -> {
+            String val = newIndustryField.getValue();
+            if (val != null && !val.isBlank()) {
+                form.getIndustries().add(val.trim());
+                industriesPicker.getDataProvider().refreshAll();
+                // Also add to selectable items if not already there
+                if (!INDUSTRY_SUGGESTIONS.contains(val.trim())) {
+                    INDUSTRY_SUGGESTIONS.add(val.trim());
+                    industriesPicker.setItems(INDUSTRY_SUGGESTIONS);
+                }
+                industriesPicker.select(val.trim());
+                newIndustryField.clear();
+            }
+        });
+
         binder.bind(nameField, "name");
         binder.bind(descField, "description");
+        binder.bind(industriesPicker, "industries");
 
         if (existing != null) {
             nameField.setValue(existing.name());
@@ -100,6 +155,16 @@ public class ProjectListView extends VerticalLayout {
             companyField.setValue(companies.stream()
                 .filter(c -> c.id().equals(existing.companyId())).findFirst().orElse(null));
             form.setCompanyId(existing.companyId());
+            if (existing.industries() != null) {
+                form.setIndustries(new java.util.HashSet<>(existing.industries()));
+                // Ensure existing industry names are selectable
+                existing.industries().forEach(ind -> {
+                    if (!INDUSTRY_SUGGESTIONS.contains(ind)) {
+                        INDUSTRY_SUGGESTIONS.add(ind);
+                    }
+                });
+                industriesPicker.setItems(INDUSTRY_SUGGESTIONS);
+            }
         } else if (companyFilter.getValue() != null) {
             companyField.setValue(companyFilter.getValue());
             form.setCompanyId(companyFilter.getValue().id());
@@ -134,7 +199,9 @@ public class ProjectListView extends VerticalLayout {
         });
         Button cancel = new Button("Cancel", e -> dialog.close());
 
-        dialog.add(new FormLayout(nameField, descField, companyField), new HorizontalLayout(save, cancel));
+        dialog.add(new FormLayout(nameField, descField, companyField, industriesPicker),
+                   new HorizontalLayout(newIndustryField),
+                   new HorizontalLayout(save, cancel));
         dialog.open();
     }
 
