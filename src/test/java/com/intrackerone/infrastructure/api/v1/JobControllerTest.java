@@ -40,15 +40,12 @@ class JobControllerTest {
     private JobService jobService;
 
     @Mock
-    private StatusChangeService statusChangeService;
-
-    @Mock
     private SecurityService securityService;
 
     @InjectMocks
     private JobController jobController;
 
-    private ObjectMapper objectMapper = new ObjectMapper();
+    private final ObjectMapper objectMapper = new ObjectMapper();
     private User user;
     private JobDto jobDto;
     private JobForm form;

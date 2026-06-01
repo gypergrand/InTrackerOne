@@ -89,7 +89,7 @@ public class JobListView extends VerticalLayout {
     }
 
     private HorizontalLayout createToolbar() {
-        Button add = new Button("Add Job", e -> openEditDialog(null));
+        Button add = new Button("Add Job", _ -> openEditDialog(null));
         return new HorizontalLayout(add);
     }
 
@@ -246,7 +246,7 @@ public class JobListView extends VerticalLayout {
                 .filter(s -> s.id().equals(existing.currentStatusId())).findFirst().orElse(null));
         }
 
-        Button save = new Button("Save", e -> {
+        Button save = new Button("Save", _ -> {
             try {
                 if (positionField.isEmpty()) {
                     Notification.show("Position is required", 3000, Notification.Position.MIDDLE);
@@ -314,7 +314,7 @@ public class JobListView extends VerticalLayout {
                 Notification.show("Save failed: " + ex.getMessage(), 5000, Notification.Position.MIDDLE);
             }
         });
-        Button cancel = new Button("Cancel", e -> dialog.close());
+        Button cancel = new Button("Cancel", _ -> dialog.close());
 
         dialog.add(new FormLayout(positionField, descField, urlField, locationField, salaryField,
             typeField, workTypeField, sourceField, sourceMetaField, notesField,
