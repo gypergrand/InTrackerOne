@@ -1,10 +1,14 @@
 # InTrackerOne — REST API v1
 
+## Base URL
+
+All endpoints are under `/api/v1/`.
+
 ## Authentication
 
 All endpoints require `Authorization: Bearer <token>` header.
 Tokens use `itr_` prefix. Authentication handled by `TokenAuthenticationFilter` which extracts token identifier, looks up token, and verifies SHA-256 hash.
-`ApiExceptionHandler` maps exceptions: `ResourceNotFoundException` → 404, `UnauthorizedException` → 403, `SecurityException` → 403.
+`ApiExceptionHandler` maps exceptions: `ResourceNotFoundException` → 404, `UnauthorizedException` → 403, `SecurityException` → 403, `IllegalArgumentException` → 400.
 
 ### Tokens
 
@@ -101,7 +105,7 @@ GET    /api/v1/users                   # List all users
 POST   /api/v1/users                   # Create user (password required)
 GET    /api/v1/users/{id}              # Single user
 PUT    /api/v1/users/{id}              # Update (password optional)
-DELETE /api/v1/users/{id}              # Delete
+DELETE /api/v1/users/{id}              # Delete (fails if target is "admin" user)
 ```
 
 ### Dashboard
@@ -111,8 +115,20 @@ GET    /api/v1/dashboard/summary       # Stats: total jobs by status, by company
 GET    /api/v1/dashboard/recent        # Recent status changes (last 20)
 ```
 
+## UI-Only Features (no REST endpoints)
+
+The following features are available exclusively through the Vaadin UI (no REST API):
+
+| Feature | View | Description |
+|---------|------|-------------|
+| Default Statuses | `/default-statuses` | ADMIN manages 14 default pipeline status templates |
+| Default Industries | `/default-industries` | ADMIN manages shared industry list |
+| Change Password | Header button | Any authenticated user changes own password |
+| Pipeline Kanban | `/pipeline` | Drag-and-drop board with ComboBox status picker |
+
 ## Error Responses
 
+### 404 — Resource Not Found
 ```json
 {
   "message": "Resource not found: JobApplication with id 42",
@@ -121,10 +137,20 @@ GET    /api/v1/dashboard/recent        # Recent status changes (last 20)
 }
 ```
 
+### 403 — Access Denied
 ```json
 {
   "message": "Access denied",
   "status": 403,
+  "timestamp": "2025-01-15T10:30:00Z"
+}
+```
+
+### 400 — Validation Error
+```json
+{
+  "message": "Validation failed: statusId must not be null",
+  "status": 400,
   "timestamp": "2025-01-15T10:30:00Z"
 }
 ```
