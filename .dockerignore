@@ -1,6 +1,6 @@
-target/
-.mvn/
+.git/
 .idea/
 *.iml
-.git/
-.gitignore
+.mvn/
+src/
+scripts/

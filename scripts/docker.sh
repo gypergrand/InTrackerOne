@@ -5,6 +5,8 @@ cd "$(dirname "$0")/.."
 
 case "${1:-up}" in
   up)
+    echo "Building JAR..."
+    mvn clean package -DskipTests -q
     echo "Starting Docker Compose..."
     docker compose up -d
     echo ""
@@ -27,12 +29,8 @@ case "${1:-up}" in
   status)
     docker compose ps
     ;;
-  build)
-    echo "Building images..."
-    docker compose build
-    ;;
   *)
-    echo "Usage: $0 {up|down|restart|logs|status|build}"
+    echo "Usage: $0 {up|down|restart|logs|status}"
     exit 1
     ;;
 esac

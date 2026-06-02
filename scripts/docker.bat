@@ -5,6 +5,8 @@ if "%1"=="" set action=up
 set action=%1
 
 if "%action%"=="up" (
+    echo Building JAR...
+    mvn clean package -DskipTests -q
     echo Starting Docker Compose...
     docker compose up -d
     echo.
@@ -22,10 +24,7 @@ if "%action%"=="up" (
     docker compose logs -f app
 ) else if "%action%"=="status" (
     docker compose ps
-) else if "%action%"=="build" (
-    echo Building images...
-    docker compose build
 ) else (
-    echo Usage: docker.bat {up^|down^|restart^|logs^|status^|build}
+    echo Usage: docker.bat {up^|down^|restart^|logs^|status}
     exit /b 1
 )
