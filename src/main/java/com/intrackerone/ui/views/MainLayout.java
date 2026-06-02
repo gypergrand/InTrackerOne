@@ -7,6 +7,8 @@ import com.intrackerone.ui.views.companies.CompanyListView;
 import com.intrackerone.ui.views.jobs.JobListView;
 import com.intrackerone.ui.views.pipeline.PipelineView;
 import com.intrackerone.ui.views.projects.ProjectListView;
+import com.intrackerone.ui.views.question.DefaultQuestionsView;
+import com.intrackerone.ui.views.question.QuestionsView;
 import com.intrackerone.ui.views.recruiters.RecruiterListView;
 import com.intrackerone.ui.views.industry.DefaultIndustryView;
 import com.intrackerone.ui.views.status.DefaultStatusView;
@@ -76,6 +78,7 @@ public class MainLayout extends AppLayout implements RouterLayout {
         nav.addItem(new SideNavItem("Recruiters", RecruiterListView.class, VaadinIcon.USERS.create()));
         nav.addItem(new SideNavItem("Jobs", JobListView.class, VaadinIcon.BRIEFCASE.create()));
         nav.addItem(new SideNavItem("Pipeline", PipelineView.class, VaadinIcon.CONNECT.create()));
+        nav.addItem(new SideNavItem("Questions", QuestionsView.class, VaadinIcon.QUESTION.create()));
         nav.addItem(new SideNavItem("API Tokens", ApiTokenListView.class, VaadinIcon.KEY.create()));
         
         User currentUser = securityService.getCurrentUser();
@@ -85,6 +88,7 @@ public class MainLayout extends AppLayout implements RouterLayout {
         if (currentUser.getRole() == Role.ADMIN) {
             nav.addItem(new SideNavItem("Default Statuses", DefaultStatusView.class, VaadinIcon.GLOBE.create()));
             nav.addItem(new SideNavItem("Default Industries", DefaultIndustryView.class, VaadinIcon.COG.create()));
+            nav.addItem(new SideNavItem("Default Questions", DefaultQuestionsView.class, VaadinIcon.BOOK.create()));
         }
 
         addToDrawer(new VerticalLayout(nav));
