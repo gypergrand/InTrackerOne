@@ -30,6 +30,8 @@ public record JobDto(
     Long currentStatusId,
     String currentStatusName,
     String currentStatusColor,
+    Long ownerId,
+    String ownerName,
     LocalDateTime createdAt,
     LocalDateTime updatedAt
 ) {}

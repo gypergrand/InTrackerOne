@@ -6,6 +6,8 @@ import org.mapstruct.Mapping;
 @Mapper(componentModel = "spring")
 public interface CompanyMapper {
 
+    @Mapping(target = "ownerId", source = "owner.id")
+    @Mapping(target = "ownerName", source = "owner.username")
     CompanyDto toDto(Company company);
 
     @Mapping(target = "id", ignore = true)

@@ -76,7 +76,7 @@ class RecruiterServiceTest {
             .build();
 
         recruiterDto = new RecruiterDto(1L, "Jane Doe", "jane@test.com", "+123",
-            "Good", 1L, "TestCorp", Set.of(1L));
+            "Good", 1L, "TestCorp", Set.of(1L), 1L, "admin");
 
         form = new RecruiterForm();
         form.setName("Jane Doe");

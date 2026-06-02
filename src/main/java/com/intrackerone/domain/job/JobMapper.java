@@ -15,6 +15,8 @@ public interface JobMapper {
     @Mapping(target = "currentStatusId", expression = "java(job.getCurrentStatus() != null ? job.getCurrentStatus().getId() : null)")
     @Mapping(target = "currentStatusName", expression = "java(job.getCurrentStatus() != null ? job.getCurrentStatus().getName() : null)")
     @Mapping(target = "currentStatusColor", expression = "java(job.getCurrentStatus() != null ? job.getCurrentStatus().getColor() : null)")
+    @Mapping(target = "ownerId", expression = "java(job.getOwner() != null ? job.getOwner().getId() : null)")
+    @Mapping(target = "ownerName", expression = "java(job.getOwner() != null ? job.getOwner().getUsername() : null)")
     JobDto toDto(JobApplication job);
 
     @Mapping(target = "id", ignore = true)

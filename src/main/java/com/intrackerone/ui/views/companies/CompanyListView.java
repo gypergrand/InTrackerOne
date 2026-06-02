@@ -5,9 +5,12 @@ import com.intrackerone.domain.company.CompanyForm;
 import com.intrackerone.domain.company.CompanyService;
 import com.intrackerone.domain.user.Role;
 import com.intrackerone.domain.user.User;
+import com.intrackerone.domain.user.UserDto;
+import com.intrackerone.domain.user.UserService;
 import com.intrackerone.infrastructure.security.SecurityService;
 import com.intrackerone.ui.views.MainLayout;
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.confirmdialog.ConfirmDialog;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.formlayout.FormLayout;
@@ -27,11 +30,14 @@ public class CompanyListView extends VerticalLayout {
 
     private final CompanyService companyService;
     private final SecurityService securityService;
+    private final UserService userService;
     private final Grid<CompanyDto> grid = new Grid<>(CompanyDto.class);
 
-    public CompanyListView(CompanyService companyService, SecurityService securityService) {
+    public CompanyListView(CompanyService companyService, SecurityService securityService,
+                           UserService userService) {
         this.companyService = companyService;
         this.securityService = securityService;
+        this.userService = userService;
         setSizeFull();
         configureGrid();
         add(createToolbar(), grid);
@@ -45,6 +51,7 @@ public class CompanyListView extends VerticalLayout {
         grid.addColumn(CompanyDto::website).setHeader("Website");
         grid.addColumn(c -> c.notes() != null && c.notes().length() > 100
             ? c.notes().substring(0, 100) + "..." : c.notes()).setHeader("Notes");
+        grid.addColumn(CompanyDto::ownerName).setHeader("Owner").setSortable(true);
         grid.asSingleSelect().addValueChangeListener(e -> {
             if (e.getValue() != null) openEditDialog(e.getValue());
         });
@@ -64,6 +71,7 @@ public class CompanyListView extends VerticalLayout {
             form.setNotes(existing.notes());
         }
 
+        User current = securityService.getCurrentUser();
         Binder<CompanyForm> binder = new Binder<>(CompanyForm.class);
         binder.setBean(form);
 
@@ -75,6 +83,21 @@ public class CompanyListView extends VerticalLayout {
         binder.bind(websiteField, "website");
         binder.bind(notesField, "notes");
 
+        boolean canChangeOwner = current.getRole() == Role.ADMIN;
+        final ComboBox<UserDto> ownerField;
+        if (canChangeOwner) {
+            Long originalOwnerId = existing != null ? existing.ownerId() : null;
+            ownerField = new ComboBox<>("Owner");
+            ownerField.setItems(userService.findAll());
+            ownerField.setItemLabelGenerator(u -> u.username() + " (" + u.email() + ")");
+            if (originalOwnerId != null) {
+                ownerField.setValue(userService.findAll().stream()
+                    .filter(u -> u.id().equals(originalOwnerId)).findFirst().orElse(null));
+            }
+        } else {
+            ownerField = null;
+        }
+
         Button save = new Button("Save", e -> {
             try {
                 if (nameField.getValue() == null || nameField.getValue().isBlank()) {
@@ -82,11 +105,12 @@ public class CompanyListView extends VerticalLayout {
                     nameField.focus();
                     return;
                 }
-                User current = securityService.getCurrentUser();
                 if (existing == null) {
                     companyService.create(form, current.getId());
                 } else {
-                    companyService.update(existing.id(), form, current.getId(), current.getRole());
+                    Long newOwnerId = canChangeOwner && ownerField.getValue() != null
+                        ? ownerField.getValue().id() : null;
+                    companyService.update(existing.id(), form, newOwnerId, current.getId(), current.getRole());
                 }
                 dialog.close();
                 refresh();
@@ -102,7 +126,6 @@ public class CompanyListView extends VerticalLayout {
                 new ConfirmDialog("Confirm Delete", "Delete this company?",
                     "Delete", ev -> {
                         try {
-                            User current = securityService.getCurrentUser();
                             companyService.delete(existing.id(), current.getId(), current.getRole());
                             dialog.close();
                             refresh();
@@ -118,7 +141,11 @@ public class CompanyListView extends VerticalLayout {
             buttons.add(delete);
         }
 
-        dialog.add(new FormLayout(nameField, websiteField, notesField), buttons);
+        if (canChangeOwner && ownerField != null) {
+            dialog.add(new FormLayout(nameField, websiteField, notesField, ownerField), buttons);
+        } else {
+            dialog.add(new FormLayout(nameField, websiteField, notesField), buttons);
+        }
         dialog.open();
     }
 

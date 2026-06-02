@@ -50,7 +50,7 @@ class CompanyControllerTest {
         mockMvc = MockMvcBuilders.standaloneSetup(companyController).build();
 
         adminUser = User.builder().id(1L).username("admin").role(Role.ADMIN).build();
-        companyDto = new CompanyDto(1L, "Test Corp", "https://test.com", "notes");
+        companyDto = new CompanyDto(1L, "Test Corp", "https://test.com", "notes", 1L, "admin");
         companyForm = new CompanyForm();
         companyForm.setName("Test Corp");
         companyForm.setWebsite("https://test.com");

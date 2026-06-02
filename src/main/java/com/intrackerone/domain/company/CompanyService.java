@@ -58,11 +58,24 @@ public class CompanyService {
 
     @Transactional
     public CompanyDto update(Long id, CompanyForm form, Long currentUserId, Role role) {
+        return update(id, form, null, currentUserId, role);
+    }
+
+    @Transactional
+    public CompanyDto update(Long id, CompanyForm form, Long newOwnerId, Long currentUserId, Role role) {
         Company company = findCompany(id);
         AccessControl.requireOwnerOrGlobal(company.getOwner(), currentUserId, role, "Company");
         company.setName(form.getName());
         company.setWebsite(form.getWebsite());
         company.setNotes(form.getNotes());
+        if (newOwnerId != null && !newOwnerId.equals(company.getOwner().getId())) {
+            if (role != Role.ADMIN) {
+                throw new UnauthorizedException("Only ADMIN can transfer company ownership");
+            }
+            User newOwner = userRepository.findById(newOwnerId)
+                    .orElseThrow(() -> new ResourceNotFoundException("User", newOwnerId));
+            company.setOwner(newOwner);
+        }
         company = companyRepository.save(company);
         return companyMapper.toDto(company);
     }

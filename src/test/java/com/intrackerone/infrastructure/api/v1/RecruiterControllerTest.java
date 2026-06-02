@@ -50,7 +50,7 @@ class RecruiterControllerTest {
         mockMvc = MockMvcBuilders.standaloneSetup(recruiterController).build();
         user = User.builder().id(1L).username("admin").role(Role.ADMIN).build();
         recruiterDto = new RecruiterDto(1L, "Jane Doe", "jane@test.com", "+123",
-            "Good", 1L, "TestCorp", Set.of(1L));
+            "Good", 1L, "TestCorp", Set.of(1L), 1L, "admin");
 
         form = new RecruiterForm();
         form.setName("Jane Doe");

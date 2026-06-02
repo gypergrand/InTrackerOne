@@ -95,12 +95,24 @@ public class JobService {
 
     @Transactional
     public JobDto update(Long id, JobForm form, Long currentUserId, Role role) {
+        return update(id, form, null, currentUserId, role);
+    }
+
+    @Transactional
+    public JobDto update(Long id, JobForm form, Long newOwnerId, Long currentUserId, Role role) {
         JobApplication job = findJob(id);
         AccessControl.requireOwnerOrGlobal(job.getOwner(), currentUserId, role, "JobApplication");
         updateFields(job, form);
         Project project = updateProject(job, form.getProjectId(), role);
         updateStatus(job, form.getCurrentStatusId(), role);
         updateRecruiter(job, form.getRecruiterId(), project, job.getOwner(), role);
+        if (newOwnerId != null && !newOwnerId.equals(job.getOwner().getId())) {
+            if (!AccessControl.hasGlobalDataAccess(role)) {
+                throw new UnauthorizedException("Only ADMIN or MODERATOR can transfer job ownership");
+            }
+            User newOwner = getUser(newOwnerId);
+            job.setOwner(newOwner);
+        }
         job = jobRepository.saveAndFlush(job);
         return jobMapper.toDto(job);
     }

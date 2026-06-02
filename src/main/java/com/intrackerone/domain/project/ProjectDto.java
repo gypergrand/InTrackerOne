@@ -8,5 +8,7 @@ public record ProjectDto(
     String description,
     Long companyId,
     String companyName,
-    Set<String> industries
+    Set<String> industries,
+    Long ownerId,
+    String ownerName
 ) {}

@@ -7,7 +7,10 @@ import com.intrackerone.domain.project.ProjectService;
 import com.intrackerone.domain.recruiter.RecruiterDto;
 import com.intrackerone.domain.recruiter.RecruiterForm;
 import com.intrackerone.domain.recruiter.RecruiterService;
+import com.intrackerone.domain.user.Role;
 import com.intrackerone.domain.user.User;
+import com.intrackerone.domain.user.UserDto;
+import com.intrackerone.domain.user.UserService;
 import com.intrackerone.infrastructure.security.SecurityService;
 import com.intrackerone.ui.views.MainLayout;
 import com.vaadin.flow.component.button.Button;
@@ -38,16 +41,19 @@ public class RecruiterListView extends VerticalLayout {
     private final RecruiterService recruiterService;
     private final CompanyService companyService;
     private final ProjectService projectService;
+    private final UserService userService;
     private final SecurityService securityService;
     private final Grid<RecruiterDto> grid = new Grid<>(RecruiterDto.class);
     private ComboBox<CompanyDto> companyFilter;
     private final List<CompanyDto> companies = new ArrayList<>();
 
     public RecruiterListView(RecruiterService recruiterService, CompanyService companyService,
-                              ProjectService projectService, SecurityService securityService) {
+                              ProjectService projectService, UserService userService,
+                              SecurityService securityService) {
         this.recruiterService = recruiterService;
         this.companyService = companyService;
         this.projectService = projectService;
+        this.userService = userService;
         this.securityService = securityService;
         setSizeFull();
         configureGrid();
@@ -63,6 +69,7 @@ public class RecruiterListView extends VerticalLayout {
         grid.addColumn(RecruiterDto::email).setHeader("Email");
         grid.addColumn(RecruiterDto::phone).setHeader("Phone");
         grid.addColumn(RecruiterDto::companyName).setHeader("Company");
+        grid.addColumn(RecruiterDto::ownerName).setHeader("Owner").setSortable(true);
         grid.asSingleSelect().addValueChangeListener(e -> {
             if (e.getValue() != null) openEditDialog(e.getValue());
         });
@@ -95,6 +102,20 @@ public class RecruiterListView extends VerticalLayout {
         TextField emailField = new TextField("Email");
         TextField phoneField = new TextField("Phone");
         TextArea notesField = new TextArea("Notes");
+
+        boolean canChangeOwner = current.getRole() == Role.ADMIN || current.getRole() == Role.MODERATOR;
+        final ComboBox<UserDto> ownerField;
+        if (canChangeOwner) {
+            ownerField = new ComboBox<>("Owner");
+            ownerField.setItems(userService.findAll());
+            ownerField.setItemLabelGenerator(u -> u.username() + " (" + u.email() + ")");
+            if (existing != null && existing.ownerId() != null) {
+                ownerField.setValue(userService.findAll().stream()
+                    .filter(u -> u.id().equals(existing.ownerId())).findFirst().orElse(null));
+            }
+        } else {
+            ownerField = null;
+        }
 
         ComboBox<CompanyDto> companyField = new ComboBox<>("Company");
         companyField.setItems(companies);
@@ -160,7 +181,9 @@ public class RecruiterListView extends VerticalLayout {
                 if (existing == null) {
                     recruiterService.create(form, current.getId(), current.getRole());
                 } else {
-                    recruiterService.update(existing.id(), form, current.getId(), current.getRole());
+                    Long newOwnerId = canChangeOwner && ownerField.getValue() != null
+                        ? ownerField.getValue().id() : null;
+                    recruiterService.update(existing.id(), form, newOwnerId, current.getId(), current.getRole());
                 }
                 dialog.close();
                 refreshGrid();
@@ -191,8 +214,13 @@ public class RecruiterListView extends VerticalLayout {
             buttons.add(delete);
         }
 
-        dialog.add(new FormLayout(nameField, emailField, phoneField, notesField, companyField, projectsField),
-            buttons);
+        if (canChangeOwner && ownerField != null) {
+            dialog.add(new FormLayout(nameField, emailField, phoneField, notesField, companyField, ownerField, projectsField),
+                       buttons);
+        } else {
+            dialog.add(new FormLayout(nameField, emailField, phoneField, notesField, companyField, projectsField),
+                       buttons);
+        }
         dialog.open();
     }
 

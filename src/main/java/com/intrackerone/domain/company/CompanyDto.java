@@ -4,5 +4,7 @@ public record CompanyDto(
     Long id,
     String name,
     String website,
-    String notes
+    String notes,
+    Long ownerId,
+    String ownerName
 ) {}

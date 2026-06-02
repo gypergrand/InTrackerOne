@@ -12,6 +12,8 @@ public interface ProjectMapper {
     @Mapping(target = "companyId", source = "company.id")
     @Mapping(target = "companyName", source = "company.name")
     @Mapping(target = "industries", expression = "java(industryNames(project))")
+    @Mapping(target = "ownerId", source = "owner.id")
+    @Mapping(target = "ownerName", source = "owner.username")
     ProjectDto toDto(Project project);
 
     @Mapping(target = "id", ignore = true)

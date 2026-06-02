@@ -63,6 +63,7 @@ class JobControllerTest {
             1L, "ProjectX", null, null,                      // projectId..companyName
             1L, "Jane Doe",                                  // recruiterId, recruiterName
             1L, "Applied", "#2196F3",                        // status id/name/color
+            1L, "admin",                                     // ownerId, ownerName
             null, null                                       // createdAt, updatedAt
         );
 

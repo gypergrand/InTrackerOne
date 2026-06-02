@@ -6,7 +6,10 @@ import com.intrackerone.domain.project.IndustryService;
 import com.intrackerone.domain.project.ProjectDto;
 import com.intrackerone.domain.project.ProjectForm;
 import com.intrackerone.domain.project.ProjectService;
+import com.intrackerone.domain.user.Role;
 import com.intrackerone.domain.user.User;
+import com.intrackerone.domain.user.UserDto;
+import com.intrackerone.domain.user.UserService;
 import com.intrackerone.infrastructure.security.SecurityService;
 import com.intrackerone.ui.views.MainLayout;
 import com.vaadin.flow.component.button.Button;
@@ -39,16 +42,19 @@ public class ProjectListView extends VerticalLayout {
     private final ProjectService projectService;
     private final CompanyService companyService;
     private final IndustryService industryService;
+    private final UserService userService;
     private final SecurityService securityService;
     private final Grid<ProjectDto> grid = new Grid<>(ProjectDto.class);
     private ComboBox<CompanyDto> companyFilter;
     private final List<CompanyDto> companies = new ArrayList<>();
 
     public ProjectListView(ProjectService projectService, CompanyService companyService,
-                           IndustryService industryService, SecurityService securityService) {
+                           IndustryService industryService, UserService userService,
+                           SecurityService securityService) {
         this.projectService = projectService;
         this.companyService = companyService;
         this.industryService = industryService;
+        this.userService = userService;
         this.securityService = securityService;
         setSizeFull();
         configureGrid();
@@ -79,6 +85,7 @@ public class ProjectListView extends VerticalLayout {
             }
             return badges;
         }).setHeader("Industries");
+        grid.addColumn(ProjectDto::ownerName).setHeader("Owner").setSortable(true);
         grid.asSingleSelect().addValueChangeListener(e -> {
             if (e.getValue() != null) openEditDialog(e.getValue());
         });
@@ -111,6 +118,20 @@ public class ProjectListView extends VerticalLayout {
         TextField nameField = new TextField("Name");
         nameField.setRequiredIndicatorVisible(true);
         TextArea descField = new TextArea("Description");
+
+        boolean canChangeOwner = current.getRole() == Role.ADMIN;
+        final ComboBox<UserDto> ownerField;
+        if (canChangeOwner) {
+            ownerField = new ComboBox<>("Owner");
+            ownerField.setItems(userService.findAll());
+            ownerField.setItemLabelGenerator(u -> u.username() + " (" + u.email() + ")");
+            if (existing != null && existing.ownerId() != null) {
+                ownerField.setValue(userService.findAll().stream()
+                    .filter(u -> u.id().equals(existing.ownerId())).findFirst().orElse(null));
+            }
+        } else {
+            ownerField = null;
+        }
 
         ComboBox<CompanyDto> companyField = new ComboBox<>("Company");
         companyField.setItems(companies);
@@ -191,7 +212,9 @@ public class ProjectListView extends VerticalLayout {
                 if (existing == null) {
                     projectService.create(form, current.getId(), current.getRole());
                 } else {
-                    projectService.update(existing.id(), form, current.getId(), current.getRole());
+                    Long newOwnerId = canChangeOwner && ownerField.getValue() != null
+                        ? ownerField.getValue().id() : null;
+                    projectService.update(existing.id(), form, newOwnerId, current.getId(), current.getRole());
                 }
                 dialog.close();
                 refreshGrid();
@@ -222,9 +245,15 @@ public class ProjectListView extends VerticalLayout {
             buttons.add(delete);
         }
 
-        dialog.add(new FormLayout(nameField, descField, companyField, industryCombo),
-                   selectedTags,
-                   buttons);
+        if (canChangeOwner && ownerField != null) {
+            dialog.add(new FormLayout(nameField, descField, companyField, ownerField, industryCombo),
+                       selectedTags,
+                       buttons);
+        } else {
+            dialog.add(new FormLayout(nameField, descField, companyField, industryCombo),
+                       selectedTags,
+                       buttons);
+        }
         dialog.open();
     }
 

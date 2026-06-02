@@ -16,7 +16,10 @@ import com.intrackerone.domain.recruiter.RecruiterDto;
 import com.intrackerone.domain.recruiter.RecruiterService;
 import com.intrackerone.domain.status.PipelineStatusDto;
 import com.intrackerone.domain.status.PipelineStatusService;
+import com.intrackerone.domain.user.Role;
 import com.intrackerone.domain.user.User;
+import com.intrackerone.domain.user.UserDto;
+import com.intrackerone.domain.user.UserService;
 import com.intrackerone.infrastructure.security.SecurityService;
 import com.intrackerone.ui.views.MainLayout;
 import com.vaadin.flow.component.button.Button;
@@ -47,17 +50,20 @@ public class JobListView extends VerticalLayout {
     private final ProjectService projectService;
     private final RecruiterService recruiterService;
     private final PipelineStatusService pipelineStatusService;
+    private final UserService userService;
     private final SecurityService securityService;
     private final Grid<JobDto> grid = new Grid<>(JobDto.class);
 
     public JobListView(JobService jobService, CompanyService companyService,
                        ProjectService projectService, RecruiterService recruiterService,
-                       PipelineStatusService pipelineStatusService, SecurityService securityService) {
+                       PipelineStatusService pipelineStatusService, UserService userService,
+                       SecurityService securityService) {
         this.jobService = jobService;
         this.companyService = companyService;
         this.projectService = projectService;
         this.recruiterService = recruiterService;
         this.pipelineStatusService = pipelineStatusService;
+        this.userService = userService;
         this.securityService = securityService;
         setSizeFull();
         configureGrid();
@@ -84,6 +90,7 @@ public class JobListView extends VerticalLayout {
         grid.addColumn(job -> job.timezone() != null ? job.timezone().getDisplayLabel() : "").setHeader("Timezone");
         grid.addColumn(job -> job.onCallSchedule() != null && job.onCallSchedule() != OnCallSchedule.NONE ? job.onCallSchedule().name() : "").setHeader("On-Call");
         grid.addColumn(JobDto::updatedAt).setHeader("Updated");
+        grid.addColumn(JobDto::ownerName).setHeader("Owner").setSortable(true);
         grid.asSingleSelect().addValueChangeListener(e -> {
             if (e.getValue() != null) openEditDialog(e.getValue());
         });
@@ -124,6 +131,20 @@ public class JobListView extends VerticalLayout {
         sourceField.setLabel("Source");
         sourceField.setItems(Source.values());
         sourceField.setRequiredIndicatorVisible(true);
+
+        boolean canChangeOwner = current.getRole() == Role.ADMIN || current.getRole() == Role.MODERATOR;
+        final ComboBox<UserDto> ownerField;
+        if (canChangeOwner) {
+            ownerField = new ComboBox<>("Owner");
+            ownerField.setItems(userService.findAll());
+            ownerField.setItemLabelGenerator(u -> u.username() + " (" + u.email() + ")");
+            if (existing != null && existing.ownerId() != null) {
+                ownerField.setValue(userService.findAll().stream()
+                    .filter(u -> u.id().equals(existing.ownerId())).findFirst().orElse(null));
+            }
+        } else {
+            ownerField = null;
+        }
 
         // On-call schedule
         Select<OnCallSchedule> onCallField = new Select<>();
@@ -306,7 +327,9 @@ public class JobListView extends VerticalLayout {
                 if (existing == null) {
                     jobService.create(form, current.getId(), current.getRole());
                 } else {
-                    jobService.update(existing.id(), form, current.getId(), current.getRole());
+                    Long newOwnerId = canChangeOwner && ownerField.getValue() != null
+                        ? ownerField.getValue().id() : null;
+                    jobService.update(existing.id(), form, newOwnerId, current.getId(), current.getRole());
                 }
                 dialog.close();
                 refresh();
@@ -341,8 +364,11 @@ public class JobListView extends VerticalLayout {
             typeField, workTypeField, sourceField, sourceMetaField, notesField,
             companyField, projectField, recruiterField, statusField),
             new FormLayout(onCallField, onCallDetailsField, timezoneField, timezoneIsOther, timezoneOtherField,
-                firstAppearedField, repostedField),
-            buttons);
+                firstAppearedField, repostedField));
+        if (canChangeOwner && ownerField != null) {
+            dialog.add(new FormLayout(ownerField));
+        }
+        dialog.add(buttons);
         dialog.open();
     }
 

@@ -78,12 +78,25 @@ public class ProjectService {
 
     @Transactional
     public ProjectDto update(Long id, ProjectForm form, Long currentUserId, Role role) {
+        return update(id, form, null, currentUserId, role);
+    }
+
+    @Transactional
+    public ProjectDto update(Long id, ProjectForm form, Long newOwnerId, Long currentUserId, Role role) {
         Project project = findProject(id);
         AccessControl.requireOwnerOrGlobal(project.getOwner(), currentUserId, role, "Project");
         project.setName(form.getName());
         project.setDescription(form.getDescription());
         updateCompany(project, form.getCompanyId());
         project.setIndustries(resolveIndustries(form.getIndustries()));
+        if (newOwnerId != null && !newOwnerId.equals(project.getOwner().getId())) {
+            if (role != Role.ADMIN) {
+                throw new UnauthorizedException("Only ADMIN can transfer project ownership");
+            }
+            var newOwner = userRepository.findById(newOwnerId)
+                    .orElseThrow(() -> new ResourceNotFoundException("User", newOwnerId));
+            project.setOwner(newOwner);
+        }
         project = projectRepository.save(project);
         return projectMapper.toDto(project);
     }

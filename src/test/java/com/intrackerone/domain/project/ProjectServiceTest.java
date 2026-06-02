@@ -68,7 +68,7 @@ class ProjectServiceTest {
             .id(1L).name("Platform").description("Backend").company(company).owner(admin)
             .build();
 
-        projectDto = new ProjectDto(1L, "Platform", "Backend", 1L, "TestCorp", java.util.Set.of("Software Development", "SaaS"));
+        projectDto = new ProjectDto(1L, "Platform", "Backend", 1L, "TestCorp", java.util.Set.of("Software Development", "SaaS"), 1L, "admin");
 
         form = new ProjectForm();
         form.setName("Platform");

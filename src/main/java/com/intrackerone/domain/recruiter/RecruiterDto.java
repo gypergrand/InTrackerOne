@@ -10,5 +10,7 @@ public record RecruiterDto(
     String notes,
     Long companyId,
     String companyName,
-    Set<Long> projectIds
+    Set<Long> projectIds,
+    Long ownerId,
+    String ownerName
 ) {}

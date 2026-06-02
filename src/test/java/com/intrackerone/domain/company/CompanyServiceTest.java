@@ -58,7 +58,7 @@ class CompanyServiceTest {
             .id(1L).name("TestCorp").website("https://test.com").notes("notes")
             .owner(admin).build();
 
-        companyDto = new CompanyDto(1L, "TestCorp", "https://test.com", "notes");
+        companyDto = new CompanyDto(1L, "TestCorp", "https://test.com", "notes", 1L, "admin");
 
         form = new CompanyForm();
         form.setName("TestCorp");

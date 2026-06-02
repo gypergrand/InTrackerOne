@@ -14,6 +14,8 @@ public interface RecruiterMapper {
     @Mapping(target = "companyId", source = "company.id")
     @Mapping(target = "companyName", source = "company.name")
     @Mapping(target = "projectIds", source = "projects", qualifiedByName = "projectToIds")
+    @Mapping(target = "ownerId", source = "owner.id")
+    @Mapping(target = "ownerName", source = "owner.username")
     RecruiterDto toDto(Recruiter recruiter);
 
     @Mapping(target = "id", ignore = true)

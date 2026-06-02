@@ -81,6 +81,11 @@ public class RecruiterService {
 
     @Transactional
     public RecruiterDto update(Long id, RecruiterForm form, Long currentUserId, Role role) {
+        return update(id, form, null, currentUserId, role);
+    }
+
+    @Transactional
+    public RecruiterDto update(Long id, RecruiterForm form, Long newOwnerId, Long currentUserId, Role role) {
         Recruiter recruiter = findRecruiter(id);
         AccessControl.requireOwnerOrGlobal(recruiter.getOwner(), currentUserId, role, "Recruiter");
         updateFields(recruiter, form);
@@ -88,6 +93,14 @@ public class RecruiterService {
         if (form.getProjectIds() != null) {
             Long companyId = recruiter.getCompany().getId();
             recruiter.setProjects(resolveProjects(form.getProjectIds(), recruiter.getOwner(), companyId));
+        }
+        if (newOwnerId != null && !newOwnerId.equals(recruiter.getOwner().getId())) {
+            if (!AccessControl.hasGlobalDataAccess(role)) {
+                throw new UnauthorizedException("Only ADMIN or MODERATOR can transfer recruiter ownership");
+            }
+            User newOwner = userRepository.findById(newOwnerId)
+                    .orElseThrow(() -> new ResourceNotFoundException("User", newOwnerId));
+            recruiter.setOwner(newOwner);
         }
         recruiter = recruiterRepository.save(recruiter);
         return recruiterMapper.toDto(recruiter);
