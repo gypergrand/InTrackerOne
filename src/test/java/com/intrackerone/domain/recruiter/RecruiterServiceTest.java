@@ -2,6 +2,7 @@ package com.intrackerone.domain.recruiter;
 
 import com.intrackerone.domain.company.Company;
 import com.intrackerone.domain.company.CompanyRepository;
+import com.intrackerone.domain.job.JobApplicationRepository;
 import com.intrackerone.domain.project.Project;
 import com.intrackerone.domain.project.ProjectRepository;
 import com.intrackerone.domain.user.Role;
@@ -44,6 +45,9 @@ class RecruiterServiceTest {
 
     @Mock
     private UserRepository userRepository;
+
+    @Mock
+    private JobApplicationRepository jobApplicationRepository;
 
     @InjectMocks
     private RecruiterService recruiterService;
@@ -166,6 +170,7 @@ class RecruiterServiceTest {
     @Test
     void delete_whenExists_deletes() {
         when(recruiterRepository.findById(1L)).thenReturn(Optional.of(recruiter));
+        when(jobApplicationRepository.findByRecruiterId(1L)).thenReturn(List.of());
 
         recruiterService.delete(1L, 1L, Role.ADMIN);
 

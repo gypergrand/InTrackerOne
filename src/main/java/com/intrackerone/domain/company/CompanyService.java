@@ -1,9 +1,12 @@
 package com.intrackerone.domain.company;
 
+import com.intrackerone.domain.project.ProjectRepository;
+import com.intrackerone.domain.recruiter.RecruiterRepository;
 import com.intrackerone.domain.user.Role;
 import com.intrackerone.domain.user.User;
 import com.intrackerone.domain.user.UserRepository;
 import com.intrackerone.infrastructure.exception.ResourceNotFoundException;
+import com.intrackerone.infrastructure.exception.UnauthorizedException;
 import com.intrackerone.infrastructure.security.AccessControl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,6 +23,8 @@ public class CompanyService {
     private final CompanyRepository companyRepository;
     private final CompanyMapper companyMapper;
     private final UserRepository userRepository;
+    private final ProjectRepository projectRepository;
+    private final RecruiterRepository recruiterRepository;
 
     @Transactional(readOnly = true)
     public List<CompanyDto> findAll(Long currentUserId, Role role) {
@@ -66,6 +71,12 @@ public class CompanyService {
     public void delete(Long id, Long currentUserId, Role role) {
         Company company = findCompany(id);
         AccessControl.requireOwnerOrGlobal(company.getOwner(), currentUserId, role, "Company");
+        if (!projectRepository.findByCompanyId(id).isEmpty()) {
+            throw new UnauthorizedException("Cannot delete company with existing projects. Delete projects first.");
+        }
+        if (!recruiterRepository.findByCompanyId(id).isEmpty()) {
+            throw new UnauthorizedException("Cannot delete company with existing recruiters. Delete recruiters first.");
+        }
         companyRepository.delete(company);
     }
 

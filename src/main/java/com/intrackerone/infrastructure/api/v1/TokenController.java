@@ -1,7 +1,10 @@
 package com.intrackerone.infrastructure.api.v1;
 
+import com.intrackerone.domain.user.ApiTokenCreateForm;
+import com.intrackerone.domain.user.ApiTokenDto;
 import com.intrackerone.domain.user.ApiTokenService;
 import com.intrackerone.infrastructure.security.SecurityService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,9 +17,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.intrackerone.domain.user.ApiTokenDto;
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/api/v1/tokens")
@@ -34,9 +35,9 @@ public class TokenController {
     }
 
     @PostMapping
-    public ResponseEntity<ApiTokenService.CreatedToken> create(@RequestBody Map<String, String> body) {
+    public ResponseEntity<ApiTokenService.CreatedToken> create(@Valid @RequestBody ApiTokenCreateForm form) {
         var current = securityService.getCurrentUser();
-        ApiTokenService.CreatedToken result = apiTokenService.create(current.getId(), body.get("name"));
+        ApiTokenService.CreatedToken result = apiTokenService.create(current.getId(), form.getName());
         return ResponseEntity.status(HttpStatus.CREATED).body(result);
     }
 

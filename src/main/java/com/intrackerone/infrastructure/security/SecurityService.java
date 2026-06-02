@@ -23,6 +23,6 @@ public class SecurityService {
         }
         String username = auth.getName();
         return userRepository.findByUsername(username)
-            .orElseThrow(() -> new ResourceNotFoundException("User not found for authenticated principal: " + username));
+            .orElseThrow(() -> new UnauthorizedException("Authenticated principal not found in database: " + username));
     }
 }

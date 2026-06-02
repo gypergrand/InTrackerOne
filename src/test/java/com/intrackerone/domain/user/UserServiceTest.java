@@ -1,5 +1,10 @@
 package com.intrackerone.domain.user;
 
+import com.intrackerone.domain.company.CompanyRepository;
+import com.intrackerone.domain.job.JobApplicationRepository;
+import com.intrackerone.domain.project.ProjectRepository;
+import com.intrackerone.domain.recruiter.RecruiterRepository;
+import com.intrackerone.domain.status.PipelineStatusRepository;
 import com.intrackerone.domain.status.PipelineStatusService;
 import com.intrackerone.infrastructure.exception.ResourceNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
@@ -34,6 +39,24 @@ class UserServiceTest {
 
     @Mock
     private PipelineStatusService pipelineStatusService;
+
+    @Mock
+    private ApiTokenRepository apiTokenRepository;
+
+    @Mock
+    private CompanyRepository companyRepository;
+
+    @Mock
+    private ProjectRepository projectRepository;
+
+    @Mock
+    private RecruiterRepository recruiterRepository;
+
+    @Mock
+    private PipelineStatusRepository pipelineStatusRepository;
+
+    @Mock
+    private JobApplicationRepository jobApplicationRepository;
 
     @InjectMocks
     private UserService userService;
@@ -125,6 +148,12 @@ class UserServiceTest {
     @Test
     void delete_whenExists_deletes() {
         when(userRepository.existsById(1L)).thenReturn(true);
+        when(apiTokenRepository.findByUserId(1L)).thenReturn(List.of());
+        when(companyRepository.findByOwnerId(1L)).thenReturn(List.of());
+        when(projectRepository.findByOwnerId(1L)).thenReturn(List.of());
+        when(recruiterRepository.findByOwnerId(1L)).thenReturn(List.of());
+        when(pipelineStatusRepository.findByOwnerIdOrderBySortOrderAsc(1L)).thenReturn(List.of());
+        when(jobApplicationRepository.findByOwnerId(1L)).thenReturn(List.of());
 
         userService.delete(1L);
 

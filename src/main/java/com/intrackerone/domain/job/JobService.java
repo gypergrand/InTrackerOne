@@ -1,7 +1,9 @@
 package com.intrackerone.domain.job;
 
+import com.intrackerone.domain.compensation.CompensationEntryRepository;
 import com.intrackerone.domain.history.StatusChange;
 import com.intrackerone.domain.history.StatusChangeRepository;
+import com.intrackerone.domain.interview.InterviewEventRepository;
 import com.intrackerone.domain.project.Project;
 import com.intrackerone.domain.project.ProjectRepository;
 import com.intrackerone.domain.recruiter.Recruiter;
@@ -34,6 +36,8 @@ public class JobService {
     private final RecruiterRepository recruiterRepository;
     private final PipelineStatusRepository pipelineStatusRepository;
     private final StatusChangeRepository statusChangeRepository;
+    private final InterviewEventRepository interviewEventRepository;
+    private final CompensationEntryRepository compensationEntryRepository;
     private final com.intrackerone.domain.user.UserRepository userRepository;
 
     @Transactional(readOnly = true)
@@ -105,6 +109,9 @@ public class JobService {
     public void delete(Long id, Long currentUserId, Role role) {
         JobApplication job = findJob(id);
         AccessControl.requireOwnerOrGlobal(job.getOwner(), currentUserId, role, "JobApplication");
+        statusChangeRepository.deleteAll(statusChangeRepository.findByJobApplicationIdOrderByChangedAtDesc(id));
+        interviewEventRepository.deleteAll(interviewEventRepository.findByJobApplicationIdOrderByEventDateAsc(id));
+        compensationEntryRepository.deleteAll(compensationEntryRepository.findByJobApplicationId(id));
         jobRepository.delete(job);
     }
 

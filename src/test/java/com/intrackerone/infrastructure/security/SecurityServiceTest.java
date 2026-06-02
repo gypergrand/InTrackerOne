@@ -78,7 +78,7 @@ class SecurityServiceTest {
     }
 
     @Test
-    void getCurrentUser_whenAuthenticatedUserExistsButNotFoundInRepository_throwsResourceNotFoundException() {
+    void getCurrentUser_whenAuthenticatedUserExistsButNotFoundInRepository_throwsUnauthorizedException() {
         // Given
         String username = "testUser";
 
@@ -88,8 +88,8 @@ class SecurityServiceTest {
         when(userRepository.findByUsername(username)).thenReturn(Optional.empty());
 
         // When & Then
-        ResourceNotFoundException exception = assertThrows(ResourceNotFoundException.class, () -> securityService.getCurrentUser());
-        assertEquals("User not found for authenticated principal: testUser", exception.getMessage());
+        UnauthorizedException exception = assertThrows(UnauthorizedException.class, () -> securityService.getCurrentUser());
+        assertEquals("Authenticated principal not found in database: testUser", exception.getMessage());
         verify(securityContext, times(1)).getAuthentication();
         verify(authentication, times(1)).isAuthenticated();
         verify(authentication, times(1)).getName();

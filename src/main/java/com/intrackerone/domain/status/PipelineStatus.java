@@ -25,7 +25,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "pipeline_statuses", uniqueConstraints = {
-    @UniqueConstraint(columnNames = {"user_id", "name"})
+    @UniqueConstraint(columnNames = {"owner_id", "name"})
 })
 @Getter
 @Setter

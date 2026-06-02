@@ -60,7 +60,6 @@ class CompanyControllerTest {
     @Test
     void getAll_returnsCompanies() throws Exception {
         when(securityService.getCurrentUser()).thenReturn(adminUser);
-        when(securityService.getCurrentUser()).thenReturn(adminUser);
         when(companyService.findAll(1L, Role.ADMIN)).thenReturn(List.of(companyDto));
 
         mockMvc.perform(get("/api/v1/companies"))
@@ -81,7 +80,6 @@ class CompanyControllerTest {
 
     @Test
     void create_returnsCreated() throws Exception {
-        when(securityService.getCurrentUser()).thenReturn(adminUser);
         when(securityService.getCurrentUser()).thenReturn(adminUser);
         when(companyService.create(any(CompanyForm.class), eq(1L))).thenReturn(companyDto);
 

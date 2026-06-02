@@ -1,5 +1,6 @@
 package com.intrackerone.infrastructure.api.v1;
 
+import com.intrackerone.domain.history.StatusChangeDto;
 import com.intrackerone.domain.history.StatusChangeService;
 import com.intrackerone.domain.job.JobService;
 import com.intrackerone.domain.status.PipelineStatusService;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -44,7 +46,7 @@ public class DashboardController {
     }
 
     @GetMapping("/recent")
-    public Object recent() {
+    public List<StatusChangeDto> recent() {
         User current = securityService.getCurrentUser();
         return statusChangeService.findRecentByOwnerId(current.getId(), 20);
     }

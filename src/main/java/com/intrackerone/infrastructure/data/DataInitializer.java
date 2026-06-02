@@ -10,6 +10,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.core.annotation.Order;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 @Component
 @Order(1)
@@ -22,6 +23,7 @@ public class DataInitializer implements CommandLineRunner {
     private final PipelineStatusService pipelineStatusService;
 
     @Override
+    @Transactional
     public void run(String... args) {
         User admin;
         if (!userRepository.existsByUsername("admin")) {

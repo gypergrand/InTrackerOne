@@ -6,6 +6,7 @@ import com.intrackerone.domain.status.PipelineStatusService;
 import com.intrackerone.domain.user.User;
 import com.intrackerone.infrastructure.security.SecurityService;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,7 +20,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/api/v1/statuses")
@@ -28,6 +28,8 @@ public class StatusController {
 
     private final PipelineStatusService pipelineStatusService;
     private final SecurityService securityService;
+
+    public record MoveRequest(@NotNull Integer newOrder) {}
 
     @GetMapping
     public List<PipelineStatusDto> findAll() {
@@ -62,9 +64,9 @@ public class StatusController {
     }
 
     @PutMapping("/{id}/move")
-    public ResponseEntity<Void> move(@PathVariable Long id, @RequestBody Map<String, Integer> body) {
+    public ResponseEntity<Void> move(@PathVariable Long id, @Valid @RequestBody MoveRequest body) {
         User current = securityService.getCurrentUser();
-        pipelineStatusService.move(id, body.get("newOrder"), current.getId(), current.getRole());
+        pipelineStatusService.move(id, body.newOrder(), current.getId(), current.getRole());
         return ResponseEntity.ok().build();
     }
 }

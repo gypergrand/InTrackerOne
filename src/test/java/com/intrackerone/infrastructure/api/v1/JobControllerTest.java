@@ -25,9 +25,8 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.util.List;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.when;
+import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -81,7 +80,6 @@ class JobControllerTest {
     @Test
     void findAll_returnsJobs() throws Exception {
         when(securityService.getCurrentUser()).thenReturn(user);
-        when(securityService.getCurrentUser()).thenReturn(user);
         when(jobService.findAll(1L, Role.ADMIN, null, null, null)).thenReturn(List.of(jobDto));
 
         mockMvc.perform(get("/api/v1/jobs"))
@@ -101,7 +99,6 @@ class JobControllerTest {
 
     @Test
     void create_returnsCreated() throws Exception {
-        when(securityService.getCurrentUser()).thenReturn(user);
         when(securityService.getCurrentUser()).thenReturn(user);
         when(jobService.create(any(JobForm.class), eq(1L), eq(Role.ADMIN))).thenReturn(jobDto);
 
@@ -137,5 +134,6 @@ class JobControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{\"statusId\":2,\"notes\":\"Moving forward\",\"decidedBy\":\"COMPANY\"}"))
             .andExpect(status().isOk());
+        verify(statusChangeService).recordChange(eq(1L), eq(2L), eq("COMPANY"), eq("Moving forward"), eq(1L), eq(Role.ADMIN));
     }
 }

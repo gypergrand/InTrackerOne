@@ -2,9 +2,11 @@ package com.intrackerone.domain.project;
 
 import com.intrackerone.domain.company.Company;
 import com.intrackerone.domain.company.CompanyRepository;
+import com.intrackerone.domain.job.JobApplicationRepository;
 import com.intrackerone.domain.user.Role;
 import com.intrackerone.domain.user.UserRepository;
 import com.intrackerone.infrastructure.exception.ResourceNotFoundException;
+import com.intrackerone.infrastructure.exception.UnauthorizedException;
 import com.intrackerone.infrastructure.security.AccessControl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,6 +25,7 @@ public class ProjectService {
     private final CompanyRepository companyRepository;
     private final IndustryRepository industryRepository;
     private final UserRepository userRepository;
+    private final JobApplicationRepository jobApplicationRepository;
 
     @Transactional(readOnly = true)
     public List<ProjectDto> findByCompanyId(Long companyId, Long currentUserId, Role role) {
@@ -89,6 +92,9 @@ public class ProjectService {
     public void delete(Long id, Long currentUserId, Role role) {
         Project project = findProject(id);
         AccessControl.requireOwnerOrGlobal(project.getOwner(), currentUserId, role, "Project");
+        if (!jobApplicationRepository.findByProjectId(id).isEmpty()) {
+            throw new UnauthorizedException("Cannot delete project with existing job applications. Delete jobs first.");
+        }
         projectRepository.delete(project);
     }
 

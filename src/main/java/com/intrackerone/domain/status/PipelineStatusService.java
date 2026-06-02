@@ -1,9 +1,12 @@
 package com.intrackerone.domain.status;
 
+import com.intrackerone.domain.history.StatusChangeRepository;
+import com.intrackerone.domain.job.JobApplicationRepository;
 import com.intrackerone.domain.user.Role;
 import com.intrackerone.domain.user.User;
 import com.intrackerone.domain.user.UserRepository;
 import com.intrackerone.infrastructure.exception.ResourceNotFoundException;
+import com.intrackerone.infrastructure.exception.UnauthorizedException;
 import com.intrackerone.infrastructure.security.AccessControl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,6 +23,8 @@ public class PipelineStatusService {
     private final PipelineStatusRepository pipelineStatusRepository;
     private final PipelineStatusMapper pipelineStatusMapper;
     private final UserRepository userRepository;
+    private final JobApplicationRepository jobApplicationRepository;
+    private final StatusChangeRepository statusChangeRepository;
 
     @Transactional(readOnly = true)
     public List<PipelineStatusDto> findByOwnerId(Long ownerId) {
@@ -79,6 +84,12 @@ public class PipelineStatusService {
     public void delete(Long id, Long currentUserId, Role role) {
         PipelineStatus status = findStatus(id);
         AccessControl.requireOwnerOrGlobal(status.getOwner(), currentUserId, role, "PipelineStatus");
+        if (!jobApplicationRepository.findByCurrentStatusId(id).isEmpty()) {
+            throw new UnauthorizedException("Cannot delete status used by active job applications. Change job statuses first.");
+        }
+        if (!statusChangeRepository.findByToStatusId(id).isEmpty()) {
+            throw new UnauthorizedException("Cannot delete status with recorded status changes.");
+        }
         pipelineStatusRepository.delete(status);
     }
 

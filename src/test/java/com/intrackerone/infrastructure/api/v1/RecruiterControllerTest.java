@@ -61,7 +61,6 @@ class RecruiterControllerTest {
     @Test
     void findByCompany_returnsRecruiters() throws Exception {
         when(securityService.getCurrentUser()).thenReturn(user);
-        when(securityService.getCurrentUser()).thenReturn(user);
         when(recruiterService.findByCompanyId(1L, 1L, Role.ADMIN)).thenReturn(List.of(recruiterDto));
 
         mockMvc.perform(get("/api/v1/recruiters").param("companyId", "1"))
@@ -81,7 +80,6 @@ class RecruiterControllerTest {
 
     @Test
     void create_returnsCreated() throws Exception {
-        when(securityService.getCurrentUser()).thenReturn(user);
         when(securityService.getCurrentUser()).thenReturn(user);
         when(recruiterService.create(any(RecruiterForm.class), eq(1L), eq(Role.ADMIN))).thenReturn(recruiterDto);
 

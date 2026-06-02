@@ -60,7 +60,6 @@ class StatusControllerTest {
     @Test
     void findAll_returnsStatuses() throws Exception {
         when(securityService.getCurrentUser()).thenReturn(user);
-        when(securityService.getCurrentUser()).thenReturn(user);
         when(pipelineStatusService.findByOwnerId(1L)).thenReturn(List.of(statusDto));
 
         mockMvc.perform(get("/api/v1/statuses"))
@@ -80,7 +79,6 @@ class StatusControllerTest {
 
     @Test
     void create_returnsCreated() throws Exception {
-        when(securityService.getCurrentUser()).thenReturn(user);
         when(securityService.getCurrentUser()).thenReturn(user);
         when(pipelineStatusService.create(any(PipelineStatusForm.class), eq(1L))).thenReturn(statusDto);
 

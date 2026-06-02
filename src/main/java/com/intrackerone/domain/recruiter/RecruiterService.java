@@ -2,6 +2,8 @@ package com.intrackerone.domain.recruiter;
 
 import com.intrackerone.domain.company.Company;
 import com.intrackerone.domain.company.CompanyRepository;
+import com.intrackerone.domain.job.JobApplication;
+import com.intrackerone.domain.job.JobApplicationRepository;
 import com.intrackerone.domain.project.Project;
 import com.intrackerone.domain.project.ProjectRepository;
 import com.intrackerone.domain.user.Role;
@@ -29,6 +31,7 @@ public class RecruiterService {
     private final CompanyRepository companyRepository;
     private final ProjectRepository projectRepository;
     private final UserRepository userRepository;
+    private final JobApplicationRepository jobApplicationRepository;
 
     @Transactional(readOnly = true)
     public List<RecruiterDto> findByCompanyId(Long companyId, Long currentUserId, Role role) {
@@ -94,6 +97,9 @@ public class RecruiterService {
     public void delete(Long id, Long currentUserId, Role role) {
         Recruiter recruiter = findRecruiter(id);
         AccessControl.requireOwnerOrGlobal(recruiter.getOwner(), currentUserId, role, "Recruiter");
+        for (JobApplication job : jobApplicationRepository.findByRecruiterId(id)) {
+            job.setRecruiter(null);
+        }
         recruiterRepository.delete(recruiter);
     }
 

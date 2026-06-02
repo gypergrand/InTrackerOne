@@ -9,4 +9,6 @@ public interface StatusChangeRepository extends JpaRepository<StatusChange, Long
     List<StatusChange> findByJobApplicationIdOrderByChangedAtDesc(Long jobApplicationId);
 
     List<StatusChange> findByJobApplicationOwnerIdOrderByChangedAtDesc(Long ownerId);
+
+    List<StatusChange> findByToStatusId(Long statusId);
 }

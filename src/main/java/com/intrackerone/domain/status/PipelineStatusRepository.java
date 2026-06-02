@@ -9,7 +9,5 @@ public interface PipelineStatusRepository extends JpaRepository<PipelineStatus, 
 
     List<PipelineStatus> findByOwnerIdOrderBySortOrderAsc(Long ownerId);
 
-    Optional<PipelineStatus> findByOwnerIdAndName(Long ownerId, String name);
-
     boolean existsByOwnerIdAndName(Long ownerId, String name);
 }

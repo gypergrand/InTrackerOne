@@ -60,7 +60,6 @@ class ProjectControllerTest {
     @Test
     void findByCompany_returnsProjects() throws Exception {
         when(securityService.getCurrentUser()).thenReturn(user);
-        when(securityService.getCurrentUser()).thenReturn(user);
         when(projectService.findByCompanyId(1L, 1L, Role.ADMIN)).thenReturn(List.of(projectDto));
 
         mockMvc.perform(get("/api/v1/projects").param("companyId", "1"))
@@ -80,7 +79,6 @@ class ProjectControllerTest {
 
     @Test
     void create_returnsCreated() throws Exception {
-        when(securityService.getCurrentUser()).thenReturn(user);
         when(securityService.getCurrentUser()).thenReturn(user);
         when(projectService.create(any(ProjectForm.class), eq(1L), eq(Role.ADMIN))).thenReturn(projectDto);
 
