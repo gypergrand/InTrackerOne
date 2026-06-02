@@ -20,6 +20,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -38,9 +40,9 @@ public class JobService {
     public List<JobDto> findAll(Long currentUserId, Role role, Long statusId, Long companyId, Long projectId) {
         List<JobApplication> jobs;
         if (role == Role.ADMIN) {
-            jobs = jobRepository.findAll();
+            jobs = jobRepository.findAllWithRelations();
         } else {
-            jobs = jobRepository.findByOwnerId(currentUserId);
+            jobs = jobRepository.findByOwnerIdWithRelations(currentUserId);
         }
         return jobs.stream()
                 .filter(j -> statusId == null || (j.getCurrentStatus() != null && j.getCurrentStatus().getId().equals(statusId)))
@@ -104,7 +106,7 @@ public class JobService {
         jobRepository.delete(job);
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public long countByOwnerId(Long ownerId) {
         return jobRepository.countByOwnerId(ownerId);
     }
@@ -112,6 +114,15 @@ public class JobService {
     @Transactional(readOnly = true)
     public long countByOwnerIdAndStatusId(Long ownerId, Long statusId) {
         return jobRepository.countByOwnerIdAndCurrentStatusId(ownerId, statusId);
+    }
+
+    @Transactional(readOnly = true)
+    public Map<Long, Long> countByOwnerGroupByStatusId(Long ownerId) {
+        return jobRepository.countByOwnerIdGroupByStatusId(ownerId).stream()
+                .collect(Collectors.toMap(
+                    row -> (Long) row[0],
+                    row -> (Long) row[1]
+                ));
     }
 
     private void updateFields(JobApplication job, JobForm form) {

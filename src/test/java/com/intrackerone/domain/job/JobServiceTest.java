@@ -107,7 +107,7 @@ class JobServiceTest {
 
     @Test
     void findAll_forAdmin_returnsAllJobs() {
-        when(jobRepository.findAll()).thenReturn(List.of(job));
+        when(jobRepository.findAllWithRelations()).thenReturn(List.of(job));
         when(jobMapper.toDto(job)).thenReturn(jobDto);
 
         List<JobDto> result = jobService.findAll(1L, Role.ADMIN, null, null, null);
@@ -117,7 +117,7 @@ class JobServiceTest {
 
     @Test
     void findAll_withStatusFilter_filtersResults() {
-        when(jobRepository.findAll()).thenReturn(List.of(job));
+        when(jobRepository.findAllWithRelations()).thenReturn(List.of(job));
 
         List<JobDto> result = jobService.findAll(1L, Role.ADMIN, 99L, null, null);
 

@@ -36,6 +36,9 @@ public class UserService {
 
     @Transactional
     public UserDto create(UserForm form) {
+        if (form.getPassword() == null || form.getPassword().isBlank()) {
+            throw new IllegalArgumentException("Password is required");
+        }
         User user = userMapper.toEntity(form);
         user.setPassword(passwordEncoder.encode(form.getPassword()));
         user = userRepository.save(user);

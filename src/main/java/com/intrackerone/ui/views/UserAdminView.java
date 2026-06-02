@@ -66,10 +66,13 @@ public class UserAdminView extends VerticalLayout {
         UserForm form = new UserForm();
 
         TextField usernameField = new TextField("Username");
+        usernameField.setRequiredIndicatorVisible(true);
         PasswordField passwordField = new PasswordField("Password");
         TextField emailField = new TextField("Email");
+        emailField.setRequiredIndicatorVisible(true);
         ComboBox<Role> roleField = new ComboBox<>("Role");
         roleField.setItems(Role.values());
+        roleField.setRequiredIndicatorVisible(true);
         Checkbox enabledField = new Checkbox("Enabled");
         enabledField.setValue(true);
 
@@ -79,29 +82,59 @@ public class UserAdminView extends VerticalLayout {
             roleField.setValue(existing.role());
             enabledField.setValue(existing.enabled());
             passwordField.setPlaceholder("Leave blank to keep current password");
+        } else {
+            passwordField.setRequiredIndicatorVisible(true);
         }
 
         Button save = new Button("Save", e -> {
-            form.setUsername(usernameField.getValue());
-            // Fix: Set password to null if blank to keep current password
-            form.setPassword(passwordField.getValue().isBlank() ? null : passwordField.getValue());
-            form.setEmail(emailField.getValue());
-            form.setRole(roleField.getValue());
-            form.setEnabled(enabledField.getValue());
+            try {
+                if (usernameField.getValue() == null || usernameField.getValue().isBlank()) {
+                    Notification.show("Username is required", 3000, Notification.Position.MIDDLE);
+                    usernameField.focus();
+                    return;
+                }
+                if (existing == null && (passwordField.getValue() == null || passwordField.getValue().isBlank())) {
+                    Notification.show("Password is required", 3000, Notification.Position.MIDDLE);
+                    passwordField.focus();
+                    return;
+                }
+                if (emailField.getValue() == null || emailField.getValue().isBlank()) {
+                    Notification.show("Email is required", 3000, Notification.Position.MIDDLE);
+                    emailField.focus();
+                    return;
+                }
+                if (!emailField.getValue().matches("^[\\w.-]+@[\\w.-]+\\.[a-zA-Z]{2,}$")) {
+                    Notification.show("Email must be valid", 3000, Notification.Position.MIDDLE);
+                    emailField.focus();
+                    return;
+                }
+                if (roleField.getValue() == null) {
+                    Notification.show("Role is required", 3000, Notification.Position.MIDDLE);
+                    return;
+                }
 
-            if (existing != null && existing.id().equals(current.getId()) && !enabledField.getValue()) {
-                Notification.show("You cannot disable your own account");
-                return;
-            }
+                form.setUsername(usernameField.getValue());
+                form.setPassword(passwordField.getValue().isBlank() ? null : passwordField.getValue());
+                form.setEmail(emailField.getValue());
+                form.setRole(roleField.getValue());
+                form.setEnabled(enabledField.getValue());
 
-            if (existing == null) {
-                userService.create(form);
-            } else {
-                userService.update(existing.id(), form);
+                if (existing != null && existing.id().equals(current.getId()) && !enabledField.getValue()) {
+                    Notification.show("You cannot disable your own account");
+                    return;
+                }
+
+                if (existing == null) {
+                    userService.create(form);
+                } else {
+                    userService.update(existing.id(), form);
+                }
+                dialog.close();
+                refresh();
+                Notification.show("Saved");
+            } catch (Exception ex) {
+                Notification.show("Save failed: " + ex.getMessage(), 5000, Notification.Position.MIDDLE);
             }
-            dialog.close();
-            refresh();
-            Notification.show("Saved");
         });
         Button cancel = new Button("Cancel", e -> dialog.close());
 

@@ -123,6 +123,7 @@ class RecruiterServiceTest {
     @Test
     void create_savesWithCompanyOwnerAndProjects() {
         when(companyRepository.findById(1L)).thenReturn(Optional.of(company));
+        when(userRepository.findById(1L)).thenReturn(Optional.of(admin));
         when(projectRepository.findById(1L)).thenReturn(Optional.of(project));
         when(recruiterMapper.toEntity(form)).thenReturn(recruiter);
         when(recruiterRepository.save(any())).thenReturn(recruiter);
@@ -200,6 +201,7 @@ class RecruiterServiceTest {
     void create_whenProjectNotFound_throwsException() {
         form.setProjectIds(Set.of(99L));
         when(companyRepository.findById(1L)).thenReturn(Optional.of(company));
+        when(userRepository.findById(1L)).thenReturn(Optional.of(admin));
         when(recruiterMapper.toEntity(form)).thenReturn(recruiter);
         when(projectRepository.findById(99L)).thenReturn(Optional.empty());
 

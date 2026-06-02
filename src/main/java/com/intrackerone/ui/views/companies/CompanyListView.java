@@ -67,6 +67,7 @@ public class CompanyListView extends VerticalLayout {
         binder.setBean(form);
 
         TextField nameField = new TextField("Name");
+        nameField.setRequiredIndicatorVisible(true);
         TextField websiteField = new TextField("Website");
         TextArea notesField = new TextArea("Notes");
         binder.bind(nameField, "name");
@@ -75,17 +76,20 @@ public class CompanyListView extends VerticalLayout {
 
         Button save = new Button("Save", e -> {
             try {
-                if (binder.validate().isOk()) {
-                    User current = securityService.getCurrentUser();
-                    if (existing == null) {
-                        companyService.create(form, current.getId());
-                    } else {
-                        companyService.update(existing.id(), form, current.getId(), current.getRole());
-                    }
-                    dialog.close();
-                    refresh();
-                    Notification.show("Saved");
+                if (nameField.getValue() == null || nameField.getValue().isBlank()) {
+                    Notification.show("Company name is required", 3000, Notification.Position.MIDDLE);
+                    nameField.focus();
+                    return;
                 }
+                User current = securityService.getCurrentUser();
+                if (existing == null) {
+                    companyService.create(form, current.getId());
+                } else {
+                    companyService.update(existing.id(), form, current.getId(), current.getRole());
+                }
+                dialog.close();
+                refresh();
+                Notification.show("Saved");
             } catch (Exception ex) {
                 Notification.show("Save failed: " + ex.getMessage(), 5000, Notification.Position.MIDDLE);
             }

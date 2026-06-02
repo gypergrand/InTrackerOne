@@ -116,6 +116,7 @@ public class ProjectListView extends VerticalLayout {
         binder.setBean(form);
 
         TextField nameField = new TextField("Name");
+        nameField.setRequiredIndicatorVisible(true);
         TextArea descField = new TextArea("Description");
 
         ComboBox<CompanyDto> companyField = new ComboBox<>("Company");
@@ -179,6 +180,11 @@ public class ProjectListView extends VerticalLayout {
         Button save = new Button("Save", e -> {
             try {
                 if (!binder.validate().isOk()) {
+                    return;
+                }
+                if (nameField.getValue() == null || nameField.getValue().isBlank()) {
+                    Notification.show("Project name is required", 3000, Notification.Position.MIDDLE);
+                    nameField.focus();
                     return;
                 }
                 if (form.getCompanyId() == null) {

@@ -3,6 +3,7 @@ package com.intrackerone.domain.project;
 import com.intrackerone.domain.company.Company;
 import com.intrackerone.domain.company.CompanyRepository;
 import com.intrackerone.domain.user.Role;
+import com.intrackerone.domain.user.UserRepository;
 import com.intrackerone.infrastructure.exception.ResourceNotFoundException;
 import com.intrackerone.infrastructure.security.AccessControl;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +22,7 @@ public class ProjectService {
     private final ProjectMapper projectMapper;
     private final CompanyRepository companyRepository;
     private final IndustryRepository industryRepository;
+    private final UserRepository userRepository;
 
     @Transactional(readOnly = true)
     public List<ProjectDto> findByCompanyId(Long companyId, Long currentUserId, Role role) {
@@ -60,9 +62,11 @@ public class ProjectService {
     public ProjectDto create(ProjectForm form, Long currentUserId, Role role) {
         Company company = findCompany(form.getCompanyId());
         AccessControl.requireOwnerOrGlobal(company.getOwner(), currentUserId, role, "Company");
+        var currentUser = userRepository.findById(currentUserId)
+                .orElseThrow(() -> new ResourceNotFoundException("User", currentUserId));
         Project project = projectMapper.toEntity(form);
         project.setCompany(company);
-        project.setOwner(company.getOwner());
+        project.setOwner(currentUser);
         project.setIndustries(resolveIndustries(form.getIndustries()));
         project = projectRepository.save(project);
         log.info("Created project: {} for company {}", project.getName(), company.getName());

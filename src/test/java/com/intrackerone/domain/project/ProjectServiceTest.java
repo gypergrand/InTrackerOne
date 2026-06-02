@@ -118,6 +118,7 @@ class ProjectServiceTest {
         when(industryRepository.findByNameIgnoreCase("SaaS")).thenReturn(Optional.of(saas));
 
         when(companyRepository.findById(1L)).thenReturn(Optional.of(company));
+        when(userRepository.findById(1L)).thenReturn(Optional.of(admin));
         Project emptyProject = Project.builder().build();
         when(projectMapper.toEntity(form)).thenReturn(emptyProject);
         when(projectRepository.save(any())).thenReturn(project);

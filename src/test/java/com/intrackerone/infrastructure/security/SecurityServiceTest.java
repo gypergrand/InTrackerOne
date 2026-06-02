@@ -3,6 +3,7 @@ package com.intrackerone.infrastructure.security;
 import com.intrackerone.domain.user.User;
 import com.intrackerone.domain.user.UserRepository;
 import com.intrackerone.infrastructure.exception.ResourceNotFoundException;
+import com.intrackerone.infrastructure.exception.UnauthorizedException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -68,7 +69,7 @@ class SecurityServiceTest {
         when(securityContext.getAuthentication()).thenReturn(null);
 
         // When & Then
-        SecurityException exception = assertThrows(SecurityException.class, () -> securityService.getCurrentUser());
+        UnauthorizedException exception = assertThrows(UnauthorizedException.class, () -> securityService.getCurrentUser());
         assertEquals("No authenticated user", exception.getMessage());
         verify(securityContext, times(1)).getAuthentication();
         verify(authentication, never()).isAuthenticated();

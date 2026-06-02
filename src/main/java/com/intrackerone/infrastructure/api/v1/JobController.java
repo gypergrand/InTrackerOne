@@ -9,6 +9,7 @@ import com.intrackerone.infrastructure.exception.ResourceNotFoundException;
 import com.intrackerone.infrastructure.security.SecurityService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -36,8 +37,8 @@ public class JobController {
 
     public record StatusChangeRequest(
             @NotNull Long statusId,
-            String notes,
-            String decidedBy
+            @Size(max = 500) String notes,
+            @Size(max = 50) String decidedBy
     ) {}
 
     @GetMapping

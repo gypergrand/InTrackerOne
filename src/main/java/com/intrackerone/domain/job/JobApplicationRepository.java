@@ -18,6 +18,23 @@ public interface JobApplicationRepository extends JpaRepository<JobApplication, 
     @Query("SELECT j.owner.id FROM JobApplication j WHERE j.id = :id")
     Optional<Long> findOwnerIdById(@Param("id") Long id);
 
+    @Query("SELECT DISTINCT j FROM JobApplication j " +
+           "LEFT JOIN FETCH j.project p " +
+           "LEFT JOIN FETCH p.company " +
+           "LEFT JOIN FETCH j.recruiter " +
+           "LEFT JOIN FETCH j.currentStatus " +
+           "LEFT JOIN FETCH j.owner")
+    List<JobApplication> findAllWithRelations();
+
+    @Query("SELECT DISTINCT j FROM JobApplication j " +
+           "LEFT JOIN FETCH j.project p " +
+           "LEFT JOIN FETCH p.company " +
+           "LEFT JOIN FETCH j.recruiter " +
+           "LEFT JOIN FETCH j.currentStatus " +
+           "LEFT JOIN FETCH j.owner " +
+           "WHERE j.owner.id = :ownerId")
+    List<JobApplication> findByOwnerIdWithRelations(@Param("ownerId") Long ownerId);
+
     List<JobApplication> findByOwnerId(Long ownerId);
 
     List<JobApplication> findByProjectId(Long projectId);
@@ -29,4 +46,8 @@ public interface JobApplicationRepository extends JpaRepository<JobApplication, 
     long countByOwnerId(Long ownerId);
 
     long countByOwnerIdAndCurrentStatusId(Long ownerId, Long statusId);
+
+    @Query("SELECT j.currentStatus.id, COUNT(j) FROM JobApplication j " +
+           "WHERE j.owner.id = :ownerId GROUP BY j.currentStatus.id")
+    List<Object[]> countByOwnerIdGroupByStatusId(@Param("ownerId") Long ownerId);
 }

@@ -6,6 +6,7 @@ import com.intrackerone.domain.project.Project;
 import com.intrackerone.domain.project.ProjectRepository;
 import com.intrackerone.domain.user.Role;
 import com.intrackerone.domain.user.User;
+import com.intrackerone.domain.user.UserRepository;
 import com.intrackerone.infrastructure.exception.ResourceNotFoundException;
 import com.intrackerone.infrastructure.exception.UnauthorizedException;
 import com.intrackerone.infrastructure.security.AccessControl;
@@ -27,6 +28,7 @@ public class RecruiterService {
     private final RecruiterMapper recruiterMapper;
     private final CompanyRepository companyRepository;
     private final ProjectRepository projectRepository;
+    private final UserRepository userRepository;
 
     @Transactional(readOnly = true)
     public List<RecruiterDto> findByCompanyId(Long companyId, Long currentUserId, Role role) {
@@ -63,10 +65,12 @@ public class RecruiterService {
     public RecruiterDto create(RecruiterForm form, Long currentUserId, Role role) {
         Company company = findCompany(form.getCompanyId());
         AccessControl.requireOwnerOrGlobal(company.getOwner(), currentUserId, role, "Company");
+        User currentUser = userRepository.findById(currentUserId)
+                .orElseThrow(() -> new ResourceNotFoundException("User", currentUserId));
         Recruiter recruiter = recruiterMapper.toEntity(form);
         recruiter.setCompany(company);
-        recruiter.setOwner(company.getOwner());
-        recruiter.setProjects(resolveProjects(form.getProjectIds(), company.getOwner(), company.getId()));
+        recruiter.setOwner(currentUser);
+        recruiter.setProjects(resolveProjects(form.getProjectIds(), currentUser, company.getId()));
         recruiter = recruiterRepository.save(recruiter);
         log.info("Created recruiter: {} for company {}", recruiter.getName(), company.getName());
         return recruiterMapper.toDto(recruiter);

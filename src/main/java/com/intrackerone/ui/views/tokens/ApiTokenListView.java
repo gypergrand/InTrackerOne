@@ -96,17 +96,21 @@ public class ApiTokenListView extends VerticalLayout {
 
         TextField nameField = new TextField("Token Name");
         nameField.setPlaceholder("e.g. CI/CD pipeline, Slack integration");
+        nameField.setRequiredIndicatorVisible(true);
         binder.bind(nameField, "name");
 
         Button createBtn = new Button("Create", e -> {
             try {
-                if (binder.validate().isOk()) {
-                    User current = securityService.getCurrentUser();
-                    ApiTokenService.CreatedToken created = apiTokenService.create(current.getId(), form.getName());
-                    dialog.close();
-                    refresh();
-                    showTokenDialog(created);
+                if (nameField.getValue() == null || nameField.getValue().isBlank()) {
+                    Notification.show("Token name is required", 3000, Notification.Position.MIDDLE);
+                    nameField.focus();
+                    return;
                 }
+                User current = securityService.getCurrentUser();
+                ApiTokenService.CreatedToken created = apiTokenService.create(current.getId(), form.getName());
+                dialog.close();
+                refresh();
+                showTokenDialog(created);
             } catch (Exception ex) {
                 Notification.show("Failed to create token: " + ex.getMessage(),
                     5000, Notification.Position.MIDDLE);

@@ -27,11 +27,12 @@ public class DashboardController {
     public Map<String, Object> summary() {
         User current = securityService.getCurrentUser();
         var statuses = pipelineStatusService.findByOwnerId(current.getId());
+        Map<Long, Long> counts = jobService.countByOwnerGroupByStatusId(current.getId());
 
         Map<String, Long> byStatus = new LinkedHashMap<>();
         long total = 0;
         for (var status : statuses) {
-            long count = jobService.countByOwnerIdAndStatusId(current.getId(), status.id());
+            long count = counts.getOrDefault(status.id(), 0L);
             byStatus.put(status.name(), count);
             total += count;
         }

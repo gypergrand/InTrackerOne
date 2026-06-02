@@ -63,7 +63,7 @@ class DashboardControllerTest {
     void summary_returnsAggregatedData() throws Exception {
         when(securityService.getCurrentUser()).thenReturn(user);
         when(pipelineStatusService.findByOwnerId(1L)).thenReturn(List.of(statusDto));
-        when(jobService.countByOwnerIdAndStatusId(1L, 1L)).thenReturn(3L);
+        when(jobService.countByOwnerGroupByStatusId(1L)).thenReturn(Map.of(1L, 3L));
 
         mockMvc.perform(get("/api/v1/dashboard/summary"))
             .andExpect(status().isOk())
