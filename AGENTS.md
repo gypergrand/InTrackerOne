@@ -1,9 +1,10 @@
 # InTrackerOne — Project Conventions
 
 ## Tech Stack
-- Java 25, Spring Boot 4.0.x, Vaadin 25.1.x (free core)
+- Java 25, Spring Boot 4.0.6, Vaadin 25.1.6 (free core)
 - Maven, Lombok, MapStruct, Flyway
 - H2 (default profile), PostgreSQL (postgres profile)
+- Token hashing: SHA-256 (user-level tokens)
 
 ## Architecture: Layered + DTOs
 ```
@@ -29,10 +30,11 @@ com.intrackerone/
 │   └── {Entity}Mapper.java        # @Mapper(componentModel = "spring")
 ├── infrastructure/
 │   ├── config/                    # SecurityConfig extends VaadinWebSecurity
-│   ├── security/                  # SecurityService, TokenAuthenticationFilter, AccessControl
+│   ├── security/                  # SecurityService, TokenAuthenticationFilter, AccessControl, JpaUserDetailsService
+│   ├── api/                       # ApiExceptionHandler, REST controllers (api/v1/)
 │   ├── exception/                 # ResourceNotFoundException, UnauthorizedException
 │   ├── data/                      # DataInitializer
-│   └── api/v1/                    # REST controllers (no @RestControllerAdvice yet)
+│   └── config/                    # DataInitializer config
 └── ui/
     ├── views/                     # Vaadin @Route views
     └── components/                # Shared UI fragments
@@ -55,16 +57,21 @@ com.intrackerone/
 - Use `ArgumentCaptor` and `verify()` to assert side effects, not just mock return values
 
 ## Security & Authorization
+- Two filter chains: one for Vaadin (form login), one for REST API (Bearer token)
 - `AccessControl` utility: static methods `hasGlobalDataAccess(role)`, `requireOwnerOrGlobal()`, `requireSameOwner()`, `isOwner()`
 - `SecurityService.getCurrentUser()` retrieves authenticated user from `SecurityContextHolder`
 - Bearer token auth via `TokenAuthenticationFilter` (added before `UsernamePasswordAuthenticationFilter`)
+- Token hashing: SHA-256 via `MessageDigest`; tokens use `itr_` prefix
 - Form validation: use `@Valid` on controller method parameters, throw exceptions for violations
+- `ApiExceptionHandler` handles `ResourceNotFoundException` → 404, `UnauthorizedException` → 403, `SecurityException` → 403
 
 ## Database
-- Flyway migrations in src/main/resources/db/migration/
+- 10 JPA entities: User, ApiToken, Company, Project, Recruiter, PipelineStatus, JobApplication, StatusChange, InterviewEvent, CompensationEntry
+- 15 Flyway migrations (V1–V15)
 - Hibernate ddl-auto: validate (Flyway owns schema)
 - H2 console enabled in dev profile
 - Tables in snake_case, plural: companies, job_applications
+- N+1 fix: use `JOIN FETCH` in `@Query` for collections (not `@EntityGraph` with custom method names)
 
 ## REST API
 - Bearer token auth only (Authorization: Bearer <token>)
@@ -73,7 +80,7 @@ com.intrackerone/
 - Custom exceptions: 
   - `ResourceNotFoundException(resource, id)` for missing entities (auto-caught as 404)
   - `UnauthorizedException(message)` for access control violations (auto-caught as 403)
-  - Throw these from services; Spring's default exception handlers catch them
+  - Throw these from services; `ApiExceptionHandler` catches them
 
 ## Roles
 - ADMIN: full access, manage users/roles/statuses, API tokens

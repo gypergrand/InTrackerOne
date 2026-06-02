@@ -3,7 +3,8 @@
 ## Authentication
 
 All endpoints require `Authorization: Bearer <token>` header.
-Only ADMIN and MODERATOR users can create API tokens.
+Tokens use `itr_` prefix. Authentication handled by `TokenAuthenticationFilter` which extracts token identifier, looks up token, and verifies SHA-256 hash.
+`ApiExceptionHandler` maps exceptions: `ResourceNotFoundException` → 404, `UnauthorizedException` → 403, `SecurityException` → 403.
 
 ### Tokens
 
@@ -27,7 +28,7 @@ DELETE /api/v1/companies/{id}          # Delete (cascades projects, jobs, recrui
 
 ```
 GET    /api/v1/projects?companyId=     # List, filterable by company
-POST   /api/v1/projects                # Create
+POST   /api/v1/projects                # Create (owner = current user)
 GET    /api/v1/projects/{id}           # Single
 PUT    /api/v1/projects/{id}           # Update
 DELETE /api/v1/projects/{id}           # Delete
@@ -37,7 +38,7 @@ DELETE /api/v1/projects/{id}           # Delete
 
 ```
 GET    /api/v1/recruiters?companyId=   # List, filterable by company
-POST   /api/v1/recruiters              # Create
+POST   /api/v1/recruiters              # Create (owner = current user)
 GET    /api/v1/recruiters/{id}         # Single
 PUT    /api/v1/recruiters/{id}         # Update
 DELETE /api/v1/recruiters/{id}         # Delete
@@ -46,13 +47,14 @@ DELETE /api/v1/recruiters/{id}         # Delete
 ### Jobs
 
 ```
-GET    /api/v1/jobs?status=&company=&project=  # List, filterable
+GET    /api/v1/jobs?status=&company=&project=  # List, filterable (uses JOIN FETCH for N+1 fix)
 POST   /api/v1/jobs                            # Create
 GET    /api/v1/jobs/{id}                       # Single (includes status history, events, compensation)
 PUT    /api/v1/jobs/{id}                       # Update
 DELETE /api/v1/jobs/{id}                       # Delete
 PATCH  /api/v1/jobs/{id}/status                # Change status
        # Body: { "statusId": 5, "notes": "...", "decidedBy": "COMPANY" }
+       # Validation: statusId required; decidedBy max 50 chars; notes max 500 chars
 ```
 
 ### Interview Events
@@ -96,15 +98,33 @@ PUT    /api/v1/statuses/{id}/move      # Reorder
 
 ```
 GET    /api/v1/users                   # List all users
-POST   /api/v1/users                   # Create user
+POST   /api/v1/users                   # Create user (password required)
 GET    /api/v1/users/{id}              # Single user
-PUT    /api/v1/users/{id}              # Update (role, enabled)
+PUT    /api/v1/users/{id}              # Update (password optional)
 DELETE /api/v1/users/{id}              # Delete
 ```
 
 ### Dashboard
 
 ```
-GET    /api/v1/dashboard/summary       # Stats: total jobs by status, by company
+GET    /api/v1/dashboard/summary       # Stats: total jobs by status, by company (aggregate query)
 GET    /api/v1/dashboard/recent        # Recent status changes (last 20)
+```
+
+## Error Responses
+
+```json
+{
+  "message": "Resource not found: JobApplication with id 42",
+  "status": 404,
+  "timestamp": "2025-01-15T10:30:00Z"
+}
+```
+
+```json
+{
+  "message": "Access denied",
+  "status": 403,
+  "timestamp": "2025-01-15T10:30:00Z"
+}
 ```
