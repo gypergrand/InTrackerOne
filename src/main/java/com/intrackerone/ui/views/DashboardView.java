@@ -58,7 +58,7 @@ public class DashboardView extends VerticalLayout {
         card.getStyle().set("background", "var(--lumo-base-color)");
         card.getStyle().set("border", "1px solid var(--lumo-contrast-10pct)");
         card.getStyle().set("border-radius", "8px");
-        card.getStyle().set("min-width", "120px");
+        card.getStyle().set("min-width", "80px");
 
         Span titleSpan = new Span(title);
         titleSpan.getStyle().set("font-size", "12px");

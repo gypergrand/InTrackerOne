@@ -42,6 +42,9 @@ class JobControllerTest {
     @Mock
     private SecurityService securityService;
 
+    @Mock
+    private StatusChangeService statusChangeService;
+
     @InjectMocks
     private JobController jobController;
 

@@ -1,7 +1,8 @@
 package com.intrackerone.infrastructure.config;
 
 import com.intrackerone.infrastructure.security.TokenAuthenticationFilter;
-import com.vaadin.flow.spring.security.VaadinWebSecurity;
+import com.intrackerone.ui.views.LoginView;
+import com.vaadin.flow.spring.security.VaadinSecurityConfigurer;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -14,14 +15,15 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.security.web.servlet.util.matcher.PathPatternRequestMatcher;
 
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
 @RequiredArgsConstructor
-public class SecurityConfig extends VaadinWebSecurity {
+public class SecurityConfig {
 
     private final TokenAuthenticationFilter tokenAuthenticationFilter;
 
@@ -30,33 +32,34 @@ public class SecurityConfig extends VaadinWebSecurity {
         return new BCryptPasswordEncoder();
     }
 
-    @Override
-    protected void configure(HttpSecurity http) throws Exception {
+    @Bean
+    SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests(auth -> auth
-                .requestMatchers(new AntPathRequestMatcher("/api/v1/tokens/**")).hasAnyRole("ADMIN", "MODERATOR")
-                .requestMatchers(new AntPathRequestMatcher("/api/**")).hasAuthority("API_ACCESS")
+                .requestMatchers(PathPatternRequestMatcher.pathPattern("/api/v1/tokens/**")).hasAnyRole("ADMIN", "MODERATOR")
+                .requestMatchers(PathPatternRequestMatcher.pathPattern("/api/**")).hasAuthority("API_ACCESS")
         );
 
         http.addFilterBefore(tokenAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
         http.exceptionHandling(exceptions -> exceptions
                 .defaultAuthenticationEntryPointFor(
                         (request, response, ex) -> response.sendError(HttpServletResponse.SC_UNAUTHORIZED),
-                        new AntPathRequestMatcher("/api/**")
+                        PathPatternRequestMatcher.pathPattern("/api/**")
                 )
                 .defaultAccessDeniedHandlerFor(
                         (request, response, ex) -> response.sendError(HttpServletResponse.SC_FORBIDDEN),
-                        new AntPathRequestMatcher("/api/**")
+                        PathPatternRequestMatcher.pathPattern("/api/**")
                 )
         );
 
-        http.csrf(csrf -> csrf.ignoringRequestMatchers(
-                new AntPathRequestMatcher("/api/**")
-        ));
+        http.csrf(csrf -> csrf
+                .ignoringRequestMatchers(PathPatternRequestMatcher.pathPattern("/api/**"))
+                .ignoringRequestMatchers(PathPatternRequestMatcher.pathPattern("/login"))
+        );
         http.headers(headers -> headers.frameOptions(frame -> frame.sameOrigin()));
 
-        super.configure(http);
+        http.with(VaadinSecurityConfigurer.vaadin(), cfg -> cfg.loginView(LoginView.class).defaultSuccessUrl("/", true));
 
-        setLoginView(http, "/login");
+        return http.build();
     }
 
     /**
@@ -70,9 +73,8 @@ public class SecurityConfig extends VaadinWebSecurity {
 
         @Bean
         @Order(Ordered.HIGHEST_PRECEDENCE)
-        org.springframework.security.web.SecurityFilterChain devH2SecurityFilterChain(
-                HttpSecurity http) throws Exception {
-            http.securityMatcher(new AntPathRequestMatcher("/h2-console/**"))
+        SecurityFilterChain devH2SecurityFilterChain(HttpSecurity http) throws Exception {
+            http.securityMatcher(PathPatternRequestMatcher.pathPattern("/h2-console/**"))
                     .authorizeHttpRequests(auth -> auth.anyRequest().permitAll())
                     .csrf(csrf -> csrf.disable())
                     .headers(headers -> headers.frameOptions(frame -> frame.sameOrigin()));
@@ -90,8 +92,8 @@ public class SecurityConfig extends VaadinWebSecurity {
     static class ProdSecurityConfig {
 
         @Bean
-        org.springframework.security.web.SecurityFilterChain h2DenyAllChain(HttpSecurity http) throws Exception {
-            http.securityMatcher(new AntPathRequestMatcher("/h2-console/**"))
+        SecurityFilterChain h2DenyAllChain(HttpSecurity http) throws Exception {
+            http.securityMatcher(PathPatternRequestMatcher.pathPattern("/h2-console/**"))
                     .authorizeHttpRequests(auth -> auth.anyRequest().denyAll());
             return http.build();
         }

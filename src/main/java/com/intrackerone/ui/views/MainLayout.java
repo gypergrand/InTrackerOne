@@ -22,7 +22,9 @@ import com.vaadin.flow.component.sidenav.SideNav;
 import com.vaadin.flow.component.sidenav.SideNavItem;
 import com.vaadin.flow.router.RouterLayout;
 import com.vaadin.flow.server.VaadinSession;
+import jakarta.annotation.security.PermitAll;
 
+@PermitAll
 public class MainLayout extends AppLayout implements RouterLayout {
 
     private final SecurityService securityService;
@@ -50,7 +52,7 @@ public class MainLayout extends AppLayout implements RouterLayout {
             getUI().ifPresent(ui -> ui.getPage().setLocation("/login"));
         });
         header.add(userBadge, logout);
-        setPrimarySection(Section.NAVBAR);
+        setPrimarySection(Section.DRAWER);
         addToNavbar(header);
     }
 
@@ -64,12 +66,10 @@ public class MainLayout extends AppLayout implements RouterLayout {
         nav.addItem(new SideNavItem("Recruiters", RecruiterListView.class, VaadinIcon.USERS.create()));
         nav.addItem(new SideNavItem("Jobs", JobListView.class, VaadinIcon.BRIEFCASE.create()));
         nav.addItem(new SideNavItem("Pipeline", PipelineView.class, VaadinIcon.CONNECT.create()));
-
+        nav.addItem(new SideNavItem("API Tokens", ApiTokenListView.class, VaadinIcon.KEY.create()));
+        
         User currentUser = securityService.getCurrentUser();
         if (currentUser.getRole() == Role.ADMIN || currentUser.getRole() == Role.MODERATOR) {
-            nav.addItem(new SideNavItem("API Tokens", ApiTokenListView.class, VaadinIcon.KEY.create()));
-        }
-        if (currentUser.getRole() == Role.ADMIN) {
             nav.addItem(new SideNavItem("Users", UserAdminView.class, VaadinIcon.USER_CARD.create()));
         }
 

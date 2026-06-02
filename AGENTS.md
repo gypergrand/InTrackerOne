@@ -1,7 +1,7 @@
 # InTrackerOne — Project Conventions
 
 ## Tech Stack
-- Java 17, Spring Boot 3.5.x, Vaadin 24.9.x (free core)
+- Java 25, Spring Boot 4.0.x, Vaadin 25.1.x (free core)
 - Maven, Lombok, MapStruct, Flyway
 - H2 (default profile), PostgreSQL (postgres profile)
 
@@ -68,7 +68,7 @@ com.intrackerone/
 
 ## REST API
 - Bearer token auth only (Authorization: Bearer <token>)
-- Tokens created by ADMIN/MODERATOR only
+- Tokens created by authenticated users
 - All endpoints under /api/v1/
 - Custom exceptions: 
   - `ResourceNotFoundException(resource, id)` for missing entities (auto-caught as 404)
@@ -78,7 +78,7 @@ com.intrackerone/
 ## Roles
 - ADMIN: full access, manage users/roles/statuses, API tokens
 - MODERATOR: all data CRUD, API tokens, no user management
-- USER: own data only, no API access
+- USER: own API tokens and data only
 
 ## Build Commands
 - `mvn clean install -DskipTests` — build JAR/WAR

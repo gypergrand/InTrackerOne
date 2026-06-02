@@ -1,16 +1,12 @@
-import { B as c, j as d, b as h, w as g, a5 as u, s as v, P as f, G as y, r as k } from "./copilot-D63_Kxm1.js";
-import { r as s } from "./state-BA6hnnsv.js";
-import { e as w } from "./query-BykXNUlT.js";
-import { B as $ } from "./base-panel-DwlRfMDt.js";
-import { i as x } from "./icons-B1bSjv1h.js";
-import { m as A } from "./overlay-monkeypatch-CMzG4ZpL.js";
-const P = "copilot-feedback-panel{display:flex;flex-direction:column;font:var(--font-xsmall);gap:var(--space-200);padding:var(--space-150)}copilot-feedback-panel>p{margin:0}copilot-feedback-panel .dialog-footer{display:flex;gap:var(--space-100)}copilot-feedback-panel :is(vaadin-select,vaadin-text-area,vaadin-email-field){padding:0}copilot-feedback-panel :is(vaadin-select,vaadin-text-area,vaadin-email-field)::part(input-field),copilot-feedback-panel vaadin-select-value-button{padding:0}copilot-feedback-panel vaadin-select::part(toggle-button){align-items:center;display:flex;height:var(--size-m);justify-content:center;width:var(--size-m)}copilot-feedback-panel vaadin-text-area textarea{line-height:var(--line-height-1);padding:calc((var(--size-m) - var(--line-height-1)) / 2) var(--space-100)}copilot-feedback-panel vaadin-text-area:hover::part(input-field){background:none}copilot-feedback-panel vaadin-email-field input{padding:0 var(--space-100)}copilot-feedback-panel>*::part(label){font-weight:var(--font-weight-medium);line-height:var(--line-height-1);margin:0;padding:0 var(--space-150) var(--space-50) 0}copilot-feedback-panel>*::part(helper-text){line-height:var(--line-height-1);margin:0}";
-var F = Object.defineProperty, T = Object.getOwnPropertyDescriptor, o = (e, t, n, l) => {
-  for (var a = l > 1 ? void 0 : l ? T(t, n) : t, p = e.length - 1, r; p >= 0; p--)
-    (r = e[p]) && (a = (l ? r(t, n, a) : r(a)) || a);
-  return l && a && F(t, n, a), a;
+import { x as r, u as f, e as y, c as d, q as v, D as h, s as g, P as m, r as s, a2 as k, p as w } from "./copilot-CdD0jRv0.js";
+import { B as $ } from "./base-panel-DqYmxkT9.js";
+const x = "copilot-feedback-panel{display:flex;flex-direction:column;font:var(--copilot-font-xs);gap:var(--space-200);padding:var(--space-150)}copilot-feedback-panel>p{margin:0}copilot-feedback-panel .dialog-footer{display:flex;gap:var(--space-100)}copilot-feedback-panel :is(vaadin-select,vaadin-email-field)::part(input-field){padding-block:0}copilot-feedback-panel :is(vaadin-select)::part(input-field){padding-inline-end:0}copilot-feedback-panel vaadin-select::part(toggle-button){align-items:center;display:flex;height:var(--copilot-size-md);justify-content:center;width:var(--copilot-size-md)}copilot-feedback-panel vaadin-text-area textarea{line-height:var(--copilot-line-height-sm)}copilot-feedback-panel vaadin-text-area:hover::part(input-field){background:none}copilot-feedback-panel>*::part(helper-text){line-height:var(--copilot-line-height-sm);margin:0}";
+var A = Object.defineProperty, P = Object.getOwnPropertyDescriptor, o = (e, t, n, l) => {
+  for (var a = l > 1 ? void 0 : l ? P(t, n) : t, p = e.length - 1, c; p >= 0; p--)
+    (c = e[p]) && (a = (l ? c(t, n, a) : c(a)) || a);
+  return l && a && A(t, n, a), a;
 };
-const D = "https://github.com/vaadin", b = "https://github.com/vaadin/copilot/issues/new", E = "?template=feature_request.md&title=%5BFEATURE%5D", U = "A short, concise description of the bug and why you consider it a bug. Any details like exceptions and logs can be helpful as well.", C = "Please provide as many details as possible, this will help us deliver a fix as soon as possible.%0AThank you!%0A%0A%23%23%23 Description of the Bug%0A%0A{description}%0A%0A%23%23%23 Expected Behavior%0A%0AA description of what you would expect to happen. (Sometimes it is clear what the expected outcome is if something does not work, other times, it is not super clear.)%0A%0A%23%23%23 Minimal Reproducible Example%0A%0AWe would appreciate the minimum code with which we can reproduce the issue.%0A%0A%23%23%23 Versions%0A{versionsInfo}";
+const F = "https://github.com/vaadin", u = "https://github.com/vaadin/copilot/issues/new", T = "?template=feature_request.md&title=%5BFEATURE%5D", D = "A short, concise description of the bug and why you consider it a bug. Any details like exceptions and logs can be helpful as well.", E = "Please provide as many details as possible, this will help us deliver a fix as soon as possible.%0AThank you!%0A%0A%23%23%23 Description of the Bug%0A%0A{description}%0A%0A%23%23%23 Expected Behavior%0A%0AA description of what you would expect to happen. (Sometimes it is clear what the expected outcome is if something does not work, other times, it is not super clear.)%0A%0A%23%23%23 Minimal Reproducible Example%0A%0AWe would appreciate the minimum code with which we can reproduce the issue.%0A%0A%23%23%23 Versions%0A{versionsInfo}";
 let i = class extends $ {
   constructor() {
     super(), this.description = "", this.types = [
@@ -54,15 +50,12 @@ let i = class extends $ {
     ], this.topic = this.topics[0].value;
   }
   render() {
-    return c`<style>
-        ${P}</style
+    return r`<style>
+        ${x}</style
       >${this.renderContent()}${this.renderFooter()}`;
   }
-  firstUpdated() {
-    A(this);
-  }
   renderContent() {
-    return this.message === void 0 ? c`
+    return this.message === void 0 ? r`
           <p>
             Your insights are incredibly valuable to us. Whether you’ve encountered a hiccup, have questions, or ideas
             to make our platform better, we're all ears! If you wish, leave your email, and we’ll get back to you. You
@@ -104,23 +97,23 @@ let i = class extends $ {
     }}
             .required=${this.type === "question"}
             id="email"
-            value="${d.userInfo?.email}"
+            value="${f.userInfo?.email}"
             label="Your Email${this.type === "question" ? "" : " (Optional)"}"
             helper-text="Leave your email if you’d like us to follow up, we’d love to keep the conversation going."></vaadin-text-field>
-        ` : c`<p>${this.message}</p>`;
+        ` : r`<p>${this.message}</p>`;
   }
   renderFooter() {
-    return this.message === void 0 ? c`
+    return this.message === void 0 ? r`
           <div class="dialog-footer">
             <button
               style="margin-inline-end: auto"
               @click="${() => {
-      d.active ? h.emit("system-info-with-callback", {
+      d.emit("system-info-with-callback", {
         callback: (e) => this.openGithub(e, this),
         notify: !1
-      }) : this.openGithub(null, this);
+      });
     }}">
-              <span class="prefix">${x.github}</span>
+              <span class="prefix">${y.github}</span>
               Create GitHub Issue
             </button>
             <button @click="${this.close}">Cancel</button>
@@ -128,17 +121,15 @@ let i = class extends $ {
               Submit
             </button>
           </div>
-        ` : c` <div class="footer">
+        ` : r` <div class="footer">
           <vaadin-button @click="${this.close}">Close</vaadin-button>
         </div>`;
   }
   close() {
-    g.updatePanel("copilot-feedback-panel", {
-      floating: !1
-    });
+    v.closePanel("copilot-feedback-panel");
   }
   submit() {
-    if (u("feedback", { github: !1, type: this.type, topic: this.topic }), this.description.trim() === "") {
+    if (h("feedback", { github: !1, type: this.type, topic: this.topic }), this.description.trim() === "") {
       this.descriptionField.invalid = !0, this.descriptionField.placeholder = "Please tell us more before sending", this.descriptionField.value = "";
       return;
     }
@@ -148,25 +139,25 @@ let i = class extends $ {
       type: this.type,
       topic: this.topic
     };
-    d.active ? h.emit("system-info-with-callback", {
-      callback: (t) => v(`${f}feedback`, { ...e, versions: t }),
+    d.emit("system-info-with-callback", {
+      callback: (t) => g(`${m}feedback`, { ...e, versions: t }),
       notify: !1
-    }) : v(`${f}feedback`, { ...e, versions: {} }), this.parentNode?.style.setProperty("--section-height", "150px"), this.message = "Thank you for sharing feedback.";
+    }), this.parentNode?.style.setProperty("--section-height", "150px"), this.message = "Thank you for sharing feedback.";
   }
   keyDown(e) {
     (e.key === "Backspace" || e.key === "Delete") && e.stopPropagation();
   }
   openGithub(e, t) {
-    if (u("feedback", { github: !0, type: this.type, topic: this.topic }), this.type === "idea") {
-      window.open(`${b}${E}`);
+    if (h("feedback", { github: !0, type: this.type, topic: this.topic }), this.type === "idea") {
+      window.open(`${u}${T}`);
       return;
     }
     if (this.type === "feedback") {
-      window.open(`${D}/${this.topic}/issues/new`);
+      window.open(`${F}/${this.topic}/issues/new`);
       return;
     }
-    const n = e ? e.replace(/\n/g, "%0A") : "Activate Copilot to include version info.", l = `${t.types.find((r) => r.value === this.type)?.ghTitle}`, a = t.description !== "" ? t.description : U, p = C.replace("{description}", a).replace("{versionsInfo}", n);
-    window.open(`${b}?title=${l}&body=${p}`, "_blank")?.focus();
+    const n = e ? e.replace(/\n/g, "%0A") : "Activate Copilot to include version info.", l = `${t.types.find((c) => c.value === this.type)?.ghTitle}`, a = t.description !== "" ? t.description : D, p = E.replace("{description}", a).replace("{versionsInfo}", n);
+    window.open(`${u}?title=${l}&body=${p}`, "_blank")?.focus();
   }
 };
 o([
@@ -191,28 +182,22 @@ o([
   s()
 ], i.prototype, "topics", 2);
 o([
-  w("vaadin-text-area")
+  k("vaadin-text-area")
 ], i.prototype, "descriptionField", 2);
 i = o([
-  k("copilot-feedback-panel")
+  w("copilot-feedback-panel")
 ], i);
-const m = y({
+const b = {
   header: "Help Us Improve!",
   tag: "copilot-feedback-panel",
-  width: 500,
-  height: 550,
-  floatingPosition: {
-    top: 100,
-    left: 100
-  },
   individual: !0
-}), B = {
+}, C = {
   init(e) {
-    e.addPanel(m);
+    e.addPanel(b);
   }
 };
-window.Vaadin.copilot.plugins.push(B);
-g.addPanel(m);
+window.Vaadin.copilot.plugins.push(C);
+v.addPanel(b);
 export {
   i as CopilotFeedbackPanel
 };

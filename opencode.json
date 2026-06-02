@@ -1,19 +1,24 @@
 {
   "$schema": "https://opencode.ai/config.json",
   "shell": "powershell",
-  "instructions": ["AGENTS.md"],
+  "instructions": [
+    "AGENTS.md"
+  ],
   "command": {
     "build": {
       "description": "Build the project with Maven (skip tests)",
-      "prompt": "Run mvn clean install -DskipTests in the project root"
+      "prompt": "Run mvn clean install -DskipTests in the project root",
+      "template": "mvn clean install -DskipTests"
     },
     "test": {
       "description": "Run all tests",
-      "prompt": "Run mvn test in the project root"
+      "prompt": "Run mvn test in the project root",
+      "template": "mvn test"
     },
     "run": {
       "description": "Start Spring Boot (H2 profile)",
-      "prompt": "Run mvn spring-boot:run in the project root"
+      "prompt": "Run mvn spring-boot:run in the project root",
+      "template": "mvn spring-boot:run"
     }
   }
 }

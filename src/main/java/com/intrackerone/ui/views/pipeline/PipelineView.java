@@ -53,8 +53,8 @@ public class PipelineView extends HorizontalLayout {
 
         for (PipelineStatusDto status : statuses) {
             VerticalLayout column = new VerticalLayout();
-            column.setWidth("280px");
-            column.setMinWidth("280px");
+            column.setWidth("200px");
+            column.setMinWidth("180px");
             column.getStyle().set("background", "var(--lumo-contrast-5pct)");
             column.getStyle().set("border-radius", "8px");
             column.getStyle().set("padding", "8px");
@@ -99,7 +99,7 @@ public class PipelineView extends HorizontalLayout {
         card.add(company);
 
         for (PipelineStatusDto s : statuses) {
-            if (s.type() == StatusType.TERMINAL) continue;
+//            if (s.type() == StatusType.TERMINAL) continue;
             if (s.id().equals(job.currentStatusId())) continue;
             Button moveBtn = new Button("→ " + s.name(), e -> {
                 statusChangeService.recordChange(job.id(), s.id(), null, null, current.getId(), current.getRole());

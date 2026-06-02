@@ -55,6 +55,7 @@ export declare enum MessageType {
 type DevToolsConf = {
     enable: boolean;
     url: string;
+    contextRelativePath: string;
     backend?: string;
     liveReloadPort?: number;
     token?: string;
@@ -85,6 +86,7 @@ export declare class VaadinDevTools extends LitElement {
     private transitionDuration;
     elementTelemetry(): void;
     openWebSocketConnection(): void;
+    removeOldLinks(path: string): void;
     tabHandleMessage(tabElement: HTMLElement, message: ServerMessage): boolean;
     handleFrontendMessage(message: ServerMessage): void;
     handleHmrMessage(message: ServerMessage): boolean;
