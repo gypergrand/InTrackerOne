@@ -5,6 +5,8 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
 
 @Data
 public class JobForm {
@@ -33,4 +35,5 @@ public class JobForm {
     private Long recruiterId;
     @NotNull(message = "Status is required")
     private Long currentStatusId;
+    private Set<String> technologies = new HashSet<>();
 }

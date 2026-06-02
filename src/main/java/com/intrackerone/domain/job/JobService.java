@@ -10,6 +10,7 @@ import com.intrackerone.domain.recruiter.Recruiter;
 import com.intrackerone.domain.recruiter.RecruiterRepository;
 import com.intrackerone.domain.status.PipelineStatus;
 import com.intrackerone.domain.status.PipelineStatusRepository;
+import com.intrackerone.domain.technology.TechnologyService;
 import com.intrackerone.domain.user.Role;
 import com.intrackerone.domain.user.User;
 import com.intrackerone.infrastructure.exception.ResourceNotFoundException;
@@ -39,6 +40,7 @@ public class JobService {
     private final InterviewEventRepository interviewEventRepository;
     private final CompensationEntryRepository compensationEntryRepository;
     private final com.intrackerone.domain.user.UserRepository userRepository;
+    private final TechnologyService technologyService;
 
     @Transactional(readOnly = true)
     public List<JobDto> findAll(Long currentUserId, Role role, Long statusId, Long companyId, Long projectId) {
@@ -78,6 +80,7 @@ public class JobService {
         job.setProject(project);
         job.setCurrentStatus(status);
         job.setOwner(currentUser);
+        job.setTechnologies(technologyService.resolveTechnologies(form.getTechnologies()));
         updateRecruiter(job, form.getRecruiterId(), project, currentUser, role);
         job = jobRepository.saveAndFlush(job);
 
@@ -106,6 +109,9 @@ public class JobService {
         Project project = updateProject(job, form.getProjectId(), role);
         updateStatus(job, form.getCurrentStatusId(), role);
         updateRecruiter(job, form.getRecruiterId(), project, job.getOwner(), role);
+        if (form.getTechnologies() != null) {
+            job.setTechnologies(technologyService.resolveTechnologies(form.getTechnologies()));
+        }
         if (newOwnerId != null && !newOwnerId.equals(job.getOwner().getId())) {
             if (!AccessControl.hasGlobalDataAccess(role)) {
                 throw new UnauthorizedException("Only ADMIN or MODERATOR can transfer job ownership");

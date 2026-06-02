@@ -2,6 +2,7 @@ package com.intrackerone.domain.job;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Set;
 
 public record JobDto(
     Long id,
@@ -32,6 +33,7 @@ public record JobDto(
     String currentStatusColor,
     Long ownerId,
     String ownerName,
+    Set<String> technologies,
     LocalDateTime createdAt,
     LocalDateTime updatedAt
 ) {}

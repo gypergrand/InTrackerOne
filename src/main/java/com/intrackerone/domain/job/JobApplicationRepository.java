@@ -23,7 +23,8 @@ public interface JobApplicationRepository extends JpaRepository<JobApplication, 
            "LEFT JOIN FETCH p.company " +
            "LEFT JOIN FETCH j.recruiter " +
            "LEFT JOIN FETCH j.currentStatus " +
-           "LEFT JOIN FETCH j.owner")
+           "LEFT JOIN FETCH j.owner " +
+           "LEFT JOIN FETCH j.technologies")
     List<JobApplication> findAllWithRelations();
 
     @Query("SELECT DISTINCT j FROM JobApplication j " +
@@ -32,6 +33,7 @@ public interface JobApplicationRepository extends JpaRepository<JobApplication, 
            "LEFT JOIN FETCH j.recruiter " +
            "LEFT JOIN FETCH j.currentStatus " +
            "LEFT JOIN FETCH j.owner " +
+           "LEFT JOIN FETCH j.technologies " +
            "WHERE j.owner.id = :ownerId")
     List<JobApplication> findByOwnerIdWithRelations(@Param("ownerId") Long ownerId);
 

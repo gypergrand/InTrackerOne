@@ -16,6 +16,7 @@ import com.intrackerone.domain.recruiter.RecruiterDto;
 import com.intrackerone.domain.recruiter.RecruiterService;
 import com.intrackerone.domain.status.PipelineStatusDto;
 import com.intrackerone.domain.status.PipelineStatusService;
+import com.intrackerone.domain.technology.TechnologyService;
 import com.intrackerone.domain.user.Role;
 import com.intrackerone.domain.user.User;
 import com.intrackerone.domain.user.UserDto;
@@ -50,6 +51,7 @@ public class JobListView extends VerticalLayout {
     private final ProjectService projectService;
     private final RecruiterService recruiterService;
     private final PipelineStatusService pipelineStatusService;
+    private final TechnologyService technologyService;
     private final UserService userService;
     private final SecurityService securityService;
     private final Grid<JobDto> grid = new Grid<>(JobDto.class);
@@ -57,7 +59,7 @@ public class JobListView extends VerticalLayout {
     public JobListView(JobService jobService, CompanyService companyService,
                        ProjectService projectService, RecruiterService recruiterService,
                        PipelineStatusService pipelineStatusService, UserService userService,
-                       SecurityService securityService) {
+                       SecurityService securityService, TechnologyService technologyService) {
         this.jobService = jobService;
         this.companyService = companyService;
         this.projectService = projectService;
@@ -65,6 +67,7 @@ public class JobListView extends VerticalLayout {
         this.pipelineStatusService = pipelineStatusService;
         this.userService = userService;
         this.securityService = securityService;
+        this.technologyService = technologyService;
         setSizeFull();
         configureGrid();
         add(createToolbar(), grid);
