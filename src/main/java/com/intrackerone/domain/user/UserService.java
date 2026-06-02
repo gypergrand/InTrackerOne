@@ -63,6 +63,9 @@ public class UserService {
     public UserDto update(Long id, UserForm form) {
         User user = userRepository.findById(id)
             .orElseThrow(() -> new ResourceNotFoundException("User", id));
+        if ("admin".equals(user.getUsername()) && Boolean.FALSE.equals(form.getEnabled())) {
+            throw new UnauthorizedException("Cannot disable the admin user");
+        }
         user.setUsername(form.getUsername());
         user.setEmail(form.getEmail());
         user.setRole(form.getRole());
@@ -78,8 +81,10 @@ public class UserService {
 
     @Transactional
     public void delete(Long id) {
-        if (!userRepository.existsById(id)) {
-            throw new ResourceNotFoundException("User", id);
+        User user = userRepository.findById(id)
+            .orElseThrow(() -> new ResourceNotFoundException("User", id));
+        if ("admin".equals(user.getUsername())) {
+            throw new UnauthorizedException("Cannot delete the admin user");
         }
         if (!apiTokenRepository.findByUserId(id).isEmpty()) {
             throw new UnauthorizedException("Cannot delete user with existing API tokens. Revoke tokens first.");
@@ -100,5 +105,23 @@ public class UserService {
             throw new UnauthorizedException("Cannot delete user with existing job applications. Delete jobs first.");
         }
         userRepository.deleteById(id);
+    }
+
+    @Transactional
+    public void changePassword(Long userId, String currentPassword, String newPassword) {
+        if (currentPassword == null || currentPassword.isBlank()) {
+            throw new IllegalArgumentException("Current password is required");
+        }
+        if (newPassword == null || newPassword.isBlank()) {
+            throw new IllegalArgumentException("New password is required");
+        }
+        User user = userRepository.findById(userId)
+            .orElseThrow(() -> new ResourceNotFoundException("User", userId));
+        if (!passwordEncoder.matches(currentPassword, user.getPassword())) {
+            throw new IllegalArgumentException("Current password is incorrect");
+        }
+        user.setPassword(passwordEncoder.encode(newPassword));
+        userRepository.save(user);
+        log.info("Changed password for user: {}", user.getUsername());
     }
 }

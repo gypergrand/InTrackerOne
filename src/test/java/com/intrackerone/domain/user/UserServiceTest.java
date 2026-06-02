@@ -7,6 +7,7 @@ import com.intrackerone.domain.recruiter.RecruiterRepository;
 import com.intrackerone.domain.status.PipelineStatusRepository;
 import com.intrackerone.domain.status.PipelineStatusService;
 import com.intrackerone.infrastructure.exception.ResourceNotFoundException;
+import com.intrackerone.infrastructure.exception.UnauthorizedException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -65,7 +66,9 @@ class UserServiceTest {
     private ArgumentCaptor<User> userCaptor;
 
     private User adminUser;
+    private User regularUser;
     private UserDto adminDto;
+    private UserDto regularDto;
     private UserForm form;
 
     @BeforeEach
@@ -75,7 +78,13 @@ class UserServiceTest {
             .email("admin@test.com").enabled(true).role(Role.ADMIN)
             .build();
 
+        regularUser = User.builder()
+            .id(2L).username("regular").password("hashed")
+            .email("regular@test.com").enabled(true).role(Role.USER)
+            .build();
+
         adminDto = new UserDto(1L, "admin", "admin@test.com", true, Role.ADMIN);
+        regularDto = new UserDto(2L, "regular", "regular@test.com", true, Role.USER);
 
         form = new UserForm();
         form.setUsername("newuser");
@@ -130,41 +139,95 @@ class UserServiceTest {
     @Test
     void update_changesEnabledField() {
         UserForm updateForm = new UserForm();
-        updateForm.setUsername("admin");
-        updateForm.setEmail("admin@test.com");
-        updateForm.setRole(Role.ADMIN);
+        updateForm.setUsername("regular");
+        updateForm.setEmail("regular@test.com");
+        updateForm.setRole(Role.USER);
         updateForm.setEnabled(false);
 
-        when(userRepository.findById(1L)).thenReturn(Optional.of(adminUser));
-        when(userRepository.save(any())).thenReturn(adminUser);
-        when(userMapper.toDto(adminUser)).thenReturn(adminDto);
+        when(userRepository.findById(2L)).thenReturn(Optional.of(regularUser));
+        when(userRepository.save(any())).thenReturn(regularUser);
+        when(userMapper.toDto(regularUser)).thenReturn(regularDto);
 
-        userService.update(1L, updateForm);
+        userService.update(2L, updateForm);
 
         verify(userRepository).save(userCaptor.capture());
         assertThat(userCaptor.getValue().getEnabled()).isFalse();
     }
 
     @Test
+    void update_adminUserDisable_throwsException() {
+        UserForm updateForm = new UserForm();
+        updateForm.setUsername("admin");
+        updateForm.setEmail("admin@test.com");
+        updateForm.setRole(Role.ADMIN);
+        updateForm.setEnabled(false);
+
+        when(userRepository.findById(1L)).thenReturn(Optional.of(adminUser));
+
+        assertThatThrownBy(() -> userService.update(1L, updateForm))
+            .isInstanceOf(UnauthorizedException.class)
+            .hasMessageContaining("Cannot disable the admin user");
+    }
+
+    @Test
     void delete_whenExists_deletes() {
-        when(userRepository.existsById(1L)).thenReturn(true);
-        when(apiTokenRepository.findByUserId(1L)).thenReturn(List.of());
-        when(companyRepository.findByOwnerId(1L)).thenReturn(List.of());
-        when(projectRepository.findByOwnerId(1L)).thenReturn(List.of());
-        when(recruiterRepository.findByOwnerId(1L)).thenReturn(List.of());
-        when(pipelineStatusRepository.findByOwnerIdOrderBySortOrderAsc(1L)).thenReturn(List.of());
-        when(jobApplicationRepository.findByOwnerId(1L)).thenReturn(List.of());
+        when(userRepository.findById(2L)).thenReturn(Optional.of(regularUser));
+        when(apiTokenRepository.findByUserId(2L)).thenReturn(List.of());
+        when(companyRepository.findByOwnerId(2L)).thenReturn(List.of());
+        when(projectRepository.findByOwnerId(2L)).thenReturn(List.of());
+        when(recruiterRepository.findByOwnerId(2L)).thenReturn(List.of());
+        when(pipelineStatusRepository.findByOwnerIdOrderBySortOrderAsc(2L)).thenReturn(List.of());
+        when(jobApplicationRepository.findByOwnerId(2L)).thenReturn(List.of());
 
-        userService.delete(1L);
+        userService.delete(2L);
 
-        verify(userRepository).deleteById(1L);
+        verify(userRepository).deleteById(2L);
     }
 
     @Test
     void delete_whenNotFound_throwsException() {
-        when(userRepository.existsById(99L)).thenReturn(false);
+        when(userRepository.findById(99L)).thenReturn(Optional.empty());
 
         assertThatThrownBy(() -> userService.delete(99L))
             .isInstanceOf(ResourceNotFoundException.class);
+    }
+
+    @Test
+    void delete_adminUser_throwsException() {
+        when(userRepository.findById(1L)).thenReturn(Optional.of(adminUser));
+
+        assertThatThrownBy(() -> userService.delete(1L))
+            .isInstanceOf(UnauthorizedException.class)
+            .hasMessageContaining("Cannot delete the admin user");
+    }
+
+    @Test
+    void changePassword_success() {
+        when(userRepository.findById(1L)).thenReturn(Optional.of(adminUser));
+        when(passwordEncoder.matches("oldPass", "hashed")).thenReturn(true);
+        when(passwordEncoder.encode("newPass")).thenReturn("newHashed");
+
+        userService.changePassword(1L, "oldPass", "newPass");
+
+        verify(userRepository).save(userCaptor.capture());
+        assertThat(userCaptor.getValue().getPassword()).isEqualTo("newHashed");
+    }
+
+    @Test
+    void changePassword_wrongCurrentPassword_throwsException() {
+        when(userRepository.findById(1L)).thenReturn(Optional.of(adminUser));
+        when(passwordEncoder.matches("wrong", "hashed")).thenReturn(false);
+
+        assertThatThrownBy(() -> userService.changePassword(1L, "wrong", "newPass"))
+            .isInstanceOf(IllegalArgumentException.class)
+            .hasMessageContaining("Current password is incorrect");
+    }
+
+    @Test
+    void changePassword_blankPasswords_throwsException() {
+        assertThatThrownBy(() -> userService.changePassword(1L, "", "newPass"))
+            .isInstanceOf(IllegalArgumentException.class);
+        assertThatThrownBy(() -> userService.changePassword(1L, "old", ""))
+            .isInstanceOf(IllegalArgumentException.class);
     }
 }

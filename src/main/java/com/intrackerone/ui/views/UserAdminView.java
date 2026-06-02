@@ -52,7 +52,25 @@ public class UserAdminView extends VerticalLayout {
 
     private HorizontalLayout createToolbar() {
         Button add = new Button("Add User", e -> openEditDialog(null));
-        return new HorizontalLayout(add);
+        Button delete = new Button("Delete Selected", e -> {
+            UserDto selected = grid.asSingleSelect().getValue();
+            if (selected == null) {
+                Notification.show("Select a user first");
+                return;
+            }
+            if ("admin".equals(selected.username())) {
+                Notification.show("Cannot delete the admin user", 3000, Notification.Position.MIDDLE);
+                return;
+            }
+            try {
+                userService.delete(selected.id());
+                refresh();
+                Notification.show("User deleted");
+            } catch (Exception ex) {
+                Notification.show("Delete failed: " + ex.getMessage(), 5000, Notification.Position.MIDDLE);
+            }
+        });
+        return new HorizontalLayout(add, delete);
     }
 
     private void openEditDialog(UserDto existing) {
@@ -119,8 +137,8 @@ public class UserAdminView extends VerticalLayout {
                 form.setRole(roleField.getValue());
                 form.setEnabled(enabledField.getValue());
 
-                if (existing != null && existing.id().equals(current.getId()) && !enabledField.getValue()) {
-                    Notification.show("You cannot disable your own account");
+                if (existing != null && "admin".equals(existing.username()) && !enabledField.getValue()) {
+                    Notification.show("Cannot disable the admin user");
                     return;
                 }
 

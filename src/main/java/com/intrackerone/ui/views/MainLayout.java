@@ -9,17 +9,22 @@ import com.intrackerone.ui.views.pipeline.PipelineView;
 import com.intrackerone.ui.views.projects.ProjectListView;
 import com.intrackerone.ui.views.recruiters.RecruiterListView;
 import com.intrackerone.ui.views.tokens.ApiTokenListView;
+import com.intrackerone.domain.user.UserService;
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.applayout.DrawerToggle;
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.dialog.Dialog;
+import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.VaadinIcon;
+import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.sidenav.SideNav;
 import com.vaadin.flow.component.sidenav.SideNavItem;
+import com.vaadin.flow.component.textfield.PasswordField;
 import com.vaadin.flow.router.RouterLayout;
 import com.vaadin.flow.server.VaadinSession;
 import jakarta.annotation.security.PermitAll;
@@ -28,9 +33,11 @@ import jakarta.annotation.security.PermitAll;
 public class MainLayout extends AppLayout implements RouterLayout {
 
     private final SecurityService securityService;
+    private final UserService userService;
 
-    public MainLayout(SecurityService securityService) {
+    public MainLayout(SecurityService securityService, UserService userService) {
         this.securityService = securityService;
+        this.userService = userService;
         createHeader();
         createDrawer();
     }
@@ -46,12 +53,13 @@ public class MainLayout extends AppLayout implements RouterLayout {
 
         User current = securityService.getCurrentUser();
         Span userBadge = new Span(current.getUsername() + " (" + current.getRole() + ")");
+        Button changePassword = new Button("Change Password", e -> openChangePasswordDialog(current));
         Button logout = new Button("Logout", e -> {
             VaadinSession.getCurrent().getSession().invalidate();
             VaadinSession.getCurrent().close();
             getUI().ifPresent(ui -> ui.getPage().setLocation("/login"));
         });
-        header.add(userBadge, logout);
+        header.add(userBadge, changePassword, logout);
         setPrimarySection(Section.DRAWER);
         addToNavbar(header);
     }
@@ -74,5 +82,47 @@ public class MainLayout extends AppLayout implements RouterLayout {
         }
 
         addToDrawer(new VerticalLayout(nav));
+    }
+
+    private void openChangePasswordDialog(User current) {
+        Dialog dialog = new Dialog();
+        dialog.setHeaderTitle("Change Password");
+
+        PasswordField currentPassword = new PasswordField("Current Password");
+        currentPassword.setRequiredIndicatorVisible(true);
+        PasswordField newPassword = new PasswordField("New Password");
+        newPassword.setRequiredIndicatorVisible(true);
+        PasswordField confirmPassword = new PasswordField("Confirm New Password");
+        confirmPassword.setRequiredIndicatorVisible(true);
+
+        Button save = new Button("Save", e -> {
+            if (currentPassword.getValue() == null || currentPassword.getValue().isBlank()) {
+                Notification.show("Current password is required", 3000, Notification.Position.MIDDLE);
+                currentPassword.focus();
+                return;
+            }
+            if (newPassword.getValue() == null || newPassword.getValue().isBlank()) {
+                Notification.show("New password is required", 3000, Notification.Position.MIDDLE);
+                newPassword.focus();
+                return;
+            }
+            if (!newPassword.getValue().equals(confirmPassword.getValue())) {
+                Notification.show("Passwords do not match", 3000, Notification.Position.MIDDLE);
+                confirmPassword.focus();
+                return;
+            }
+            try {
+                userService.changePassword(current.getId(), currentPassword.getValue(), newPassword.getValue());
+                dialog.close();
+                Notification.show("Password changed");
+            } catch (Exception ex) {
+                Notification.show("Failed to change password: " + ex.getMessage(), 5000, Notification.Position.MIDDLE);
+            }
+        });
+        Button cancel = new Button("Cancel", e -> dialog.close());
+
+        dialog.add(new FormLayout(currentPassword, newPassword, confirmPassword),
+            new HorizontalLayout(save, cancel));
+        dialog.open();
     }
 }
