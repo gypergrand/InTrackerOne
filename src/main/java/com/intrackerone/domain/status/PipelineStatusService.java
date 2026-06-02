@@ -103,16 +103,15 @@ public class PipelineStatusService {
                 // Moving down: shift items between (oldOrder, newOrder] up by 1
                 if (s.getSortOrder() > oldOrder && s.getSortOrder() <= newOrder) {
                     s.setSortOrder(s.getSortOrder() - 1);
-                    pipelineStatusRepository.save(s);
                 }
             } else {
                 // Moving up: shift items between [newOrder, oldOrder) down by 1
                 if (s.getSortOrder() >= newOrder && s.getSortOrder() < oldOrder) {
                     s.setSortOrder(s.getSortOrder() + 1);
-                    pipelineStatusRepository.save(s);
                 }
             }
         }
+        pipelineStatusRepository.saveAll(all);
 
         status.setSortOrder(newOrder);
         pipelineStatusRepository.save(status);

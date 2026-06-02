@@ -5,6 +5,7 @@ import com.intrackerone.domain.user.UserRepository;
 import com.intrackerone.infrastructure.exception.ResourceNotFoundException;
 import com.intrackerone.infrastructure.exception.UnauthorizedException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -17,7 +18,7 @@ public class SecurityService {
 
     public User getCurrentUser() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        if (auth == null || !auth.isAuthenticated()) {
+        if (auth == null || !auth.isAuthenticated() || auth instanceof AnonymousAuthenticationToken) {
             throw new UnauthorizedException("No authenticated user");
         }
         String username = auth.getName();

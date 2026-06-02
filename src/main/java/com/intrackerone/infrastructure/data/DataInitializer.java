@@ -23,7 +23,7 @@ public class DataInitializer implements CommandLineRunner {
 
     @Override
     public void run(String... args) {
-        User admin = null;
+        User admin;
         if (!userRepository.existsByUsername("admin")) {
             admin = User.builder()
                 .username("admin")
@@ -34,7 +34,10 @@ public class DataInitializer implements CommandLineRunner {
                 .build();
             admin = userRepository.save(admin);
             log.info("Created admin user (default password: admin)");
+        } else {
+            admin = userRepository.findByUsername("admin").orElseThrow();
         }
+        pipelineStatusService.seedDefaultsForUser(admin.getId());
 
         if (!userRepository.existsByUsername("user")) {
             User regularUser = User.builder()
@@ -47,10 +50,6 @@ public class DataInitializer implements CommandLineRunner {
             regularUser = userRepository.save(regularUser);
             pipelineStatusService.seedDefaultsForUser(regularUser.getId());
             log.info("Created regular user (default password: user)");
-        }
-
-        if (admin != null) {
-            pipelineStatusService.seedDefaultsForUser(admin.getId());
         }
         log.info("Data initialization complete");
     }

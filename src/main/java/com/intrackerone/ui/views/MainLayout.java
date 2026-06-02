@@ -42,7 +42,7 @@ public class MainLayout extends AppLayout implements RouterLayout {
         );
         header.setDefaultVerticalComponentAlignment(FlexComponent.Alignment.CENTER);
         header.setWidthFull();
-        header.expand(new H3(""));
+        header.expand(new com.vaadin.flow.component.html.Div());
 
         User current = securityService.getCurrentUser();
         Span userBadge = new Span(current.getUsername() + " (" + current.getRole() + ")");

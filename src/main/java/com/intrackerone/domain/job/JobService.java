@@ -39,7 +39,7 @@ public class JobService {
     @Transactional(readOnly = true)
     public List<JobDto> findAll(Long currentUserId, Role role, Long statusId, Long companyId, Long projectId) {
         List<JobApplication> jobs;
-        if (role == Role.ADMIN) {
+        if (role == Role.ADMIN || role == Role.MODERATOR) {
             jobs = jobRepository.findAllWithRelations();
         } else {
             jobs = jobRepository.findByOwnerIdWithRelations(currentUserId);
@@ -66,13 +66,15 @@ public class JobService {
         AccessControl.requireOwnerOrGlobal(project.getOwner(), currentUserId, role, "Project");
         PipelineStatus status = findStatus(form.getCurrentStatusId());
         User currentUser = getUser(currentUserId);
-        requireSameOwner(currentUser, status.getOwner(), "PipelineStatus");
+        if (!AccessControl.hasGlobalDataAccess(role)) {
+            requireSameOwner(currentUser, status.getOwner(), "PipelineStatus");
+        }
 
         JobApplication job = jobMapper.toEntity(form);
         job.setProject(project);
         job.setCurrentStatus(status);
         job.setOwner(currentUser);
-        updateRecruiter(job, form.getRecruiterId(), project, currentUser);
+        updateRecruiter(job, form.getRecruiterId(), project, currentUser, role);
         job = jobRepository.saveAndFlush(job);
 
         StatusChange change = StatusChange.builder()
@@ -92,9 +94,9 @@ public class JobService {
         JobApplication job = findJob(id);
         AccessControl.requireOwnerOrGlobal(job.getOwner(), currentUserId, role, "JobApplication");
         updateFields(job, form);
-        Project project = updateProject(job, form.getProjectId());
-        updateStatus(job, form.getCurrentStatusId());
-        updateRecruiter(job, form.getRecruiterId(), project, job.getOwner());
+        Project project = updateProject(job, form.getProjectId(), role);
+        updateStatus(job, form.getCurrentStatusId(), role);
+        updateRecruiter(job, form.getRecruiterId(), project, job.getOwner(), role);
         job = jobRepository.saveAndFlush(job);
         return jobMapper.toDto(job);
     }
@@ -144,22 +146,26 @@ public class JobService {
         job.setNotes(form.getNotes());
     }
 
-    private Project updateProject(JobApplication job, Long projectId) {
+    private Project updateProject(JobApplication job, Long projectId, Role role) {
         if (projectId == null) {
             return job.getProject();
         }
         Project project = findProject(projectId);
-        requireSameOwner(job.getOwner(), project.getOwner(), "Project");
+        if (!AccessControl.hasGlobalDataAccess(role)) {
+            requireSameOwner(job.getOwner(), project.getOwner(), "Project");
+        }
         job.setProject(project);
         return project;
     }
 
-    private void updateStatus(JobApplication job, Long statusId) {
+    private void updateStatus(JobApplication job, Long statusId, Role role) {
         if (statusId == null) {
             return;
         }
         PipelineStatus newStatus = findStatus(statusId);
-        requireSameOwner(job.getOwner(), newStatus.getOwner(), "PipelineStatus");
+        if (!AccessControl.hasGlobalDataAccess(role)) {
+            requireSameOwner(job.getOwner(), newStatus.getOwner(), "PipelineStatus");
+        }
         PipelineStatus oldStatus = job.getCurrentStatus();
 
         // Record status change in history when the status actually changes
@@ -180,13 +186,15 @@ public class JobService {
         }
     }
 
-    private void updateRecruiter(JobApplication job, Long recruiterId, Project project, User owner) {
+    private void updateRecruiter(JobApplication job, Long recruiterId, Project project, User owner, Role role) {
         if (recruiterId == null) {
             job.setRecruiter(null);
             return;
         }
         Recruiter recruiter = findRecruiter(recruiterId);
-        requireSameOwner(owner, recruiter.getOwner(), "Recruiter");
+        if (!AccessControl.hasGlobalDataAccess(role)) {
+            requireSameOwner(owner, recruiter.getOwner(), "Recruiter");
+        }
         requireRecruiterCompany(recruiter, project);
         job.setRecruiter(recruiter);
     }

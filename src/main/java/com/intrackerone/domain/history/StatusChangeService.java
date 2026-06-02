@@ -10,7 +10,6 @@ import com.intrackerone.infrastructure.security.AccessControl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
@@ -44,7 +43,7 @@ public class StatusChangeService {
                 .toList();
     }
 
-    @Transactional(isolation = Isolation.SERIALIZABLE)
+    @Transactional
     public StatusChangeDto recordChange(Long jobId, Long toStatusId, String decidedBy, String notes,
                                         Long currentUserId, Role role) {
         JobApplication job = jobRepository.findByIdWithLock(jobId)

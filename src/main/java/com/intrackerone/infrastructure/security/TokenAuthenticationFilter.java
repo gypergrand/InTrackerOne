@@ -55,13 +55,15 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
      */
     private boolean authenticate(String rawToken, HttpServletResponse response) throws IOException {
         if (rawToken == null || rawToken.length() < MIN_TOKEN_LENGTH || !rawToken.startsWith(TOKEN_PREFIX)) {
-            return false;
+            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Invalid token format");
+            return true;
         }
         int identifierEnd = Math.min(rawToken.length(), TOKEN_PREFIX.length() + 16);
         String identifier = rawToken.substring(TOKEN_PREFIX.length(), identifierEnd);
         ApiToken token = apiTokenRepository.findByTokenIdentifier(identifier).orElse(null);
         if (token == null) {
-            return false;
+            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Invalid token");
+            return true;
         }
         if (Boolean.FALSE.equals(token.getEnabled())) {
             response.sendError(HttpServletResponse.SC_FORBIDDEN, "Token has been revoked");
@@ -72,18 +74,23 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
             String hashHex = HexFormat.of().formatHex(hash);
             if (MessageDigest.isEqual(hashHex.getBytes(java.nio.charset.StandardCharsets.UTF_8),
                     token.getTokenHash().getBytes(java.nio.charset.StandardCharsets.UTF_8))) {
-                setAuthentication(token);
+                return setAuthentication(token, response);
             }
         } catch (java.security.NoSuchAlgorithmException e) {
             // SHA-256 is guaranteed to be available
         }
-        return false;
+        response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Invalid token");
+        return true;
     }
 
-    private void setAuthentication(ApiToken token) {
+    /**
+     * @return true if the request should be stopped (error response sent), false to continue the chain
+     */
+    private boolean setAuthentication(ApiToken token, HttpServletResponse response) throws IOException {
         User user = token.getUser();
         if (user.getEnabled() != null && !user.getEnabled()) {
-            return;
+            response.sendError(HttpServletResponse.SC_FORBIDDEN, "User account is disabled");
+            return true;
         }
         LocalDateTime now = LocalDateTime.now();
         if (token.getLastUsedAt() == null || ChronoUnit.MINUTES.between(token.getLastUsedAt(), now) >= 5) {
@@ -95,6 +102,7 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
             user.getUsername(), null, authoritiesFor(user)
         );
         SecurityContextHolder.getContext().setAuthentication(auth);
+        return false;
     }
 
     private Collection<? extends SimpleGrantedAuthority> authoritiesFor(User user) {

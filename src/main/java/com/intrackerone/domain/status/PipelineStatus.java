@@ -53,7 +53,7 @@ public class PipelineStatus {
     private StatusType type;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false)
+    @JoinColumn(name = "owner_id", nullable = false)
     private User owner;
 
     @Column(nullable = false, updatable = false)
