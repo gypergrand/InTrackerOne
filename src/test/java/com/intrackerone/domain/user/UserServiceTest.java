@@ -197,7 +197,7 @@ class UserServiceTest {
         when(userRepository.findById(1L)).thenReturn(Optional.of(adminUser));
 
         assertThatThrownBy(() -> userService.delete(1L))
-            .isInstanceOf(UnauthorizedException.class)
+            .isInstanceOf(IllegalStateException.class)
             .hasMessageContaining("Cannot delete the admin user");
     }
 

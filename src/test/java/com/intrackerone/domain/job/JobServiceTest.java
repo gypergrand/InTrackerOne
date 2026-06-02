@@ -92,7 +92,8 @@ class JobServiceTest {
             JobTimezone.CET, null, null, null,
             Source.LINKEDIN, null, null,
             1L, "ProjectX", null, null, 1L, "Jane Doe",
-            1L, "Applied", "#2196F3", 1L, "admin", null, null);
+            1L, "Applied", "#2196F3", 1L, "admin",
+            null, null, null);
 
         form = new JobForm();
         form.setPosition("Java Developer");

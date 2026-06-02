@@ -84,25 +84,25 @@ public class UserService {
         User user = userRepository.findById(id)
             .orElseThrow(() -> new ResourceNotFoundException("User", id));
         if ("admin".equals(user.getUsername())) {
-            throw new UnauthorizedException("Cannot delete the admin user");
+            throw new IllegalStateException("Cannot delete the admin user");
         }
         if (!apiTokenRepository.findByUserId(id).isEmpty()) {
-            throw new UnauthorizedException("Cannot delete user with existing API tokens. Revoke tokens first.");
+            throw new IllegalStateException("Cannot delete user with existing API tokens. Revoke tokens first.");
         }
         if (!companyRepository.findByOwnerId(id).isEmpty()) {
-            throw new UnauthorizedException("Cannot delete user with existing companies. Delete companies first.");
+            throw new IllegalStateException("Cannot delete user with existing companies. Delete companies first.");
         }
         if (!projectRepository.findByOwnerId(id).isEmpty()) {
-            throw new UnauthorizedException("Cannot delete user with existing projects. Delete projects first.");
+            throw new IllegalStateException("Cannot delete user with existing projects. Delete projects first.");
         }
         if (!recruiterRepository.findByOwnerId(id).isEmpty()) {
-            throw new UnauthorizedException("Cannot delete user with existing recruiters. Delete recruiters first.");
+            throw new IllegalStateException("Cannot delete user with existing recruiters. Delete recruiters first.");
         }
         if (!pipelineStatusRepository.findByOwnerIdOrderBySortOrderAsc(id).isEmpty()) {
-            throw new UnauthorizedException("Cannot delete user with existing pipeline statuses. Delete statuses first.");
+            throw new IllegalStateException("Cannot delete user with existing pipeline statuses. Delete statuses first.");
         }
         if (!jobApplicationRepository.findByOwnerId(id).isEmpty()) {
-            throw new UnauthorizedException("Cannot delete user with existing job applications. Delete jobs first.");
+            throw new IllegalStateException("Cannot delete user with existing job applications. Delete jobs first.");
         }
         userRepository.deleteById(id);
     }

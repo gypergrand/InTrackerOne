@@ -90,8 +90,8 @@ public class ProjectService {
         updateCompany(project, form.getCompanyId());
         project.setIndustries(resolveIndustries(form.getIndustries()));
         if (newOwnerId != null && !newOwnerId.equals(project.getOwner().getId())) {
-            if (role != Role.ADMIN) {
-                throw new UnauthorizedException("Only ADMIN can transfer project ownership");
+            if (!AccessControl.hasGlobalDataAccess(role)) {
+                throw new UnauthorizedException("Only ADMIN or MODERATOR can transfer project ownership");
             }
             var newOwner = userRepository.findById(newOwnerId)
                     .orElseThrow(() -> new ResourceNotFoundException("User", newOwnerId));
@@ -106,7 +106,7 @@ public class ProjectService {
         Project project = findProject(id);
         AccessControl.requireOwnerOrGlobal(project.getOwner(), currentUserId, role, "Project");
         if (!jobApplicationRepository.findByProjectId(id).isEmpty()) {
-            throw new UnauthorizedException("Cannot delete project with existing job applications. Delete jobs first.");
+            throw new IllegalStateException("Cannot delete project with existing job applications. Delete jobs first.");
         }
         projectRepository.delete(project);
     }

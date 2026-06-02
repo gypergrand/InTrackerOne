@@ -69,8 +69,8 @@ public class CompanyService {
         company.setWebsite(form.getWebsite());
         company.setNotes(form.getNotes());
         if (newOwnerId != null && !newOwnerId.equals(company.getOwner().getId())) {
-            if (role != Role.ADMIN) {
-                throw new UnauthorizedException("Only ADMIN can transfer company ownership");
+            if (!AccessControl.hasGlobalDataAccess(role)) {
+                throw new UnauthorizedException("Only ADMIN or MODERATOR can transfer company ownership");
             }
             User newOwner = userRepository.findById(newOwnerId)
                     .orElseThrow(() -> new ResourceNotFoundException("User", newOwnerId));
@@ -85,10 +85,10 @@ public class CompanyService {
         Company company = findCompany(id);
         AccessControl.requireOwnerOrGlobal(company.getOwner(), currentUserId, role, "Company");
         if (!projectRepository.findByCompanyId(id).isEmpty()) {
-            throw new UnauthorizedException("Cannot delete company with existing projects. Delete projects first.");
+            throw new IllegalStateException("Cannot delete company with existing projects. Delete projects first.");
         }
         if (!recruiterRepository.findByCompanyId(id).isEmpty()) {
-            throw new UnauthorizedException("Cannot delete company with existing recruiters. Delete recruiters first.");
+            throw new IllegalStateException("Cannot delete company with existing recruiters. Delete recruiters first.");
         }
         companyRepository.delete(company);
     }

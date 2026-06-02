@@ -57,13 +57,15 @@ class JobControllerTest {
         mockMvc = MockMvcBuilders.standaloneSetup(jobController).build();
         user = User.builder().id(1L).username("admin").role(Role.ADMIN).build();
         jobDto = new JobDto(
-            1L, "Java Developer", null, null, null, null,   // id..salaryRange
-            null, null, null, null, null, null, null, null,  // jobType..repostedAt
+            1L, "Java Developer", null, null, null, null,   // id, position, jobDescription, jobUrl, location, salaryRange
+            null, null, null,                                // jobType, workType, onCallSchedule
+            null, null, null, null, null,                   // onCallDetails, timezone, timezoneOther, firstAppeared, repostedAt
             null, null, null,                                // source, sourceMeta, notes
-            1L, "ProjectX", null, null,                      // projectId..companyName
+            1L, "ProjectX", null, null,                      // projectId, projectName, companyId, companyName
             1L, "Jane Doe",                                  // recruiterId, recruiterName
-            1L, "Applied", "#2196F3",                        // status id/name/color
+            1L, "Applied", "#2196F3",                        // currentStatusId, currentStatusName, currentStatusColor
             1L, "admin",                                     // ownerId, ownerName
+            null,                                            // technologies
             null, null                                       // createdAt, updatedAt
         );
 

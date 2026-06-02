@@ -139,10 +139,10 @@ public class PipelineStatusService {
         PipelineStatus status = findStatus(id);
         AccessControl.requireOwnerOrGlobal(status.getOwner(), currentUserId, role, "PipelineStatus");
         if (!jobApplicationRepository.findByCurrentStatusId(id).isEmpty()) {
-            throw new UnauthorizedException("Cannot delete status used by active job applications. Change job statuses first.");
+            throw new IllegalStateException("Cannot delete status used by active job applications. Change job statuses first.");
         }
         if (!statusChangeRepository.findByToStatusId(id).isEmpty()) {
-            throw new UnauthorizedException("Cannot delete status with recorded status changes.");
+            throw new IllegalStateException("Cannot delete status with recorded status changes.");
         }
         pipelineStatusRepository.delete(status);
     }

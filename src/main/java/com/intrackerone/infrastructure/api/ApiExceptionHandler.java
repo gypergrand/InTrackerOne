@@ -32,6 +32,12 @@ public class ApiExceptionHandler {
             .body(Map.of("error", ex.getMessage()));
     }
 
+    @ExceptionHandler(IllegalStateException.class)
+    public ResponseEntity<Map<String, String>> handleConflict(IllegalStateException ex) {
+        return ResponseEntity.status(HttpStatus.CONFLICT)
+            .body(Map.of("error", ex.getMessage()));
+    }
+
     @ExceptionHandler(SecurityException.class)
     public ResponseEntity<Map<String, String>> handleSecurity(SecurityException ex) {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
