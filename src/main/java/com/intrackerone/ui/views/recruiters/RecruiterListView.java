@@ -13,6 +13,7 @@ import com.intrackerone.ui.views.MainLayout;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.checkbox.CheckboxGroup;
 import com.vaadin.flow.component.combobox.ComboBox;
+import com.vaadin.flow.component.confirmdialog.ConfirmDialog;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.grid.Grid;
@@ -169,9 +170,29 @@ public class RecruiterListView extends VerticalLayout {
             }
         });
         Button cancel = new Button("Cancel", e -> dialog.close());
+        HorizontalLayout buttons = new HorizontalLayout(save, cancel);
+        if (existing != null) {
+            Button delete = new Button("Delete", e -> {
+                new ConfirmDialog("Confirm Delete", "Delete this recruiter?",
+                    "Delete", ev -> {
+                        try {
+                            recruiterService.delete(existing.id(), current.getId(), current.getRole());
+                            dialog.close();
+                            refreshGrid();
+                            Notification.show("Deleted");
+                        } catch (Exception ex) {
+                            Notification.show("Delete failed: " + ex.getMessage(), 5000, Notification.Position.MIDDLE);
+                        }
+                    },
+                    "Cancel", ev2 -> {}
+                ).open();
+            });
+            delete.getStyle().set("color", "red");
+            buttons.add(delete);
+        }
 
         dialog.add(new FormLayout(nameField, emailField, phoneField, notesField, companyField, projectsField),
-            new HorizontalLayout(save, cancel));
+            buttons);
         dialog.open();
     }
 

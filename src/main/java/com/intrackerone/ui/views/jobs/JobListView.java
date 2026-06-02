@@ -21,6 +21,7 @@ import com.intrackerone.infrastructure.security.SecurityService;
 import com.intrackerone.ui.views.MainLayout;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.combobox.ComboBox;
+import com.vaadin.flow.component.confirmdialog.ConfirmDialog;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.grid.Grid;
@@ -315,13 +316,33 @@ public class JobListView extends VerticalLayout {
             }
         });
         Button cancel = new Button("Cancel", _ -> dialog.close());
+        HorizontalLayout buttons = new HorizontalLayout(save, cancel);
+        if (existing != null) {
+            Button delete = new Button("Delete", _ -> {
+                new ConfirmDialog("Confirm Delete", "Delete this job?",
+                    "Delete", ev -> {
+                        try {
+                            jobService.delete(existing.id(), current.getId(), current.getRole());
+                            dialog.close();
+                            refresh();
+                            Notification.show("Deleted");
+                        } catch (Exception ex) {
+                            Notification.show("Delete failed: " + ex.getMessage(), 5000, Notification.Position.MIDDLE);
+                        }
+                    },
+                    "Cancel", ev2 -> {}
+                ).open();
+            });
+            delete.getStyle().set("color", "red");
+            buttons.add(delete);
+        }
 
         dialog.add(new FormLayout(positionField, descField, urlField, locationField, salaryField,
             typeField, workTypeField, sourceField, sourceMetaField, notesField,
             companyField, projectField, recruiterField, statusField),
             new FormLayout(onCallField, onCallDetailsField, timezoneField, timezoneIsOther, timezoneOtherField,
                 firstAppearedField, repostedField),
-            new HorizontalLayout(save, cancel));
+            buttons);
         dialog.open();
     }
 

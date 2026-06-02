@@ -8,6 +8,7 @@ import com.intrackerone.domain.user.User;
 import com.intrackerone.infrastructure.security.SecurityService;
 import com.intrackerone.ui.views.MainLayout;
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.confirmdialog.ConfirmDialog;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.grid.Grid;
@@ -95,8 +96,29 @@ public class CompanyListView extends VerticalLayout {
             }
         });
         Button cancel = new Button("Cancel", e -> dialog.close());
+        HorizontalLayout buttons = new HorizontalLayout(save, cancel);
+        if (existing != null) {
+            Button delete = new Button("Delete", e -> {
+                new ConfirmDialog("Confirm Delete", "Delete this company?",
+                    "Delete", ev -> {
+                        try {
+                            User current = securityService.getCurrentUser();
+                            companyService.delete(existing.id(), current.getId(), current.getRole());
+                            dialog.close();
+                            refresh();
+                            Notification.show("Deleted");
+                        } catch (Exception ex) {
+                            Notification.show("Delete failed: " + ex.getMessage(), 5000, Notification.Position.MIDDLE);
+                        }
+                    },
+                    "Cancel", ev2 -> {}
+                ).open();
+            });
+            delete.getStyle().set("color", "red");
+            buttons.add(delete);
+        }
 
-        dialog.add(new FormLayout(nameField, websiteField, notesField), new HorizontalLayout(save, cancel));
+        dialog.add(new FormLayout(nameField, websiteField, notesField), buttons);
         dialog.open();
     }
 
