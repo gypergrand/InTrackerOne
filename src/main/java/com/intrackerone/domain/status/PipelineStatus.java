@@ -53,8 +53,11 @@ public class PipelineStatus {
     private StatusType type;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "owner_id", nullable = false)
+    @JoinColumn(name = "owner_id", nullable = true)
     private User owner;
+
+    @Column(nullable = false)
+    private Boolean isDefault;
 
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;

@@ -28,7 +28,7 @@ public final class AccessControl {
     }
 
     public static void requireSameOwner(User expectedOwner, User actualOwner, String resource) {
-        if (sameOwner(expectedOwner, actualOwner)) {
+        if (actualOwner == null || sameOwner(expectedOwner, actualOwner)) {
             return;
         }
         throw new UnauthorizedException(resource + " belongs to another user");

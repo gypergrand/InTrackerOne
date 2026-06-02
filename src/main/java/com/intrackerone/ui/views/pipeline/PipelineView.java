@@ -32,7 +32,7 @@ import java.util.stream.Collectors;
 
 @Route(value = "pipeline", layout = MainLayout.class)
 @PermitAll
-public class PipelineView extends HorizontalLayout {
+public class PipelineView extends VerticalLayout {
 
     private final JobService jobService;
     private final PipelineStatusService pipelineStatusService;
@@ -61,6 +61,9 @@ public class PipelineView extends HorizontalLayout {
 
         add(createToolbar(statuses, current));
 
+        HorizontalLayout columnsRow = new HorizontalLayout();
+        columnsRow.setSpacing(false);
+
         for (int i = 0; i < statuses.size(); i++) {
             PipelineStatusDto status = statuses.get(i);
             VerticalLayout column = new VerticalLayout();
@@ -78,21 +81,25 @@ public class PipelineView extends HorizontalLayout {
             Span count = new Span("(" + jobsByStatus.getOrDefault(status.id(), List.of()).size() + ")");
             count.getStyle().set("color", "var(--lumo-secondary-text-color)");
 
-            Button editBtn = new Button(VaadinIcon.EDIT.create(), e -> openStatusDialog(status, current));
-            editBtn.getElement().setAttribute("title", "Edit status");
-            editBtn.getStyle().set("margin-left", "auto");
-
-            Button deleteBtn = new Button(VaadinIcon.TRASH.create(), e -> openDeleteConfirm(status, current));
-            deleteBtn.getElement().setAttribute("title", "Delete status");
-
-            HorizontalLayout headRow = new HorizontalLayout(header, count, editBtn, deleteBtn);
+            HorizontalLayout headRow = new HorizontalLayout(header, count);
             headRow.setDefaultVerticalComponentAlignment(FlexComponent.Alignment.CENTER);
             headRow.setWidthFull();
             column.add(headRow);
 
-            HorizontalLayout moveRow = new HorizontalLayout();
-            moveRow.setWidthFull();
-            moveRow.getStyle().set("margin-top", "2px");
+            HorizontalLayout actionRow = new HorizontalLayout();
+            actionRow.setWidthFull();
+            actionRow.getStyle().set("margin-top", "2px");
+
+            Button editBtn = new Button(VaadinIcon.EDIT.create(), e -> openStatusDialog(status, current));
+            editBtn.getElement().setAttribute("title", "Edit status");
+            editBtn.getStyle().set("font-size", "9px");
+            actionRow.add(editBtn);
+
+            Button deleteBtn = new Button(VaadinIcon.TRASH.create(), e -> openDeleteConfirm(status, current));
+            deleteBtn.getElement().setAttribute("title", "Delete status");
+            deleteBtn.getStyle().set("font-size", "9px");
+            actionRow.add(deleteBtn);
+
             if (i > 0) {
                 Button moveLeft = new Button(VaadinIcon.ARROW_LEFT.create(), e -> {
                     pipelineStatusService.move(status.id(), status.sortOrder() - 1, current.getId(), current.getRole());
@@ -100,7 +107,7 @@ public class PipelineView extends HorizontalLayout {
                 });
                 moveLeft.getElement().setAttribute("title", "Move left");
                 moveLeft.getStyle().set("font-size", "9px");
-                moveRow.add(moveLeft);
+                actionRow.add(moveLeft);
             }
             if (i < statuses.size() - 1) {
                 Button moveRight = new Button(VaadinIcon.ARROW_RIGHT.create(), e -> {
@@ -109,19 +116,19 @@ public class PipelineView extends HorizontalLayout {
                 });
                 moveRight.getElement().setAttribute("title", "Move right");
                 moveRight.getStyle().set("font-size", "9px");
-                moveRow.add(moveRight);
+                actionRow.add(moveRight);
             }
-            if (!moveRow.getChildren().findAny().isEmpty()) {
-                column.add(moveRow);
-            }
+            column.add(actionRow);
 
             List<JobDto> columnJobs = jobsByStatus.getOrDefault(status.id(), List.of());
             for (JobDto job : columnJobs) {
                 column.add(createJobCard(job, statuses, current));
             }
 
-            add(column);
+            columnsRow.add(column);
         }
+
+        add(columnsRow);
     }
 
     private HorizontalLayout createToolbar(List<PipelineStatusDto> statuses, User current) {
@@ -246,18 +253,22 @@ public class PipelineView extends HorizontalLayout {
         company.getStyle().set("color", "var(--lumo-secondary-text-color)");
         card.add(company);
 
-        for (PipelineStatusDto s : statuses) {
-            if (s.id().equals(job.currentStatusId())) continue;
-            Button moveBtn = new Button("→ " + s.name(), e -> {
-                statusChangeService.recordChange(job.id(), s.id(), null, null, current.getId(), current.getRole());
-                renderPipeline();
-                Notification.show("Moved to " + s.name());
-            });
-            moveBtn.getStyle().set("font-size", "11px");
-            moveBtn.getStyle().set("padding", "0 8px");
-            moveBtn.getStyle().set("margin", "2px 0");
-            card.add(moveBtn);
-        }
+        List<PipelineStatusDto> available = statuses.stream()
+            .filter(s -> !s.id().equals(job.currentStatusId()))
+            .toList();
+        ComboBox<PipelineStatusDto> statusCombo = new ComboBox<>();
+        statusCombo.setPlaceholder("Move to...");
+        statusCombo.setItemLabelGenerator(PipelineStatusDto::name);
+        statusCombo.setItems(available);
+        statusCombo.getStyle().set("font-size", "12px");
+        statusCombo.setWidthFull();
+        statusCombo.addValueChangeListener(e -> {
+            if (e.getValue() == null) return;
+            statusChangeService.recordChange(job.id(), e.getValue().id(), null, null, current.getId(), current.getRole());
+            renderPipeline();
+            Notification.show("Moved to " + e.getValue().name());
+        });
+        card.add(statusCombo);
 
         return card;
     }

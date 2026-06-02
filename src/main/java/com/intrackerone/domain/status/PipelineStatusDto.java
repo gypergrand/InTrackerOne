@@ -5,5 +5,6 @@ public record PipelineStatusDto(
     String name,
     int sortOrder,
     String color,
-    StatusType type
+    StatusType type,
+    boolean isDefault
 ) {}

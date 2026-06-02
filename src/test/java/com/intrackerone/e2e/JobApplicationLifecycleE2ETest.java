@@ -127,32 +127,32 @@ class JobApplicationLifecycleE2ETest {
         log.info("Moved to phone screen status");
 
         // ========== STEP 3: Move to technical interview ==========
-        jobForm.setCurrentStatusId(statuses.get(3).getId()); // Technical Interview
+        jobForm.setCurrentStatusId(statuses.get(6).getId()); // Technical Interview
         JobDto technicalJob = jobService.update(jobId, jobForm, testUser.getId(), userRole);
-        assertEquals(statuses.get(3).getId(), technicalJob.currentStatusId());
+        assertEquals(statuses.get(6).getId(), technicalJob.currentStatusId());
         log.info("Moved to technical interview status");
 
         // ========== STEP 4: Move to on-site ==========
-        jobForm.setCurrentStatusId(statuses.get(4).getId()); // On-site / Final
+        jobForm.setCurrentStatusId(statuses.get(7).getId()); // On-site / Final
         JobDto onSiteJob = jobService.update(jobId, jobForm, testUser.getId(), userRole);
-        assertEquals(statuses.get(4).getId(), onSiteJob.currentStatusId());
+        assertEquals(statuses.get(7).getId(), onSiteJob.currentStatusId());
         log.info("Moved to on-site interview status");
 
         // ========== STEP 5: Move to offer ==========
-        jobForm.setCurrentStatusId(statuses.get(5).getId()); // Offer
+        jobForm.setCurrentStatusId(statuses.get(8).getId()); // Offer
         JobDto offerJob = jobService.update(jobId, jobForm, testUser.getId(), userRole);
-        assertEquals(statuses.get(5).getId(), offerJob.currentStatusId());
+        assertEquals(statuses.get(8).getId(), offerJob.currentStatusId());
         log.info("Moved to offer status");
 
         // ========== STEP 6: Accept offer ==========
-        jobForm.setCurrentStatusId(statuses.get(7).getId()); // Accepted (terminal)
+        jobForm.setCurrentStatusId(statuses.get(10).getId()); // Accepted (terminal)
         JobDto acceptedJob = jobService.update(jobId, jobForm, testUser.getId(), userRole);
-        assertEquals(statuses.get(7).getId(), acceptedJob.currentStatusId());
+        assertEquals(statuses.get(10).getId(), acceptedJob.currentStatusId());
         log.info("Offer accepted!");
 
         // ========== VERIFICATION ==========
         JobApplication finalJob = jobApplicationRepository.findById(jobId).orElseThrow();
-        assertEquals(statuses.get(7).getId(), finalJob.getCurrentStatus().getId());
+        assertEquals(statuses.get(10).getId(), finalJob.getCurrentStatus().getId());
         assertEquals(StatusType.TERMINAL, finalJob.getCurrentStatus().getType());
         log.info("Job is in terminal accepted status");
     }
@@ -196,10 +196,10 @@ class JobApplicationLifecycleE2ETest {
         form1.setCurrentStatusId(statuses.get(2).getId()); // Phone screen
         jobService.update(job1.id(), form1, testUser.getId(), userRole);
 
-        form2.setCurrentStatusId(statuses.get(3).getId()); // Technical
+        form2.setCurrentStatusId(statuses.get(6).getId()); // Technical
         jobService.update(job2.id(), form2, testUser.getId(), userRole);
 
-        form3.setCurrentStatusId(statuses.get(5).getId()); // Offer
+        form3.setCurrentStatusId(statuses.get(8).getId()); // Offer
         jobService.update(job3.id(), form3, testUser.getId(), userRole);
 
         // Verify applications in different statuses (filter by positions created in this test to avoid
@@ -216,12 +216,12 @@ class JobApplicationLifecycleE2ETest {
         assertEquals(1, phoneScreenCount);
 
         long technicalCount = thisTestsJobs.stream()
-            .filter(j -> j.currentStatusId().equals(statuses.get(3).getId()))
+            .filter(j -> j.currentStatusId().equals(statuses.get(6).getId()))
             .count();
         assertEquals(1, technicalCount);
 
         long offerCount = thisTestsJobs.stream()
-            .filter(j -> j.currentStatusId().equals(statuses.get(5).getId()))
+            .filter(j -> j.currentStatusId().equals(statuses.get(8).getId()))
             .count();
         assertEquals(1, offerCount);
 
@@ -271,7 +271,7 @@ class JobApplicationLifecycleE2ETest {
         JobDto job2 = jobService.create(form2, testUser.getId(), userRole);
 
         // Move job2 to different status
-        form2.setCurrentStatusId(statuses.get(3).getId());
+        form2.setCurrentStatusId(statuses.get(6).getId());
         jobService.update(job2.id(), form2, testUser.getId(), userRole);
 
         // Filter by status AND the project created in setUp() to avoid counting
@@ -281,7 +281,7 @@ class JobApplicationLifecycleE2ETest {
         assertEquals(1, appliedJobs.size());
 
         List<JobDto> technicalJobs = jobService.findAll(testUser.getId(), userRole,
-                statuses.get(3).getId(), null, project.getId());
+                statuses.get(6).getId(), null, project.getId());
         assertEquals(1, technicalJobs.size());
 
         log.info("Jobs filtered correctly by status");

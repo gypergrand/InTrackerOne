@@ -1,0 +1,3 @@
+ALTER TABLE pipeline_statuses ADD COLUMN is_default BOOLEAN NOT NULL DEFAULT FALSE;
+
+ALTER TABLE pipeline_statuses ALTER COLUMN owner_id DROP NOT NULL;

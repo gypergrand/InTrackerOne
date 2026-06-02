@@ -34,6 +34,13 @@ public class PipelineStatusService {
     }
 
     @Transactional(readOnly = true)
+    public List<PipelineStatusDto> findDefaultStatuses() {
+        return pipelineStatusRepository.findByIsDefaultTrueOrderBySortOrderAsc().stream()
+                .map(pipelineStatusMapper::toDto)
+                .toList();
+    }
+
+    @Transactional(readOnly = true)
     public PipelineStatusDto findById(Long id, Long currentUserId, Role role) {
         PipelineStatus status = findStatus(id);
         AccessControl.requireOwnerOrGlobal(status.getOwner(), currentUserId, role, "PipelineStatus");
@@ -42,14 +49,61 @@ public class PipelineStatusService {
 
     @Transactional
     public void seedDefaultsForUser(Long userId) {
-        if (pipelineStatusRepository.existsByOwnerIdAndName(userId, "Preparation")) {
-            return;
-        }
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("User", userId));
-        List<PipelineStatus> defaults = defaultStatuses(user);
+        if (!pipelineStatusRepository.findByOwnerIdOrderBySortOrderAsc(userId).isEmpty()) {
+            return;
+        }
+        seedDefaultStatusesIfNeeded();
+        List<PipelineStatus> defaults = pipelineStatusRepository.findByIsDefaultTrueOrderBySortOrderAsc();
+        List<PipelineStatus> copies = defaults.stream()
+                .map(d -> PipelineStatus.builder()
+                        .name(d.getName())
+                        .sortOrder(d.getSortOrder())
+                        .color(d.getColor())
+                        .type(d.getType())
+                        .isDefault(false)
+                        .owner(user)
+                        .build())
+                .toList();
+        pipelineStatusRepository.saveAll(copies);
+        log.info("Seeded {} statuses for user {} from defaults", copies.size(), userId);
+    }
+
+    @Transactional
+    public void seedDefaultStatusesIfNeeded() {
+        if (!pipelineStatusRepository.findByIsDefaultTrueOrderBySortOrderAsc().isEmpty()) {
+            return;
+        }
+        List<PipelineStatus> defaults = List.of(
+            createDefaultStatus("Preparation", 1, "#9E9E9E", StatusType.ACTIVE),
+            createDefaultStatus("Applied", 2, "#2196F3", StatusType.ACTIVE),
+            createDefaultStatus("Phone Screen", 3, "#00BCD4", StatusType.ACTIVE),
+            createDefaultStatus("Behavioral Interview", 4, "#4FC3F7", StatusType.ACTIVE),
+            createDefaultStatus("DSA Interview", 5, "#FF5722", StatusType.ACTIVE),
+            createDefaultStatus("PO Interview", 6, "#E040FB", StatusType.ACTIVE),
+            createDefaultStatus("Technical Interview", 7, "#FF9800", StatusType.ACTIVE),
+            createDefaultStatus("On-site / Final", 8, "#9C27B0", StatusType.ACTIVE),
+            createDefaultStatus("Offer", 9, "#4CAF50", StatusType.ACTIVE),
+            createDefaultStatus("Negotiation", 10, "#009688", StatusType.ACTIVE),
+            createDefaultStatus("Accepted", 11, "#1B5E20", StatusType.TERMINAL),
+            createDefaultStatus("Rejected", 12, "#F44336", StatusType.TERMINAL),
+            createDefaultStatus("Withdrawn", 13, "#616161", StatusType.TERMINAL),
+            createDefaultStatus("Ghosted", 14, "#795548", StatusType.TERMINAL)
+        );
         pipelineStatusRepository.saveAll(defaults);
-        log.info("Seeded {} default statuses for user {}", defaults.size(), userId);
+        log.info("Seeded {} default statuses", defaults.size());
+    }
+
+    private PipelineStatus createDefaultStatus(String name, int order, String color, StatusType type) {
+        return PipelineStatus.builder()
+                .name(name)
+                .sortOrder(order)
+                .color(color)
+                .type(type)
+                .isDefault(true)
+                .owner(null)
+                .build();
     }
 
     @Transactional
@@ -104,19 +158,16 @@ public class PipelineStatusService {
             return;
         }
 
-        // Shift other statuses to make room, avoiding duplicate sort orders
         List<PipelineStatus> all = pipelineStatusRepository.findByOwnerIdOrderBySortOrderAsc(ownerId);
         for (PipelineStatus s : all) {
             if (s.getId().equals(id)) {
                 continue;
             }
             if (newOrder > oldOrder) {
-                // Moving down: shift items between (oldOrder, newOrder] up by 1
                 if (s.getSortOrder() > oldOrder && s.getSortOrder() <= newOrder) {
                     s.setSortOrder(s.getSortOrder() - 1);
                 }
             } else {
-                // Moving up: shift items between [newOrder, oldOrder) down by 1
                 if (s.getSortOrder() >= newOrder && s.getSortOrder() < oldOrder) {
                     s.setSortOrder(s.getSortOrder() + 1);
                 }
@@ -128,34 +179,78 @@ public class PipelineStatusService {
         pipelineStatusRepository.save(status);
     }
 
-    private List<PipelineStatus> defaultStatuses(User user) {
-        return List.of(
-            createStatus("Preparation", 1, "#9E9E9E", StatusType.ACTIVE, user),
-            createStatus("Applied", 2, "#2196F3", StatusType.ACTIVE, user),
-            createStatus("Phone Screen", 3, "#00BCD4", StatusType.ACTIVE, user),
-            createStatus("Technical Interview", 4, "#FF9800", StatusType.ACTIVE, user),
-            createStatus("On-site / Final", 5, "#9C27B0", StatusType.ACTIVE, user),
-            createStatus("Offer", 6, "#4CAF50", StatusType.ACTIVE, user),
-            createStatus("Negotiation", 7, "#009688", StatusType.ACTIVE, user),
-            createStatus("Accepted", 8, "#1B5E20", StatusType.TERMINAL, user),
-            createStatus("Rejected", 9, "#F44336", StatusType.TERMINAL, user),
-            createStatus("Withdrawn", 10, "#616161", StatusType.TERMINAL, user),
-            createStatus("Ghosted", 11, "#795548", StatusType.TERMINAL, user)
-        );
+    @Transactional
+    public PipelineStatusDto createDefault(PipelineStatusForm form) {
+        int maxOrder = pipelineStatusRepository.findByIsDefaultTrueOrderBySortOrderAsc().stream()
+                .mapToInt(PipelineStatus::getSortOrder)
+                .max()
+                .orElse(0);
+
+        PipelineStatus status = pipelineStatusMapper.toEntity(form);
+        status.setSortOrder(maxOrder + 1);
+        status.setIsDefault(true);
+        status.setOwner(null);
+        status = pipelineStatusRepository.save(status);
+        return pipelineStatusMapper.toDto(status);
     }
 
-    private PipelineStatus createStatus(String name, int order, String color, StatusType type, User user) {
-        return PipelineStatus.builder()
-                .name(name)
-                .sortOrder(order)
-                .color(color)
-                .type(type)
-                .owner(user)
-                .build();
+    @Transactional
+    public PipelineStatusDto updateDefault(Long id, PipelineStatusForm form) {
+        PipelineStatus status = findDefaultStatus(id);
+        status.setName(form.getName());
+        status.setColor(form.getColor());
+        status.setType(form.getType());
+        status = pipelineStatusRepository.save(status);
+        return pipelineStatusMapper.toDto(status);
+    }
+
+    @Transactional
+    public void deleteDefault(Long id) {
+        PipelineStatus status = findDefaultStatus(id);
+        pipelineStatusRepository.delete(status);
+    }
+
+    @Transactional
+    public void moveDefault(Long id, int newOrder) {
+        PipelineStatus status = findDefaultStatus(id);
+        int oldOrder = status.getSortOrder();
+
+        if (newOrder == oldOrder) {
+            return;
+        }
+
+        List<PipelineStatus> all = pipelineStatusRepository.findByIsDefaultTrueOrderBySortOrderAsc();
+        for (PipelineStatus s : all) {
+            if (s.getId().equals(id)) {
+                continue;
+            }
+            if (newOrder > oldOrder) {
+                if (s.getSortOrder() > oldOrder && s.getSortOrder() <= newOrder) {
+                    s.setSortOrder(s.getSortOrder() - 1);
+                }
+            } else {
+                if (s.getSortOrder() >= newOrder && s.getSortOrder() < oldOrder) {
+                    s.setSortOrder(s.getSortOrder() + 1);
+                }
+            }
+        }
+        pipelineStatusRepository.saveAll(all);
+
+        status.setSortOrder(newOrder);
+        pipelineStatusRepository.save(status);
     }
 
     private PipelineStatus findStatus(Long id) {
         return pipelineStatusRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("PipelineStatus", id));
+    }
+
+    private PipelineStatus findDefaultStatus(Long id) {
+        PipelineStatus status = pipelineStatusRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("PipelineStatus", id));
+        if (!Boolean.TRUE.equals(status.getIsDefault())) {
+            throw new UnauthorizedException("Not a default status");
+        }
+        return status;
     }
 }

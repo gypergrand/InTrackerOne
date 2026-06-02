@@ -1,5 +1,8 @@
 package com.intrackerone.domain.status;
 
+import com.intrackerone.domain.history.StatusChangeRepository;
+import com.intrackerone.domain.job.JobApplicationRepository;
+import com.intrackerone.domain.user.Role;
 import com.intrackerone.domain.user.User;
 import com.intrackerone.domain.user.UserRepository;
 import com.intrackerone.infrastructure.exception.ResourceNotFoundException;
@@ -32,6 +35,12 @@ class PipelineStatusServiceTest {
     @Mock
     private UserRepository userRepository;
 
+    @Mock
+    private JobApplicationRepository jobApplicationRepository;
+
+    @Mock
+    private StatusChangeRepository statusChangeRepository;
+
     @InjectMocks
     private PipelineStatusService pipelineStatusService;
 
@@ -41,6 +50,7 @@ class PipelineStatusServiceTest {
     private User user;
     private PipelineStatus activeStatus;
     private PipelineStatusDto statusDto;
+    private PipelineStatus defaultStatus;
 
     @BeforeEach
     void setUp() {
@@ -48,9 +58,13 @@ class PipelineStatusServiceTest {
 
         activeStatus = PipelineStatus.builder()
             .id(1L).name("Applied").sortOrder(1).color("#2196F3")
-            .type(StatusType.ACTIVE).owner(user).build();
+            .type(StatusType.ACTIVE).isDefault(false).owner(user).build();
 
-        statusDto = new PipelineStatusDto(1L, "Applied", 1, "#2196F3", StatusType.ACTIVE);
+        defaultStatus = PipelineStatus.builder()
+            .id(10L).name("Preparation").sortOrder(1).color("#9E9E9E")
+            .type(StatusType.ACTIVE).isDefault(true).owner(null).build();
+
+        statusDto = new PipelineStatusDto(1L, "Applied", 1, "#2196F3", StatusType.ACTIVE, false);
     }
 
     @Test
@@ -67,7 +81,9 @@ class PipelineStatusServiceTest {
 
     @Test
     void seedDefaultsForUser_whenAlreadySeeded_skips() {
-        when(pipelineStatusRepository.existsByOwnerIdAndName(1L, "Preparation")).thenReturn(true);
+        when(userRepository.findById(1L)).thenReturn(Optional.of(user));
+        when(pipelineStatusRepository.findByOwnerIdOrderBySortOrderAsc(1L))
+            .thenReturn(List.of(activeStatus));
 
         pipelineStatusService.seedDefaultsForUser(1L);
 
@@ -76,12 +92,29 @@ class PipelineStatusServiceTest {
 
     @Test
     void seedDefaultsForUser_whenNotSeeded_createsAllDefaults() {
-        when(pipelineStatusRepository.existsByOwnerIdAndName(1L, "Preparation")).thenReturn(false);
         when(userRepository.findById(1L)).thenReturn(Optional.of(user));
+        when(pipelineStatusRepository.findByOwnerIdOrderBySortOrderAsc(1L))
+            .thenReturn(List.of());
+        when(pipelineStatusRepository.findByIsDefaultTrueOrderBySortOrderAsc())
+            .thenReturn(List.of(defaultStatus));
 
         pipelineStatusService.seedDefaultsForUser(1L);
 
         verify(pipelineStatusRepository).saveAll(any());
+    }
+
+    @Test
+    void findDefaultStatuses_returnsDefaultStatuses() {
+        PipelineStatusDto defaultDto = new PipelineStatusDto(10L, "Preparation", 1, "#9E9E9E", StatusType.ACTIVE, true);
+        when(pipelineStatusRepository.findByIsDefaultTrueOrderBySortOrderAsc())
+            .thenReturn(List.of(defaultStatus));
+        when(pipelineStatusMapper.toDto(defaultStatus)).thenReturn(defaultDto);
+
+        List<PipelineStatusDto> result = pipelineStatusService.findDefaultStatuses();
+
+        assertThat(result).hasSize(1);
+        assertThat(result.get(0).name()).isEqualTo("Preparation");
+        assertThat(result.get(0).isDefault()).isTrue();
     }
 
     @Test
@@ -99,7 +132,7 @@ class PipelineStatusServiceTest {
         when(pipelineStatusRepository.save(any())).thenReturn(
             PipelineStatus.builder().id(2L).name("Custom Stage").sortOrder(2).build());
         when(pipelineStatusMapper.toDto(any())).thenReturn(
-            new PipelineStatusDto(2L, "Custom Stage", 2, "#FF0000", StatusType.ACTIVE));
+            new PipelineStatusDto(2L, "Custom Stage", 2, "#FF0000", StatusType.ACTIVE, false));
 
         PipelineStatusDto result = pipelineStatusService.create(form, 1L);
 
@@ -113,7 +146,7 @@ class PipelineStatusServiceTest {
     void findById_whenNotFound_throwsException() {
         when(pipelineStatusRepository.findById(99L)).thenReturn(Optional.empty());
 
-        assertThatThrownBy(() -> pipelineStatusService.findById(99L, 1L, com.intrackerone.domain.user.Role.ADMIN))
+        assertThatThrownBy(() -> pipelineStatusService.findById(99L, 1L, Role.ADMIN))
             .isInstanceOf(ResourceNotFoundException.class);
     }
 }

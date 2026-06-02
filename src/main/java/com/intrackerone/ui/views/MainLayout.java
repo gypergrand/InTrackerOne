@@ -8,6 +8,7 @@ import com.intrackerone.ui.views.jobs.JobListView;
 import com.intrackerone.ui.views.pipeline.PipelineView;
 import com.intrackerone.ui.views.projects.ProjectListView;
 import com.intrackerone.ui.views.recruiters.RecruiterListView;
+import com.intrackerone.ui.views.status.DefaultStatusView;
 import com.intrackerone.ui.views.tokens.ApiTokenListView;
 import com.intrackerone.domain.user.UserService;
 import com.vaadin.flow.component.applayout.AppLayout;
@@ -79,6 +80,9 @@ public class MainLayout extends AppLayout implements RouterLayout {
         User currentUser = securityService.getCurrentUser();
         if (currentUser.getRole() == Role.ADMIN || currentUser.getRole() == Role.MODERATOR) {
             nav.addItem(new SideNavItem("Users", UserAdminView.class, VaadinIcon.USER_CARD.create()));
+        }
+        if (currentUser.getRole() == Role.ADMIN) {
+            nav.addItem(new SideNavItem("Default Statuses", DefaultStatusView.class, VaadinIcon.GLOBE.create()));
         }
 
         addToDrawer(new VerticalLayout(nav));

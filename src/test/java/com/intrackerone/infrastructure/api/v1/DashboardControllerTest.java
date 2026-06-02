@@ -54,7 +54,7 @@ class DashboardControllerTest {
     void setUp() {
         mockMvc = MockMvcBuilders.standaloneSetup(dashboardController).build();
         user = User.builder().id(1L).username("admin").role(Role.ADMIN).build();
-        statusDto = new PipelineStatusDto(1L, "Applied", 1, "#2196F3", StatusType.ACTIVE);
+        statusDto = new PipelineStatusDto(1L, "Applied", 1, "#2196F3", StatusType.ACTIVE, false);
         changeDto = new StatusChangeDto(1L, 1L, 1L, "Applied", 2L, "Phone Screen",
             LocalDateTime.now(), "COMPANY", "Moving forward", LocalDateTime.now());
     }
