@@ -8,6 +8,7 @@ import com.intrackerone.ui.views.jobs.JobListView;
 import com.intrackerone.ui.views.pipeline.PipelineView;
 import com.intrackerone.ui.views.projects.ProjectListView;
 import com.intrackerone.ui.views.recruiters.RecruiterListView;
+import com.intrackerone.ui.views.industry.DefaultIndustryView;
 import com.intrackerone.ui.views.status.DefaultStatusView;
 import com.intrackerone.ui.views.tokens.ApiTokenListView;
 import com.intrackerone.domain.user.UserService;
@@ -83,6 +84,7 @@ public class MainLayout extends AppLayout implements RouterLayout {
         }
         if (currentUser.getRole() == Role.ADMIN) {
             nav.addItem(new SideNavItem("Default Statuses", DefaultStatusView.class, VaadinIcon.GLOBE.create()));
+            nav.addItem(new SideNavItem("Default Industries", DefaultIndustryView.class, VaadinIcon.COG.create()));
         }
 
         addToDrawer(new VerticalLayout(nav));
