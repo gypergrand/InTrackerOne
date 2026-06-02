@@ -70,21 +70,33 @@ src/main/java/com/intrackerone/
 
 See [ARCHITECTURE.md](ARCHITECTURE.md) for detailed domain model and [API.md](API.md) for REST API documentation.
 
-## Development
+## Quick Start
 
-### Build
+### Launch Scripts
 ```bash
-mvn clean install -DskipTests
+# Linux/Mac
+./scripts/run.sh local    # H2 (default)
+./scripts/run.sh docker   # PostgreSQL via Docker
+./scripts/run.sh build    # Build JAR
+./scripts/run.sh test     # Run tests
+./scripts/run.sh stop     # Stop Docker
+./scripts/run.sh logs     # View logs
+
+# Windows
+scripts\run.bat local
+scripts\run.bat docker
+scripts\run.bat build
+scripts\run.bat test
+scripts\run.bat stop
+scripts\run.bat logs
 ```
 
-### Run Tests
+### Manual Commands
 ```bash
-mvn test
-```
-
-### Single Test
-```bash
-mvn clean test -Dtest=CompanyServiceTest
+mvn spring-boot:run          # Run with H2
+mvn clean package -DskipTests  # Build JAR
+mvn test                     # Run tests
+mvn clean test -Dtest=CompanyServiceTest  # Single test
 ```
 
 ## Database
@@ -100,11 +112,21 @@ mvn clean test -Dtest=CompanyServiceTest
 mvn clean package -DskipTests
 ```
 
-### Docker
+### Docker (Standalone)
 ```bash
 docker build -t intrackerone .
-docker run -p 8080:8080 intrackerone
+docker run -e SPRING_PROFILES_ACTIVE=postgres \
+           -e DB_USER=postgres \
+           -e DB_PASS=postgres \
+           -p 8080:8080 intrackerone
 ```
+
+### Docker Compose (with PostgreSQL)
+```bash
+docker compose up -d
+```
+App: http://localhost:8080  
+PostgreSQL: localhost:5432
 
 ## License
 
