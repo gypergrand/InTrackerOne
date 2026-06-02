@@ -111,11 +111,13 @@ class ApiTokenServiceTest {
     }
 
     @Test
-    void verifyToken_checksAgainstHash() {
+    void hashToken_producesSha256Hex() {
         String raw = "itr_test123";
         String hash = apiTokenService.hashToken(raw);
 
-        assertThat(apiTokenService.verifyToken(raw, hash)).isTrue();
-        assertThat(apiTokenService.verifyToken("wrong", hash)).isFalse();
+        assertThat(hash).hasSize(64);
+        assertThat(hash).matches("[0-9a-f]{64}");
+        // Same input produces same hash (deterministic)
+        assertThat(apiTokenService.hashToken(raw)).isEqualTo(hash);
     }
 }

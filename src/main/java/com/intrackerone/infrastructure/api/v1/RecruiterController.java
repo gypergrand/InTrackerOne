@@ -35,7 +35,7 @@ public class RecruiterController {
         if (companyId != null) {
             return recruiterService.findByCompanyId(companyId, current.getId(), current.getRole());
         }
-        return List.of();
+        return recruiterService.findAllAccessible(current.getId(), current.getRole());
     }
 
     @GetMapping("/{id}")

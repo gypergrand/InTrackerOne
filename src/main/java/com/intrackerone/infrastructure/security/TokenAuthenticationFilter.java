@@ -11,14 +11,16 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.security.MessageDigest;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HexFormat;
 
 @Component
 @RequiredArgsConstructor
@@ -36,7 +38,9 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
                                     FilterChain filterChain) throws ServletException, IOException {
         String authHeader = request.getHeader("Authorization");
         if (authHeader != null && authHeader.startsWith(BEARER_PREFIX)) {
-            authenticate(authHeader.substring(BEARER_PREFIX.length()));
+            if (authenticate(authHeader.substring(BEARER_PREFIX.length()), response)) {
+                return;
+            }
         }
         filterChain.doFilter(request, response);
     }
@@ -46,21 +50,34 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
         return !request.getRequestURI().startsWith("/api/");
     }
 
-    private void authenticate(String rawToken) {
+    /**
+     * @return true if the request should be stopped (response already committed), false to continue the chain
+     */
+    private boolean authenticate(String rawToken, HttpServletResponse response) throws IOException {
         if (rawToken == null || rawToken.length() < MIN_TOKEN_LENGTH || !rawToken.startsWith(TOKEN_PREFIX)) {
-            return;
+            return false;
         }
-        // Extract the token identifier (prefix) used for DB lookup — matches how
-        // ApiTokenService.create() stores identifier = rawToken.substring(4, 20)
         int identifierEnd = Math.min(rawToken.length(), TOKEN_PREFIX.length() + 16);
         String identifier = rawToken.substring(TOKEN_PREFIX.length(), identifierEnd);
         ApiToken token = apiTokenRepository.findByTokenIdentifier(identifier).orElse(null);
-        if (token == null || Boolean.FALSE.equals(token.getEnabled())) {
-            return;
+        if (token == null) {
+            return false;
         }
-        if (BCrypt.checkpw(rawToken, token.getTokenHash())) {
-            setAuthentication(token);
+        if (Boolean.FALSE.equals(token.getEnabled())) {
+            response.sendError(HttpServletResponse.SC_FORBIDDEN, "Token has been revoked");
+            return true;
         }
+        try {
+            byte[] hash = MessageDigest.getInstance("SHA-256").digest(rawToken.getBytes(java.nio.charset.StandardCharsets.UTF_8));
+            String hashHex = HexFormat.of().formatHex(hash);
+            if (MessageDigest.isEqual(hashHex.getBytes(java.nio.charset.StandardCharsets.UTF_8),
+                    token.getTokenHash().getBytes(java.nio.charset.StandardCharsets.UTF_8))) {
+                setAuthentication(token);
+            }
+        } catch (java.security.NoSuchAlgorithmException e) {
+            // SHA-256 is guaranteed to be available
+        }
+        return false;
     }
 
     private void setAuthentication(ApiToken token) {
@@ -68,8 +85,11 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
         if (user.getEnabled() != null && !user.getEnabled()) {
             return;
         }
-        token.setLastUsedAt(LocalDateTime.now());
-        apiTokenRepository.save(token);
+        LocalDateTime now = LocalDateTime.now();
+        if (token.getLastUsedAt() == null || ChronoUnit.MINUTES.between(token.getLastUsedAt(), now) >= 5) {
+            token.setLastUsedAt(now);
+            apiTokenRepository.save(token);
+        }
 
         var auth = new UsernamePasswordAuthenticationToken(
             user.getUsername(), null, authoritiesFor(user)

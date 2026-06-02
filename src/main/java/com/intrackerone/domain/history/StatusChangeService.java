@@ -28,8 +28,9 @@ public class StatusChangeService {
 
     @Transactional(readOnly = true)
     public List<StatusChangeDto> findByJobId(Long jobId, Long currentUserId, Role role) {
-        JobApplication job = findJob(jobId);
-        AccessControl.requireOwnerOrGlobal(job.getOwner(), currentUserId, role, "JobApplication");
+        Long ownerId = jobRepository.findOwnerIdById(jobId)
+                .orElseThrow(() -> new ResourceNotFoundException("JobApplication", jobId));
+        AccessControl.requireOwnerOrGlobal(ownerId, currentUserId, role, "JobApplication");
         return statusChangeRepository.findByJobApplicationIdOrderByChangedAtDesc(jobId).stream()
                 .map(statusChangeMapper::toDto)
                 .toList();
@@ -73,11 +74,6 @@ public class StatusChangeService {
                 .decidedBy(decidedBy)
                 .notes(notes)
                 .build();
-    }
-
-    private JobApplication findJob(Long jobId) {
-        return jobRepository.findById(jobId)
-                .orElseThrow(() -> new ResourceNotFoundException("JobApplication", jobId));
     }
 
     private PipelineStatus findStatus(Long statusId) {

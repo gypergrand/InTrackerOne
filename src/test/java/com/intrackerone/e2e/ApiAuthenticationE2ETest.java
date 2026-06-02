@@ -135,7 +135,7 @@ class ApiAuthenticationE2ETest {
             get("/api/v1/companies")
                 .header("Authorization", "Bearer " + apiToken)
         )
-        .andExpect(status().isUnauthorized());
+        .andExpect(status().isForbidden());
 
         log.info("✓ Revoked token returns 403");
     }

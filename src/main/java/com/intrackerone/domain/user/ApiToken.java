@@ -35,7 +35,7 @@ public class ApiToken {
     @Column(nullable = false, length = 100)
     private String name;
 
-    @Column(nullable = false, name = "token_hash")
+    @Column(nullable = false, length = 64, name = "token_hash")
     private String tokenHash;
 
     @Column(nullable = false, unique = true, length = 64, name = "token_identifier")

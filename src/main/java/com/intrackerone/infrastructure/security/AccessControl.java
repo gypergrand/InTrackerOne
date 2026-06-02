@@ -20,6 +20,13 @@ public final class AccessControl {
         throw new UnauthorizedException("Access denied to " + resource);
     }
 
+    public static void requireOwnerOrGlobal(Long ownerId, Long currentUserId, Role role, String resource) {
+        if (hasGlobalDataAccess(role) || (ownerId != null && ownerId.equals(currentUserId))) {
+            return;
+        }
+        throw new UnauthorizedException("Access denied to " + resource);
+    }
+
     public static void requireSameOwner(User expectedOwner, User actualOwner, String resource) {
         if (sameOwner(expectedOwner, actualOwner)) {
             return;

@@ -79,7 +79,7 @@ class StatusChangeServiceTest {
 
     @Test
     void findByJobId_returnsOrderedHistory() {
-        when(jobRepository.findById(1L)).thenReturn(Optional.of(job));
+        when(jobRepository.findOwnerIdById(1L)).thenReturn(Optional.of(1L));
         when(statusChangeRepository.findByJobApplicationIdOrderByChangedAtDesc(1L))
             .thenReturn(List.of(change));
         when(statusChangeMapper.toDto(change)).thenReturn(changeDto);

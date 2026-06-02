@@ -33,6 +33,7 @@ public class SecurityConfig {
     }
 
     @Bean
+    @Order(Ordered.LOWEST_PRECEDENCE - 5)
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests(auth -> auth
                 .requestMatchers(PathPatternRequestMatcher.pathPattern("/api/v1/tokens/**")).hasAnyRole("ADMIN", "MODERATOR")
@@ -92,6 +93,7 @@ public class SecurityConfig {
     static class ProdSecurityConfig {
 
         @Bean
+        @Order(Ordered.LOWEST_PRECEDENCE - 10)
         SecurityFilterChain h2DenyAllChain(HttpSecurity http) throws Exception {
             http.securityMatcher(PathPatternRequestMatcher.pathPattern("/h2-console/**"))
                     .authorizeHttpRequests(auth -> auth.anyRequest().denyAll());

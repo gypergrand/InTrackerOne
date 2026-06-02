@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.intrackerone.domain.user.ApiTokenDto;
 import java.util.List;
 import java.util.Map;
 
@@ -27,7 +28,7 @@ public class TokenController {
     private final SecurityService securityService;
 
     @GetMapping
-    public List<?> findAll() {
+    public List<ApiTokenDto> findAll() {
         var current = securityService.getCurrentUser();
         return apiTokenService.findByUserId(current.getId());
     }

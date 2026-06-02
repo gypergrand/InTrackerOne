@@ -35,7 +35,7 @@ public class ProjectController {
         if (companyId != null) {
             return projectService.findByCompanyId(companyId, current.getId(), current.getRole());
         }
-        return List.of();
+        return projectService.findAllAccessible(current.getId(), current.getRole());
     }
 
     @GetMapping("/{id}")

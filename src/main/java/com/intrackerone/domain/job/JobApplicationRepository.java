@@ -15,6 +15,9 @@ public interface JobApplicationRepository extends JpaRepository<JobApplication, 
     @Query("SELECT j FROM JobApplication j WHERE j.id = :id")
     Optional<JobApplication> findByIdWithLock(@Param("id") Long id);
 
+    @Query("SELECT j.owner.id FROM JobApplication j WHERE j.id = :id")
+    Optional<Long> findOwnerIdById(@Param("id") Long id);
+
     List<JobApplication> findByOwnerId(Long ownerId);
 
     List<JobApplication> findByProjectId(Long projectId);

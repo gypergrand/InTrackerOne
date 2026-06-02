@@ -7,8 +7,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.security.MessageDigest;
 import java.security.SecureRandom;
 import java.util.Base64;
+import java.util.HexFormat;
 import java.util.List;
 
 @Service
@@ -65,11 +67,12 @@ public class ApiTokenService {
     }
 
     public String hashToken(String rawToken) {
-        return org.springframework.security.crypto.bcrypt.BCrypt.hashpw(rawToken, org.springframework.security.crypto.bcrypt.BCrypt.gensalt());
-    }
-
-    public boolean verifyToken(String rawToken, String tokenHash) {
-        return org.springframework.security.crypto.bcrypt.BCrypt.checkpw(rawToken, tokenHash);
+        try {
+            byte[] hash = MessageDigest.getInstance("SHA-256").digest(rawToken.getBytes(java.nio.charset.StandardCharsets.UTF_8));
+            return HexFormat.of().formatHex(hash);
+        } catch (java.security.NoSuchAlgorithmException e) {
+            throw new RuntimeException("SHA-256 not available", e);
+        }
     }
 
     public record CreatedToken(Long id, String name, String token, java.time.LocalDateTime createdAt) {}
