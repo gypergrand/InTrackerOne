@@ -110,8 +110,10 @@ public class RecruiterService {
     public void delete(Long id, Long currentUserId, Role role) {
         Recruiter recruiter = findRecruiter(id);
         AccessControl.requireOwnerOrGlobal(recruiter.getOwner(), currentUserId, role, "Recruiter");
-        for (JobApplication job : jobApplicationRepository.findByRecruiterId(id)) {
+        List<JobApplication> affectedJobs = jobApplicationRepository.findByRecruiterId(id);
+        for (JobApplication job : affectedJobs) {
             job.setRecruiter(null);
+            jobApplicationRepository.save(job);
         }
         recruiterRepository.delete(recruiter);
     }

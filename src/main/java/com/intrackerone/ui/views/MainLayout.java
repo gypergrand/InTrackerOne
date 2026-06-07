@@ -83,10 +83,8 @@ public class MainLayout extends AppLayout implements RouterLayout {
         nav.addItem(new SideNavItem("API Tokens", ApiTokenListView.class, VaadinIcon.KEY.create()));
         
         User currentUser = securityService.getCurrentUser();
-        if (currentUser.getRole() == Role.ADMIN || currentUser.getRole() == Role.MODERATOR) {
-            nav.addItem(new SideNavItem("Users", UserAdminView.class, VaadinIcon.USER_CARD.create()));
-        }
         if (currentUser.getRole() == Role.ADMIN) {
+            nav.addItem(new SideNavItem("Users", UserAdminView.class, VaadinIcon.USER_CARD.create()));
             nav.addItem(new SideNavItem("Default Statuses", DefaultStatusView.class, VaadinIcon.GLOBE.create()));
             nav.addItem(new SideNavItem("Default Industries", DefaultIndustryView.class, VaadinIcon.COG.create()));
             nav.addItem(new SideNavItem("Default Questions", DefaultQuestionsView.class, VaadinIcon.BOOK.create()));

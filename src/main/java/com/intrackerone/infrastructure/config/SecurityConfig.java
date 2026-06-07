@@ -36,7 +36,6 @@ public class SecurityConfig {
     @Order(Ordered.LOWEST_PRECEDENCE - 5)
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests(auth -> auth
-                .requestMatchers(PathPatternRequestMatcher.pathPattern("/api/v1/tokens/**")).hasAnyRole("ADMIN", "MODERATOR")
                 .requestMatchers(PathPatternRequestMatcher.pathPattern("/api/**")).hasAuthority("API_ACCESS")
         );
 

@@ -12,6 +12,8 @@ import com.intrackerone.domain.status.StatusType;
 import com.intrackerone.domain.user.Role;
 import com.intrackerone.domain.user.User;
 import com.intrackerone.domain.user.UserRepository;
+import com.intrackerone.domain.technology.TechnologyService;
+import java.util.Set;
 import com.intrackerone.infrastructure.exception.ResourceNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -53,6 +55,9 @@ class JobServiceTest {
 
     @Mock
     private UserRepository userRepository;
+
+    @Mock
+    private TechnologyService technologyService;
 
     @InjectMocks
     private JobService jobService;

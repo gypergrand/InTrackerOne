@@ -24,9 +24,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 /**
  * End-to-end test: regular USER role manages their own resources via API token.
- * Verifies the full lifecycle — token creation (via service), CRUD on companies,
- * projects, recruiters, jobs via Bearer token, and that token management endpoints
- * remain restricted to ADMIN/MODERATOR.
+ * Verifies the full lifecycle — token creation via API, CRUD on companies,
+ * projects, recruiters, jobs via Bearer token, and that users can manage their
+ * own API tokens while still being isolated from other users' tokens.
  */
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -90,9 +90,53 @@ class TokenResourceManagementE2ETest {
     }
 
     @Test
-    void user_CannotAccess_TokenManagementEndpoints() throws Exception {
+    void user_CanManageOwnTokens() throws Exception {
+        // List own tokens
         mockMvc.perform(
             get("/api/v1/tokens")
+                .header("Authorization", "Bearer " + apiToken)
+        ).andExpect(status().isOk());
+
+        // Create a new token via API
+        String createResp = mockMvc.perform(
+            post("/api/v1/tokens")
+                .header("Authorization", "Bearer " + apiToken)
+                .contentType("application/json")
+                .content("{\"name\":\"e2e-test-token\"}")
+        )
+            .andExpect(status().isCreated())
+            .andExpect(jsonPath("$.name").value("e2e-test-token"))
+            .andExpect(jsonPath("$.token").exists())
+            .andReturn().getResponse().getContentAsString();
+        long newTokenId = extractId(createResp);
+
+        // Revoke it
+        mockMvc.perform(
+            delete("/api/v1/tokens/" + newTokenId)
+                .header("Authorization", "Bearer " + apiToken)
+        ).andExpect(status().isNoContent());
+    }
+
+    @Test
+    void user_CannotRevokeOtherUsersToken() throws Exception {
+        // Create another user and a token for them, then verify the first user cannot revoke it
+        User otherUser = userRepository.findByUsername("other-user").orElseGet(() -> {
+            User u = User.builder()
+                .username("other-user")
+                .password(passwordEncoder.encode("other"))
+                .email("other-user@intrackerone.local")
+                .enabled(true)
+                .role(Role.USER)
+                .build();
+            u = userRepository.save(u);
+            pipelineStatusService.seedDefaultsForUser(u.getId());
+            return u;
+        });
+        ApiTokenService.CreatedToken otherToken = apiTokenService.create(otherUser.getId(), "Other User Token");
+        long otherTokenId = otherToken.id();
+
+        mockMvc.perform(
+            delete("/api/v1/tokens/" + otherTokenId)
                 .header("Authorization", "Bearer " + apiToken)
         ).andExpect(status().isForbidden());
     }

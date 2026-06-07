@@ -18,6 +18,7 @@ import com.intrackerone.domain.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.context.annotation.Profile;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,8 +29,13 @@ import org.springframework.transaction.annotation.Transactional;
  *   1. Company "Fever"
  *   2. Project "Senior/Staff Product Engineer" under that company
  *   3. Job application linked to the project with "Preparation" status
+ *
+ * Inactive by default. Enable only for local seeding with:
+ *   SPRING_PROFILES_ACTIVE=h2,dev-seed mvn spring-boot:run
+ * or in tests via @ActiveProfiles({"h2", "dev-seed"}).
  */
 @Component
+@Profile("dev-seed")
 @Order(2)
 @RequiredArgsConstructor
 @Slf4j

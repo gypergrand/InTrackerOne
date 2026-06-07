@@ -1,11 +1,9 @@
 package com.intrackerone.ui.views;
 
 import com.intrackerone.domain.user.Role;
-import com.intrackerone.domain.user.User;
 import com.intrackerone.domain.user.UserDto;
 import com.intrackerone.domain.user.UserForm;
 import com.intrackerone.domain.user.UserService;
-import com.intrackerone.infrastructure.security.SecurityService;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.checkbox.Checkbox;
 import com.vaadin.flow.component.combobox.ComboBox;
@@ -22,16 +20,14 @@ import com.vaadin.flow.router.Route;
 import jakarta.annotation.security.RolesAllowed;
 
 @Route(value = "users", layout = MainLayout.class)
-@RolesAllowed({"ADMIN", "MODERATOR"})
+@RolesAllowed("ADMIN")
 public class UserAdminView extends VerticalLayout {
 
     private final UserService userService;
-    private final SecurityService securityService;
     private final Grid<UserDto> grid = new Grid<>(UserDto.class);
 
-    public UserAdminView(UserService userService, SecurityService securityService) {
+    public UserAdminView(UserService userService) {
         this.userService = userService;
-        this.securityService = securityService;
         setSizeFull();
         configureGrid();
         add(createToolbar(), grid);
@@ -74,12 +70,6 @@ public class UserAdminView extends VerticalLayout {
     }
 
     private void openEditDialog(UserDto existing) {
-        User current = securityService.getCurrentUser();
-        if (current.getRole() != Role.ADMIN) {
-            Notification.show("Only admins can manage users");
-            return;
-        }
-
         Dialog dialog = new Dialog();
         UserForm form = new UserForm();
 

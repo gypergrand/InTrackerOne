@@ -5,7 +5,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -31,11 +33,12 @@ public class TechnologyService {
     }
 
     @Transactional(readOnly = true)
-    public TechnologyDto findByName(String name) {
-        if (name == null) return null;
+    public Optional<TechnologyDto> findByName(String name) {
+        if (name == null) {
+            return Optional.empty();
+        }
         return technologyRepository.findByNameIgnoreCase(name)
-                .map(t -> new TechnologyDto(t.getId(), t.getName()))
-                .orElse(null);
+                .map(t -> new TechnologyDto(t.getId(), t.getName()));
     }
 
     @Transactional
@@ -67,7 +70,7 @@ public class TechnologyService {
 
     public Set<Technology> resolveTechnologies(Set<String> technologyNames) {
         if (technologyNames == null || technologyNames.isEmpty()) {
-            return Set.of();
+            return new HashSet<>();
         }
         return technologyNames.stream()
                 .filter(name -> name != null && !name.isBlank())
@@ -75,4 +78,5 @@ public class TechnologyService {
                         .orElseGet(() -> technologyRepository.save(Technology.builder().name(name.trim()).build())))
                 .collect(Collectors.toSet());
     }
+
 }
