@@ -48,7 +48,7 @@ class ProjectControllerTest {
     void setUp() {
         mockMvc = MockMvcBuilders.standaloneSetup(projectController).build();
         user = User.builder().id(1L).username("admin").role(Role.ADMIN).build();
-        projectDto = new ProjectDto(1L, "Platform", "Backend", 1L, "TestCorp", java.util.Set.of("Software Development"), 1L, "admin");
+        projectDto = new ProjectDto(1L, "Platform", "Backend", 1L, "TestCorp", java.util.Set.of("Software Development"), java.util.Set.of("Java"), 1L, "admin");
 
         form = new ProjectForm();
         form.setName("Platform");

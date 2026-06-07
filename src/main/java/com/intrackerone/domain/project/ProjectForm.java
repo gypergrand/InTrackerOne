@@ -15,4 +15,5 @@ public class ProjectForm {
     @NotNull(message = "Company is required")
     private Long companyId;
     private Set<String> industries = new HashSet<>();
+    private Set<String> technologies = new HashSet<>();
 }

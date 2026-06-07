@@ -87,7 +87,7 @@ public class QuestionsView extends VerticalLayout {
         Select<RecruiterDto> recruiterField = new Select<>();
         recruiterField.setLabel("Recruiter");
         recruiterField.setItems(recruiterService.findAllAccessible(current.getId(), current.getRole()));
-        recruiterField.setItemLabelGenerator(r -> r.name() + (r.companyName() != null ? " (" + r.companyName() + ")" : ""));
+        recruiterField.setItemLabelGenerator(r -> r != null ? (r.name() + (r.companyName() != null ? " (" + r.companyName() + ")" : "")) : "None");
         recruiterField.setEmptySelectionAllowed(true);
         recruiterField.setPlaceholder("None");
 

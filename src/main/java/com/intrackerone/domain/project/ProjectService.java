@@ -3,6 +3,7 @@ package com.intrackerone.domain.project;
 import com.intrackerone.domain.company.Company;
 import com.intrackerone.domain.company.CompanyRepository;
 import com.intrackerone.domain.job.JobApplicationRepository;
+import com.intrackerone.domain.technology.TechnologyService;
 import com.intrackerone.domain.user.Role;
 import com.intrackerone.domain.user.UserRepository;
 import com.intrackerone.infrastructure.exception.ResourceNotFoundException;
@@ -24,6 +25,7 @@ public class ProjectService {
     private final ProjectMapper projectMapper;
     private final CompanyRepository companyRepository;
     private final IndustryRepository industryRepository;
+    private final TechnologyService technologyService;
     private final UserRepository userRepository;
     private final JobApplicationRepository jobApplicationRepository;
 
@@ -71,6 +73,7 @@ public class ProjectService {
         project.setCompany(company);
         project.setOwner(currentUser);
         project.setIndustries(resolveIndustries(form.getIndustries()));
+        project.setTechnologies(technologyService.resolveTechnologies(form.getTechnologies()));
         project = projectRepository.save(project);
         log.info("Created project: {} for company {}", project.getName(), company.getName());
         return projectMapper.toDto(project);
@@ -89,6 +92,9 @@ public class ProjectService {
         project.setDescription(form.getDescription());
         updateCompany(project, form.getCompanyId());
         project.setIndustries(resolveIndustries(form.getIndustries()));
+        if (form.getTechnologies() != null) {
+            project.setTechnologies(technologyService.resolveTechnologies(form.getTechnologies()));
+        }
         if (newOwnerId != null && !newOwnerId.equals(project.getOwner().getId())) {
             if (!AccessControl.hasGlobalDataAccess(role)) {
                 throw new UnauthorizedException("Only ADMIN or MODERATOR can transfer project ownership");

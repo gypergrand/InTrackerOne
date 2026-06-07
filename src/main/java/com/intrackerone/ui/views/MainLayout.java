@@ -12,6 +12,7 @@ import com.intrackerone.ui.views.question.QuestionsView;
 import com.intrackerone.ui.views.recruiters.RecruiterListView;
 import com.intrackerone.ui.views.industry.DefaultIndustryView;
 import com.intrackerone.ui.views.status.DefaultStatusView;
+import com.intrackerone.ui.views.technology.DefaultTechnologiesView;
 import com.intrackerone.ui.views.tokens.ApiTokenListView;
 import com.intrackerone.domain.user.UserService;
 import com.vaadin.flow.component.applayout.AppLayout;
@@ -89,6 +90,7 @@ public class MainLayout extends AppLayout implements RouterLayout {
             nav.addItem(new SideNavItem("Default Statuses", DefaultStatusView.class, VaadinIcon.GLOBE.create()));
             nav.addItem(new SideNavItem("Default Industries", DefaultIndustryView.class, VaadinIcon.COG.create()));
             nav.addItem(new SideNavItem("Default Questions", DefaultQuestionsView.class, VaadinIcon.BOOK.create()));
+            nav.addItem(new SideNavItem("Default Technologies", DefaultTechnologiesView.class, VaadinIcon.PLUS.create()));
         }
 
         addToDrawer(new VerticalLayout(nav));

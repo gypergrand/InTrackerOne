@@ -1,6 +1,7 @@
 package com.intrackerone.domain.project;
 
 import com.intrackerone.domain.company.Company;
+import com.intrackerone.domain.technology.Technology;
 import com.intrackerone.domain.user.User;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -61,6 +62,15 @@ public class Project {
     )
     @Builder.Default
     private Set<Industry> industries = new HashSet<>();
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+        name = "project_technologies",
+        joinColumns = @JoinColumn(name = "project_id"),
+        inverseJoinColumns = @JoinColumn(name = "technology_id")
+    )
+    @Builder.Default
+    private Set<Technology> technologies = new HashSet<>();
 
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;

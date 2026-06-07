@@ -6,6 +6,7 @@ import com.intrackerone.domain.project.IndustryService;
 import com.intrackerone.domain.project.ProjectDto;
 import com.intrackerone.domain.project.ProjectForm;
 import com.intrackerone.domain.project.ProjectService;
+import com.intrackerone.domain.technology.TechnologyService;
 import com.intrackerone.domain.user.Role;
 import com.intrackerone.domain.user.User;
 import com.intrackerone.domain.user.UserDto;
@@ -42,6 +43,7 @@ public class ProjectListView extends VerticalLayout {
     private final ProjectService projectService;
     private final CompanyService companyService;
     private final IndustryService industryService;
+    private final TechnologyService technologyService;
     private final UserService userService;
     private final SecurityService securityService;
     private final Grid<ProjectDto> grid = new Grid<>(ProjectDto.class);
@@ -49,11 +51,12 @@ public class ProjectListView extends VerticalLayout {
     private final List<CompanyDto> companies = new ArrayList<>();
 
     public ProjectListView(ProjectService projectService, CompanyService companyService,
-                           IndustryService industryService, UserService userService,
-                           SecurityService securityService) {
+                           IndustryService industryService, TechnologyService technologyService,
+                           UserService userService, SecurityService securityService) {
         this.projectService = projectService;
         this.companyService = companyService;
         this.industryService = industryService;
+        this.technologyService = technologyService;
         this.userService = userService;
         this.securityService = securityService;
         setSizeFull();
@@ -85,6 +88,21 @@ public class ProjectListView extends VerticalLayout {
             }
             return badges;
         }).setHeader("Industries");
+        grid.addComponentColumn(project -> {
+            HorizontalLayout badges = new HorizontalLayout();
+            badges.setSpacing(true);
+            if (project.technologies() != null) {
+                project.technologies().forEach(tech -> {
+                    Span badge = new Span(tech);
+                    badge.getStyle().set("background", "#bbdefb")
+                                  .set("padding", "2px 6px")
+                                  .set("border-radius", "4px")
+                                  .set("font-size", "0.8em");
+                    badges.add(badge);
+                });
+            }
+            return badges;
+        }).setHeader("Technologies");
         grid.addColumn(ProjectDto::ownerName).setHeader("Owner").setSortable(true);
         grid.asSingleSelect().addValueChangeListener(e -> {
             if (e.getValue() != null) openEditDialog(e.getValue());
@@ -146,11 +164,11 @@ public class ProjectListView extends VerticalLayout {
         industryCombo.setPlaceholder("Type or select to add...");
         industryCombo.setWidthFull();
 
-        HorizontalLayout selectedTags = new HorizontalLayout();
-        selectedTags.setSpacing(true);
-        selectedTags.setPadding(false);
-        selectedTags.setWidthFull();
-        selectedTags.getStyle().set("flex-wrap", "wrap");
+        HorizontalLayout industryTags = new HorizontalLayout();
+        industryTags.setSpacing(true);
+        industryTags.setPadding(false);
+        industryTags.setWidthFull();
+        industryTags.getStyle().set("flex-wrap", "wrap");
 
         industryCombo.addCustomValueSetListener(e -> {
             String val = e.getDetail();
@@ -158,7 +176,7 @@ public class ProjectListView extends VerticalLayout {
                 form.getIndustries().add(val.trim());
                 industryCombo.setItems(industryService.findAllNames());
                 industryCombo.clear();
-                renderIndustryTags(selectedTags, form, industryService);
+                renderIndustryTags(industryTags, form, industryService);
             }
         });
 
@@ -167,7 +185,41 @@ public class ProjectListView extends VerticalLayout {
                 form.getIndustries().add(e.getValue());
                 industryCombo.setItems(industryService.findAllNames());
                 industryCombo.clear();
-                renderIndustryTags(selectedTags, form, industryService);
+                renderIndustryTags(industryTags, form, industryService);
+            }
+        });
+
+        // Technologies combo + tags
+        List<String> allTechNames = technologyService.findAllNames();
+
+        ComboBox<String> techCombo = new ComboBox<>("Technologies");
+        techCombo.setItems(allTechNames);
+        techCombo.setAllowCustomValue(true);
+        techCombo.setPlaceholder("Type or select to add...");
+        techCombo.setWidthFull();
+
+        HorizontalLayout techTags = new HorizontalLayout();
+        techTags.setSpacing(true);
+        techTags.setPadding(false);
+        techTags.setWidthFull();
+        techTags.getStyle().set("flex-wrap", "wrap");
+
+        techCombo.addCustomValueSetListener(e -> {
+            String val = e.getDetail();
+            if (val != null && !val.isBlank()) {
+                form.getTechnologies().add(val.trim());
+                techCombo.setItems(technologyService.findAllNames());
+                techCombo.clear();
+                renderTechTags(techTags, form, technologyService);
+            }
+        });
+
+        techCombo.addValueChangeListener(e -> {
+            if (e.getValue() != null && !e.getValue().isBlank()) {
+                form.getTechnologies().add(e.getValue());
+                techCombo.setItems(technologyService.findAllNames());
+                techCombo.clear();
+                renderTechTags(techTags, form, technologyService);
             }
         });
 
@@ -182,7 +234,11 @@ public class ProjectListView extends VerticalLayout {
             form.setCompanyId(existing.companyId());
             if (existing.industries() != null) {
                 form.setIndustries(new HashSet<>(existing.industries()));
-                renderIndustryTags(selectedTags, form, industryService);
+                renderIndustryTags(industryTags, form, industryService);
+            }
+            if (existing.technologies() != null) {
+                form.setTechnologies(new HashSet<>(existing.technologies()));
+                renderTechTags(techTags, form, technologyService);
             }
         } else if (companyFilter.getValue() != null) {
             companyField.setValue(companyFilter.getValue());
@@ -246,12 +302,12 @@ public class ProjectListView extends VerticalLayout {
         }
 
         if (canChangeOwner && ownerField != null) {
-            dialog.add(new FormLayout(nameField, descField, companyField, ownerField, industryCombo),
-                       selectedTags,
+            dialog.add(new FormLayout(nameField, descField, companyField, ownerField, industryCombo, techCombo),
+                       industryTags, techTags,
                        buttons);
         } else {
-            dialog.add(new FormLayout(nameField, descField, companyField, industryCombo),
-                       selectedTags,
+            dialog.add(new FormLayout(nameField, descField, companyField, industryCombo, techCombo),
+                       industryTags, techTags,
                        buttons);
         }
         dialog.open();
@@ -271,6 +327,28 @@ public class ProjectListView extends VerticalLayout {
             tagLayout.setPadding(false);
             tagLayout.setSpacing(false);
             tagLayout.getStyle().set("background", "#e0e0e0")
+                .set("padding", "2px 6px")
+                .set("border-radius", "4px")
+                .set("font-size", "0.8em")
+                .set("align-items", "center");
+            container.add(tagLayout);
+        }
+    }
+
+    private void renderTechTags(HorizontalLayout container, ProjectForm form, TechnologyService svc) {
+        container.removeAll();
+        for (String tech : form.getTechnologies()) {
+            Button removeBtn = new Button(VaadinIcon.CLOSE_SMALL.create(), ev -> {
+                form.getTechnologies().remove(tech);
+                renderTechTags(container, form, svc);
+            });
+            removeBtn.getStyle().set("padding", "0").set("margin", "0 0 0 4px");
+            removeBtn.setHeight("16px");
+            removeBtn.setWidth("16px");
+            HorizontalLayout tagLayout = new HorizontalLayout(new Span(tech), removeBtn);
+            tagLayout.setPadding(false);
+            tagLayout.setSpacing(false);
+            tagLayout.getStyle().set("background", "#bbdefb")
                 .set("padding", "2px 6px")
                 .set("border-radius", "4px")
                 .set("font-size", "0.8em")

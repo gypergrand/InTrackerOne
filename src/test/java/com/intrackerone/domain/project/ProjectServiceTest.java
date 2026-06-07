@@ -3,6 +3,8 @@ package com.intrackerone.domain.project;
 import com.intrackerone.domain.company.Company;
 import com.intrackerone.domain.company.CompanyRepository;
 import com.intrackerone.domain.job.JobApplicationRepository;
+import com.intrackerone.domain.technology.Technology;
+import com.intrackerone.domain.technology.TechnologyService;
 import com.intrackerone.domain.user.Role;
 import com.intrackerone.domain.user.User;
 import com.intrackerone.domain.user.UserRepository;
@@ -43,6 +45,9 @@ class ProjectServiceTest {
     private IndustryRepository industryRepository;
 
     @Mock
+    private TechnologyService technologyService;
+
+    @Mock
     private JobApplicationRepository jobApplicationRepository;
 
     @InjectMocks
@@ -68,7 +73,7 @@ class ProjectServiceTest {
             .id(1L).name("Platform").description("Backend").company(company).owner(admin)
             .build();
 
-        projectDto = new ProjectDto(1L, "Platform", "Backend", 1L, "TestCorp", java.util.Set.of("Software Development", "SaaS"), 1L, "admin");
+        projectDto = new ProjectDto(1L, "Platform", "Backend", 1L, "TestCorp", java.util.Set.of("Software Development", "SaaS"), java.util.Set.of("Java", "Spring"), 1L, "admin");
 
         form = new ProjectForm();
         form.setName("Platform");
@@ -116,10 +121,16 @@ class ProjectServiceTest {
     @Test
     void create_savesWithCompanyAndOwner() {
         form.setIndustries(java.util.Set.of("Software Development", "SaaS"));
+        form.setTechnologies(java.util.Set.of("Java", "Spring"));
         Industry dev = Industry.builder().id(1L).name("Software Development").build();
         Industry saas = Industry.builder().id(2L).name("SaaS").build();
         when(industryRepository.findByNameIgnoreCase("Software Development")).thenReturn(Optional.of(dev));
         when(industryRepository.findByNameIgnoreCase("SaaS")).thenReturn(Optional.of(saas));
+
+        Technology javaTech = Technology.builder().id(1L).name("Java").build();
+        Technology springTech = Technology.builder().id(2L).name("Spring").build();
+        when(technologyService.resolveTechnologies(java.util.Set.of("Java", "Spring")))
+            .thenReturn(java.util.Set.of(javaTech, springTech));
 
         when(companyRepository.findById(1L)).thenReturn(Optional.of(company));
         when(userRepository.findById(1L)).thenReturn(Optional.of(admin));
@@ -136,6 +147,7 @@ class ProjectServiceTest {
         assertThat(saved.getCompany()).isEqualTo(company);
         assertThat(saved.getOwner()).isEqualTo(admin);
         assertThat(saved.getIndustries()).hasSize(2);
+        assertThat(saved.getTechnologies()).hasSize(2);
     }
 
     @Test
