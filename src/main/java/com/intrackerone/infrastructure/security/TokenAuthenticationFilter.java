@@ -12,6 +12,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.support.TransactionTemplate;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
@@ -32,6 +33,7 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
     private static final int MIN_TOKEN_LENGTH = TOKEN_PREFIX.length() + 16; // prefix + at least 16 chars of identifier payload
 
     private final ApiTokenRepository apiTokenRepository;
+    private final TransactionTemplate transactionTemplate;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
@@ -71,9 +73,8 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
         }
         try {
             byte[] hash = MessageDigest.getInstance("SHA-256").digest(rawToken.getBytes(java.nio.charset.StandardCharsets.UTF_8));
-            String hashHex = HexFormat.of().formatHex(hash);
-            if (MessageDigest.isEqual(hashHex.getBytes(java.nio.charset.StandardCharsets.UTF_8),
-                    token.getTokenHash().getBytes(java.nio.charset.StandardCharsets.UTF_8))) {
+            byte[] storedHash = HexFormat.of().parseHex(token.getTokenHash());
+            if (MessageDigest.isEqual(hash, storedHash)) {
                 return setAuthentication(token, response);
             }
         } catch (java.security.NoSuchAlgorithmException e) {
@@ -95,7 +96,7 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
         LocalDateTime now = LocalDateTime.now();
         if (token.getLastUsedAt() == null || ChronoUnit.MINUTES.between(token.getLastUsedAt(), now) >= 5) {
             token.setLastUsedAt(now);
-            apiTokenRepository.save(token);
+            transactionTemplate.execute(status -> apiTokenRepository.save(token));
         }
 
         var auth = new UsernamePasswordAuthenticationToken(
