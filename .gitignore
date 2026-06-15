@@ -11,3 +11,4 @@ target/
 /headers.txt
 /response.html
 /.ckb/
+/src/main/frontend/generated/
