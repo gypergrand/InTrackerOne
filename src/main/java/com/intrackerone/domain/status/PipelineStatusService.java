@@ -10,6 +10,7 @@ import com.intrackerone.infrastructure.exception.UnauthorizedException;
 import com.intrackerone.infrastructure.security.AccessControl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -66,8 +67,13 @@ public class PipelineStatusService {
                         .owner(user)
                         .build())
                 .toList();
-        pipelineStatusRepository.saveAll(copies);
-        log.info("Seeded {} statuses for user {} from defaults", copies.size(), userId);
+        try {
+            pipelineStatusRepository.saveAll(copies);
+            log.info("Seeded statuses for user {} from defaults", userId);
+        } catch (DataIntegrityViolationException e) {
+            // Another thread already seeded, just fetch existing
+            log.debug("Statuses already seeded for user {} by another thread", userId);
+        }
     }
 
     @Transactional
@@ -91,8 +97,13 @@ public class PipelineStatusService {
             createDefaultStatus("Withdrawn", 13, "#616161", StatusType.TERMINAL),
             createDefaultStatus("Ghosted", 14, "#795548", StatusType.TERMINAL)
         );
-        pipelineStatusRepository.saveAll(defaults);
-        log.info("Seeded {} default statuses", defaults.size());
+        try {
+            pipelineStatusRepository.saveAll(defaults);
+            log.info("Seeded default statuses");
+        } catch (DataIntegrityViolationException e) {
+            // Another thread already seeded defaults
+            log.debug("Default statuses already seeded by another thread");
+        }
     }
 
     private PipelineStatus createDefaultStatus(String name, int order, String color, StatusType type) {

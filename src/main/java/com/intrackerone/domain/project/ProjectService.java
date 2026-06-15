@@ -11,6 +11,7 @@ import com.intrackerone.infrastructure.exception.UnauthorizedException;
 import com.intrackerone.infrastructure.security.AccessControl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -90,7 +91,7 @@ public class ProjectService {
         AccessControl.requireOwnerOrGlobal(project.getOwner(), currentUserId, role, "Project");
         project.setName(form.getName());
         project.setDescription(form.getDescription());
-        updateCompany(project, form.getCompanyId());
+        updateCompany(project, form.getCompanyId(), role);
         project.setIndustries(resolveIndustries(form.getIndustries()));
         if (form.getTechnologies() != null) {
             project.setTechnologies(technologyService.resolveTechnologies(form.getTechnologies()));
@@ -117,12 +118,14 @@ public class ProjectService {
         projectRepository.delete(project);
     }
 
-    private void updateCompany(Project project, Long companyId) {
+    private void updateCompany(Project project, Long companyId, Role role) {
         if (companyId == null) {
             return;
         }
         Company company = findCompany(companyId);
-        AccessControl.requireSameOwner(project.getOwner(), company.getOwner(), "Company");
+        if (!AccessControl.hasGlobalDataAccess(role)) {
+            AccessControl.requireSameOwner(project.getOwner(), company.getOwner(), "Company");
+        }
         project.setCompany(company);
     }
 
@@ -139,6 +142,7 @@ public class ProjectService {
     /**
      * Resolves industry names to Industry entities.
      * Finds existing ones by name (case-insensitive) or creates new ones.
+     * Handles concurrent creation via DB unique constraint.
      */
     private java.util.Set<Industry> resolveIndustries(java.util.Set<String> industryNames) {
         if (industryNames == null || industryNames.isEmpty()) {
@@ -146,8 +150,21 @@ public class ProjectService {
         }
         return industryNames.stream()
                 .filter(name -> name != null && !name.isBlank())
-                .map(name -> industryRepository.findByNameIgnoreCase(name.trim())
-                        .orElseGet(() -> industryRepository.save(Industry.builder().name(name.trim()).build())))
+                .map(this::findOrCreateIndustry)
                 .collect(java.util.stream.Collectors.toSet());
+    }
+
+    private Industry findOrCreateIndustry(String name) {
+        String trimmed = name.trim();
+        return industryRepository.findByNameIgnoreCase(trimmed)
+                .orElseGet(() -> {
+                    try {
+                        return industryRepository.save(Industry.builder().name(trimmed).build());
+                    } catch (DataIntegrityViolationException e) {
+                        // Another thread created it concurrently, fetch it
+                        return industryRepository.findByNameIgnoreCase(trimmed)
+                                .orElseThrow(() -> new IllegalStateException("Industry creation failed: " + trimmed));
+                    }
+                });
     }
 }

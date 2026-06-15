@@ -113,8 +113,8 @@ public class RecruiterService {
         List<JobApplication> affectedJobs = jobApplicationRepository.findByRecruiterId(id);
         for (JobApplication job : affectedJobs) {
             job.setRecruiter(null);
-            jobApplicationRepository.save(job);
         }
+        jobApplicationRepository.saveAll(affectedJobs);
         recruiterRepository.delete(recruiter);
     }
 

@@ -63,9 +63,17 @@ public class UserService {
     public UserDto update(Long id, UserForm form) {
         User user = userRepository.findById(id)
             .orElseThrow(() -> new ResourceNotFoundException("User", id));
-        if ("admin".equals(user.getUsername()) && Boolean.FALSE.equals(form.getEnabled())) {
-            throw new UnauthorizedException("Cannot disable the admin user");
+        boolean isAdmin = "admin".equals(user.getUsername());
+        if (isAdmin) {
+            if (Boolean.FALSE.equals(form.getEnabled())) {
+                throw new UnauthorizedException("Cannot disable the admin user");
+            }
+            if (form.getRole() != null && form.getRole() != Role.ADMIN) {
+                throw new UnauthorizedException("Cannot change the admin user's role");
+            }
         }
+        validateUniqueUsername(form.getUsername(), user);
+        validateUniqueEmail(form.getEmail(), user);
         user.setUsername(form.getUsername());
         user.setEmail(form.getEmail());
         user.setRole(form.getRole());
@@ -77,6 +85,24 @@ public class UserService {
         }
         user = userRepository.save(user);
         return userMapper.toDto(user);
+    }
+
+    private void validateUniqueUsername(String username, User currentUser) {
+        if (username == null || username.equals(currentUser.getUsername())) {
+            return;
+        }
+        userRepository.findByUsername(username).ifPresent(existing -> {
+            throw new IllegalArgumentException("Username is already taken");
+        });
+    }
+
+    private void validateUniqueEmail(String email, User currentUser) {
+        if (email == null || email.equals(currentUser.getEmail())) {
+            return;
+        }
+        userRepository.findByEmail(email).ifPresent(existing -> {
+            throw new IllegalArgumentException("Email is already in use");
+        });
     }
 
     @Transactional

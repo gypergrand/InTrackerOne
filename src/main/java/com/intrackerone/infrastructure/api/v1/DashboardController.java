@@ -39,10 +39,10 @@ public class DashboardController {
             total += count;
         }
 
-        return Map.of(
-            "totalJobs", total,
-            "byStatus", byStatus
-        );
+        Map<String, Object> result = new LinkedHashMap<>();
+        result.put("totalJobs", total);
+        result.put("byStatus", byStatus);
+        return result;
     }
 
     @GetMapping("/recent")

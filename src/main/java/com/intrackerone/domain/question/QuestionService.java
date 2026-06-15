@@ -45,7 +45,7 @@ public class QuestionService {
         Question question = questionMapper.toEntity(form);
         question.setOwner(user);
         question.setIsDefault(false);
-        resolveRecruiter(question, form.getRecruiterId());
+        resolveRecruiter(question, form.getRecruiterId(), user);
         question = questionRepository.save(question);
         log.info("Created question for user {}", userId);
         return questionMapper.toDto(question);
@@ -58,7 +58,7 @@ public class QuestionService {
         question.setQuestion(form.getQuestion());
         question.setAnswer(form.getAnswer());
         question.setNotes(form.getNotes());
-        resolveRecruiter(question, form.getRecruiterId());
+        resolveRecruiter(question, form.getRecruiterId(), question.getOwner());
         question = questionRepository.save(question);
         return questionMapper.toDto(question);
     }
@@ -132,13 +132,14 @@ public class QuestionService {
         return question;
     }
 
-    private void resolveRecruiter(Question question, Long recruiterId) {
+    private void resolveRecruiter(Question question, Long recruiterId, User owner) {
         if (recruiterId == null) {
             question.setRecruiter(null);
             return;
         }
         Recruiter recruiter = recruiterRepository.findById(recruiterId)
                 .orElseThrow(() -> new ResourceNotFoundException("Recruiter", recruiterId));
+        AccessControl.requireSameOwner(owner, recruiter.getOwner(), "Recruiter");
         question.setRecruiter(recruiter);
     }
 }
